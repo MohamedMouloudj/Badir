@@ -86,7 +86,7 @@ export default function Navbar() {
                     ? "font-bold"
                     : "font-semibold"
                 }`}
-                href={`/${navRoute.url}`}
+                href={`${navRoute.url}`}
               >
                 {navRoute.label}
               </Link>
@@ -117,7 +117,7 @@ export default function Navbar() {
                         ? "font-bold"
                         : "font-semibold"
                     }`}
-                    href={`/${navRoute.url}`}
+                    href={`${navRoute.url}`}
                     onClick={closeMenu}
                   >
                     {navRoute.label}

@@ -11,7 +11,7 @@ export default function Contact() {
       <div className="flex items-center bg-neutrals-100 rounded-full overflow-hidden border-3 border-primary-400">
         <input
           type="email"
-          placeholder="بريدك الإلكتروني"
+          placeholder="فكرتك"
           className="flex-1 min-w-0 h-10 sm:h-12 px-3 sm:px-4 bg-transparent text-neutrals-700 placeholder-neutrals-400 focus:outline-none text-sm sm:text-base"
           dir="rtl"
         />
@@ -22,7 +22,7 @@ export default function Contact() {
             size="sm"
             className="whitespace-nowrap px-3 sm:px-4 h-8 sm:h-10"
           >
-            اشترك
+            أرسلها
           </AppButton>
         </div>
       </div>

@@ -41,11 +41,11 @@ export default function Error({ error, reset }: ErrorProps) {
 
         {/* Error Content */}
         <div className="space-y-4">
-          <h1 className="text-heading-h2 font-bold text-neutrals-700">
+          <h1 className="text-primary-lg font-bold text-neutrals-700">
             حدث خطأ غير متوقع
           </h1>
 
-          <p className="text-body-regular text-neutrals-500 leading-relaxed">
+          <p className="text-paragraph-md text-neutrals-500 leading-relaxed">
             نعتذر، حدث خطأ أثناء معالجة طلبك. يرجى المحاولة مرة أخرى أو الاتصال
             بنا إذا استمرت المشكلة.
           </p>
@@ -67,14 +67,14 @@ export default function Error({ error, reset }: ErrorProps) {
         <div className="space-y-4">
           <button
             onClick={reset}
-            className="w-full px-6 py-3 bg-primary-500 hover:bg-primary-400 text-white font-semibold rounded-lg transition-colors duration-200 text-button-primary"
+            className="w-full px-6 py-3 bg-primary-500 hover:bg-primary-400 text-white font-semibold rounded-lg transition-colors duration-200 text-button-lg"
           >
             المحاولة مرة أخرى
           </button>
 
           <Link
             href="/"
-            className="w-full inline-block px-6 py-3 bg-transparent border-2 border-primary-500 text-primary-500 hover:bg-primary-50 font-semibold rounded-lg transition-colors duration-200 text-button-primary"
+            className="w-full inline-block px-6 py-3 bg-transparent border-2 border-primary-500 text-primary-500 hover:bg-primary-50 font-semibold rounded-lg transition-colors duration-200 text-button-lg"
           >
             العودة للصفحة الرئيسية
           </Link>
@@ -82,7 +82,7 @@ export default function Error({ error, reset }: ErrorProps) {
 
         {/* Support Contact */}
         <div className="pt-8 border-t border-neutrals-300">
-          <p className="text-body-small text-neutrals-400">
+          <p className="text-paragraph-sm text-neutrals-400">
             هل تحتاج للمساعدة؟{" "}
             <Link
               href="/contact"

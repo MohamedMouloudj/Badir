@@ -7,7 +7,7 @@ export default function Logo({ withText = true }: { withText?: boolean }) {
     return (
       <div className="relative flex-center justify-center">
         <Image
-          src="/images/app-logos/logo-nt.svg"
+          src="/images/logos/logo-nt.svg"
           alt="Badir logo"
           width={104}
           height={40}
@@ -20,7 +20,7 @@ export default function Logo({ withText = true }: { withText?: boolean }) {
   return (
     <div className="relative flex-center justify-center">
       <Image
-        src="/images/app-logos/logo.svg"
+        src="/images/logos/logo.svg"
         alt="Badir logo"
         width={104}
         height={40}

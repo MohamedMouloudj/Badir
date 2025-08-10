@@ -12,11 +12,11 @@ export default function Footer() {
     <footer dir="rtl">
       <div className="flex-center justify-center gap-4 mb-16" dir="ltr">
         <Image
-          src="/images/Bunian.png"
+          src="/images/icons/Bunian.png"
           alt="Badir and Bunian logos"
           width={160}
           height={40}
-          quality={90}
+          quality={100}
           className="object-contain"
         />
         <div className="h-16 w-0.5 bg-neutrals-100" />
@@ -25,7 +25,7 @@ export default function Footer() {
           alt="Badir and Bunian logos"
           width={160}
           height={40}
-          quality={90}
+          quality={100}
           className="object-contain"
         />
       </div>
@@ -33,121 +33,114 @@ export default function Footer() {
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-8">
           {/* Platform Section */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-white mb-4">المنصة</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/about"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
-                >
-                  عن المنصة
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/how-it-works"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
-                >
-                  كيف نعمل
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/faq"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
-                >
-                  الأسئلة الشائعة
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/contact"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
-                >
-                  اتصل بنا
-                </Link>
-              </li>
-            </ul>
-          </div>
+
+          <ul className="space-y-2">
+            <li>
+              <Link
+                href="/about"
+                className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+              >
+                عن المنصة
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/how-it-works"
+                className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+              >
+                كيف نعمل
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/faq"
+                className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+              >
+                الأسئلة الشائعة
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/contact"
+                className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+              >
+                اتصل بنا
+              </Link>
+            </li>
+          </ul>
 
           {/* For Volunteers Section */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-white mb-4">للمتطوعين</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/organizations"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
-                >
-                  ابحث عن مبادرات
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/signup"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
-                >
-                  انضم كمتطوع
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/volunteer-guide"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
-                >
-                  دليل المتطوع
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/contact"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
-                >
-                  اتصل بنا
-                </Link>
-              </li>
-            </ul>
-          </div>
+
+          <ul className="space-y-2">
+            <li>
+              <Link
+                href="/organizations"
+                className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+              >
+                ابحث عن مبادرات
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/signup"
+                className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+              >
+                انضم كمتطوع
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/volunteer-guide"
+                className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+              >
+                دليل المتطوع
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/contact"
+                className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+              >
+                اتصل بنا
+              </Link>
+            </li>
+          </ul>
 
           {/* For Organizations Section */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-white mb-4">للمنظمات</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/initiatives/create"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
-                >
-                  ابحث عن مبادرات
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/signup"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
-                >
-                  انضم كمنظمة
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/organization-guide"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
-                >
-                  دليل المنظمة
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/contact"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
-                >
-                  اتصل بنا
-                </Link>
-              </li>
-            </ul>
-          </div>
+          <ul className="space-y-2">
+            <li>
+              <Link
+                href="/signup"
+                className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+              >
+                سجِّل كمبادر
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/signup"
+                className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+              >
+                سجِّل كمستفيد
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/organization-guide"
+                className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+              >
+                دليل المنظمة
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/contact"
+                className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+              >
+                اتصل بنا
+              </Link>
+            </li>
+          </ul>
 
           {/* Newsletter Section */}
           <div className="md:col-span-1 space-y-4">

@@ -23,11 +23,11 @@ export default function NotFound() {
 
         {/* Content */}
         <div className="space-y-4">
-          <h1 className="text-heading-h2 font-bold text-neutrals-700">
+          <h1 className="text-primary-lg font-bold text-neutrals-700">
             الصفحة غير موجودة
           </h1>
 
-          <p className="text-body-regular text-neutrals-500 leading-relaxed">
+          <p className="text-paragraph-md text-neutrals-500 leading-relaxed">
             عذراً، لا يمكننا العثور على الصفحة التي تبحث عنها. قد تكون قد تم
             حذفها أو تغيير رابطها أو أنها غير متاحة مؤقتاً.
           </p>
@@ -37,14 +37,14 @@ export default function NotFound() {
         <div className="space-y-4">
           <Link
             href="/"
-            className="w-full inline-block px-6 py-3 bg-primary-500 hover:bg-primary-400 text-white font-semibold rounded-lg transition-colors duration-200 text-button-primary"
+            className="w-full inline-block px-6 py-3 bg-primary-500 hover:bg-primary-400 text-white font-semibold rounded-lg transition-colors duration-200 text-button-lg"
           >
             العودة للصفحة الرئيسية
           </Link>
 
           <Link
             href="/contact"
-            className="w-full inline-block px-6 py-3 bg-transparent border-2 border-primary-500 text-primary-500 hover:bg-primary-50 font-semibold rounded-lg transition-colors duration-200 text-button-primary"
+            className="w-full inline-block px-6 py-3 bg-transparent border-2 border-primary-500 text-primary-500 hover:bg-primary-50 font-semibold rounded-lg transition-colors duration-200 text-button-lg"
           >
             تواصل معنا
           </Link>
@@ -52,7 +52,7 @@ export default function NotFound() {
 
         {/* Helpful Links */}
         <div className="pt-8 border-t border-neutrals-300">
-          <p className="text-body-small text-neutrals-400 mb-4">
+          <p className="text-paragraph-sm text-neutrals-400 mb-4">
             ربما تبحث عن:
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-caption-note">

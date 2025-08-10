@@ -42,9 +42,9 @@ function AppButton({
   disabled = false,
 }: ButtonProps) {
   const sizeClasses = {
-    sm: "text-xs sm:text-sm px-2 sm:px-3 h-8 sm:h-10",
-    md: "text-sm sm:text-base px-3 sm:px-4 h-10 sm:h-12",
-    lg: "text-base sm:text-lg px-4 sm:px-6 h-12 sm:h-14",
+    sm: "text-button-sm sm:text-button-md px-3 sm:px-4 h-8 sm:h-10",
+    md: "text-button-md sm:text-button-lg px-4 sm:px-5 h-10 sm:h-12",
+    lg: "text-button-lg sm:text-xl px-5 sm:px-7 h-12 sm:h-14",
   };
 
   return (
@@ -54,7 +54,7 @@ function AppButton({
         sizeClasses[size],
         type === "primary" && "bg-primary-500 text-white hover:bg-primary-400",
         type === "outline" &&
-          "border border-primary-500 text-primary-500 bg-transparent hover:bg-primary-200 hover:text-primary-300",
+          "border border-primary-500 text-primary-500 bg-transparent hover:bg-primary-100 hover:text-primary-400",
         corner === "rounded" && "rounded-full",
         corner === "default" && "rounded-md",
         className
@@ -62,6 +62,7 @@ function AppButton({
       onClick={onClick}
       disabled={disabled}
       type="button"
+      dir="ltr"
     >
       {icon} {url ? <Link href={url}>{children}</Link> : children}
     </ShadcnButton>

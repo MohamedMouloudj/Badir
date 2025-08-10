@@ -8,8 +8,10 @@ import { ArrowUpLeft } from "lucide-react";
 import { SplitText } from "gsap/all";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { useMediaQuery } from "react-responsive";
 
 export default function Hero() {
+  const isMobile = useMediaQuery({ maxWidth: 767 });
   useGSAP(() => {
     const heroTitle = new SplitText(".hero-title", { type: "words" });
     const heroSplit = new SplitText(".hero-description", { type: "lines" });
@@ -23,7 +25,7 @@ export default function Hero() {
     });
     gsap.from(heroSplit.lines, {
       opacity: 0,
-      yPercent: 100,
+      yPercent: isMobile ? 40 : 100,
       duration: 1.5,
       ease: "expo.out",
       stagger: 0.05,

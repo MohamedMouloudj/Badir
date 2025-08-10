@@ -22,7 +22,7 @@
   --color-secondary-700: rgba(68, 90, 34, 1);
 
   --color-neutrals-100: rgba(250, 249, 245, 1);
-  --color-neutrals-200: rgba(232, 231, 224, 1);
+  --color-neutrals-200: rgba(241, 240, 234, 1);
   --color-neutrals-300: rgba(201, 199, 191, 1);
   --color-neutrals-400: rgba(146, 145, 133, 1);
   --color-neutrals-500: rgba(96, 95, 87, 1);
@@ -236,18 +236,18 @@
   }
 
   .wrapper {
-    width: 90%;
+    width: 100%;
     margin-inline: auto;
     height: 150px;
     position: relative;
     overflow: hidden;
-    mask-image: linear-gradient(
+    /* mask-image: linear-gradient(
       to right,
       rgba(0, 0, 0, 0),
       rgba(0, 0, 0, 1) 10%,
       rgba(0, 0, 0, 1) 90%,
       rgba(0, 0, 0, 0)
-    );
+    ); */
   }
 
   .wrapper:hover .itemLeft,
@@ -277,13 +277,13 @@
 
   /* Left direction animation */
   .itemLeft {
-    left: max(calc(200px * var(--number-marquee)), 100%);
+    left: max(calc(100px * var(--number-marquee)), 100%);
     animation-name: scrollLeft;
   }
 
   /* Right direction animation */
   .itemRight {
-    right: max(calc(200px * var(--number-marquee)), calc(100% + 200px));
+    right: max(calc(100px * var(--number-marquee)), calc(100% + 100px));
     animation-name: scrollRight;
   }
 

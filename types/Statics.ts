@@ -16,6 +16,10 @@ export type Partner = {
   imageSrc: string;
   name: string;
 };
+export type AboutInfo = {
+  title: string;
+  description: string;
+};
 
 // ===== FORM TYPES =====
 export interface FormData {

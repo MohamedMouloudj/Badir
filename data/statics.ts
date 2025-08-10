@@ -7,7 +7,12 @@ import {
   UserType,
   InitiativeCard,
 } from "@/types";
-import { CarouselImage, Partner, TestimonialOpinion } from "@/types/Statics";
+import {
+  AboutInfo,
+  CarouselImage,
+  Partner,
+  TestimonialOpinion,
+} from "@/types/Statics";
 
 const heroCarouselItems: CarouselImage[] = [
   {
@@ -24,6 +29,29 @@ const heroCarouselItems: CarouselImage[] = [
     id: 3,
     src: "/images/carousel/carousel-3.jpg",
     alt: "مساعدة الطبيعة",
+  },
+];
+
+const aboutInfo: AboutInfo[] = [
+  {
+    title: "رؤيتنـا",
+    description:
+      "أن نكون همزة الوصل بين رغبة صادقة في العطاء، وحاجة ملحّة في الميدان.",
+  },
+  {
+    title: "رسالتنا",
+    description:
+      "تنظيم العمل التطوعي، وتفعيله عبر مبادرات نوعية تُخرج طاقات الشباب للتأثير والبناء.",
+  },
+  {
+    title: "الفئة المستهدفة",
+    description:
+      " الشباب المسلم الطامح للتأثير، والجهات والمبادرات المجتمعية الهادفة، والفئات المحتاجة للدعم.",
+  },
+  {
+    title: "دليل المنصة",
+    description:
+      "تنظيم دليلك لتنظيم العمل التطوعي، من التسجيل واختيار المبادرات، إلى المشاركة وصناعة الأثر بطرق سهلة ومنظّمة. التطوعي، وتفعيله عبر مبادرات نوعية تُخرج طاقات الشباب للتأثير والبناء.",
   },
 ];
 
@@ -238,4 +266,5 @@ export {
   sampleRatings,
   sampleInitiatives,
   partners,
+  aboutInfo,
 };

@@ -112,7 +112,7 @@ export default function Navbar() {
               {landingRoute.map((navRoute) => (
                 <li key={navRoute.url}>
                   <Link
-                    className={` py-2 px-3 ${
+                    className={`py-2 px-3 ${
                       pathname === "/" + navRoute.url
                         ? "font-bold"
                         : "font-semibold"

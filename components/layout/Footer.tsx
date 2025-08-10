@@ -12,7 +12,7 @@ export default function Footer() {
     <footer dir="rtl">
       <div className="flex-center justify-center gap-4 mb-16" dir="ltr">
         <Image
-          src="/images/icons/Bunian.png"
+          src="/images/app-logos/Bunian.png"
           alt="Badir and Bunian logos"
           width={160}
           height={40}
@@ -21,7 +21,7 @@ export default function Footer() {
         />
         <div className="h-16 w-0.5 bg-neutrals-100" />
         <Image
-          src="/images/logos/Logo-white.png"
+          src="/images/app-logos/Logo-white.png"
           alt="Badir and Bunian logos"
           width={160}
           height={40}

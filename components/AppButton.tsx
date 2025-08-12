@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 type ButtonProps = {
-  type: "primary" | "outline";
+  type: "primary" | "outline" | "submit";
   children?: ReactNode;
   className?: string;
   url?: string;
@@ -52,7 +52,8 @@ function AppButton({
       className={cn(
         "font-medium transition-all flex-center cursor-pointer",
         sizeClasses[size],
-        type === "primary" && "bg-primary-500 text-white hover:bg-primary-400",
+        (type === "primary" || type === "submit") &&
+          "bg-primary-500 text-white hover:bg-primary-400",
         type === "outline" &&
           "border border-primary-500 text-primary-500 bg-transparent hover:bg-primary-100 hover:text-primary-400",
         corner === "rounded" && "rounded-full",
@@ -61,7 +62,7 @@ function AppButton({
       )}
       onClick={onClick}
       disabled={disabled}
-      type="button"
+      type={type === "submit" ? "submit" : "button"}
       dir="ltr"
     >
       {icon} {url ? <Link href={url}>{children}</Link> : children}

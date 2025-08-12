@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { IBMPlex } from "@/lib/fonts";
 import Navbar from "@/components/layout/Navbar";
-import "./globals.css";
 import Footer from "@/components/layout/Footer";
+import { Toaster } from "sonner";
+import "./globals.css";
+import { getCookieCache } from "better-auth/cookies";
 
 export const metadata: Metadata = {
   title: {
@@ -12,7 +14,7 @@ export const metadata: Metadata = {
   description:
     "تنظم الجهود وتقيم جسوراً بين من يملكون القدرة على العطاء، ومن يتطلعون إلى من يعينهم",
 };
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -23,6 +25,7 @@ export default function RootLayout({
         <Navbar />
         <main>{children}</main>
         <Footer />
+        <Toaster />
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { partners } from "@/data/statics";
-import PartnerMarqueeCard from "../PartnerMarqueeCard";
+import PartnerMarqueeCard from "./PartnerMarqueeCard";
 
 export default function Partners() {
   return (

@@ -205,11 +205,17 @@
   }
 
   main {
-    @apply grid grid-cols-1 gap-4 md:gap-8 py-12 min-h-svh text-neutrals-500;
+    @apply grid grid-cols-1 gap-4 md:gap-8 min-h-svh text-neutrals-500 bg-neutrals-100;
+    padding: calc(var(--navbar-height)) 0 0;
 
     section {
-      @apply py-12 gap-4 md:gap-6 px-8;
+      @apply gap-4 md:gap-6 px-8;
     }
+
+    section:last-child {
+      @apply pb-8 md:pb-12;
+    }
+
     p {
       @apply text-paragraph-md font-normal;
     }

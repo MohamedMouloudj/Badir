@@ -42,9 +42,17 @@ const appRoutes: Route[] = [
   },
 ];
 
-const authRoutes: Record<string, Route> = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const authRoutes: Record<string, any> = {
   signup: {
-    url: "/signup",
+    signupOrganization: {
+      url: "/signup/organization",
+      label: "منظمة",
+    },
+    signupIndividual: {
+      url: "/signup/user",
+      label: "مستخدم",
+    },
     label: "انضم الآن",
   },
   login: {
@@ -53,4 +61,17 @@ const authRoutes: Record<string, Route> = {
   },
 };
 
-export { landingRoute, appRoutes, authRoutes };
+const forMiddleware = {
+  publicRoutes: [
+    "/",
+    "/organizations",
+    "/initiatives",
+    "/contact",
+    "/about",
+    "/form-demo",
+  ],
+  authRoutes: ["/signup", "/login", "/forgot-password"],
+  apiAuthPrefix: "/api/auth",
+};
+
+export { landingRoute, appRoutes, authRoutes, forMiddleware };

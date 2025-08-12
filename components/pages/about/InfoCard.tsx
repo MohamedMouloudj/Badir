@@ -35,14 +35,18 @@ const InfoCard: React.FC<InfoCardProps> = ({
         } as React.CSSProperties
       }
     >
-      {/* Title Badge - positioned absolutely in top right */}
-      <div className="absolute -top-3 right-8">
+      {/* Title Badge - positioned absolutely, centered on mobile */}
+      <div
+        className="absolute right-8 max-sm:right-1/2 max-sm:translate-x-1/2"
+        style={{ top: "calc(-1 * var(--badge-height) / 2)" }}
+      >
         <span
           className={`
           px-6 
           py-2 
           rounded-full 
           text-primary-sm
+          max-sm:text-secondary-lg
           font-bold
           bg-neutrals-200
           border-2
@@ -50,6 +54,8 @@ const InfoCard: React.FC<InfoCardProps> = ({
           text-primary-500
           font-ibm-plex-sans-arabic
           shadow-sm
+          block
+          whitespace-nowrap
           ${titleClassName}
         `}
         >
@@ -61,7 +67,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
       <div
         className="text-center"
         style={{
-          paddingTop: "calc(var(--badge-height) / 2 + 0.5rem)",
+          paddingTop: "calc(var(--badge-height) / 2 + 1rem)",
         }}
       >
         <p
@@ -70,6 +76,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
           leading-relaxed 
           text-neutrals-700
           text-secondary-md
+          max-sm:text-secondary-sm
           font-semibold
           font-ibm-plex-sans-arabic
           ${descriptionClassName}

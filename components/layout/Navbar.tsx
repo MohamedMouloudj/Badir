@@ -57,7 +57,9 @@ export default function Navbar() {
     <nav
       ref={navRef}
       dir="rtl"
-      className={`${isMenuOpen ? "shadow-none" : "shadow-md"} md:shadow-md`}
+      className={`app-navbar ${
+        isMenuOpen ? "shadow-none" : "shadow-md"
+      } md:shadow-md`}
     >
       {/* Mobile Burger Menu Button */}
       <button

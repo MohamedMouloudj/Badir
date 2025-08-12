@@ -192,7 +192,7 @@
     @apply font-semibold;
   }
 
-  nav {
+  .app-navbar {
     @apply w-full z-50 top-0 fixed bg-neutrals-100 flex-center justify-between px-6 py-4 md:px-14 gap-6 md:gap-8;
 
     ul {

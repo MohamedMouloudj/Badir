@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowUpLeft, MapPin } from "lucide-react";
-import { InitiativeCard as InitiativeCardProp } from "@/types";
+import { InitiativeCard as InitiativeCardType } from "@/services/initiatives";
 import AppButton from "../AppButton";
 import AvailabilityBadge from "./AvailabilityBadge";
 import Image from "next/image";
@@ -10,7 +10,7 @@ import CategoryBadge from "./CategoryBadge";
 export default function InitiativeCard({
   initiative,
 }: {
-  initiative: InitiativeCardProp;
+  initiative: InitiativeCardType;
 }) {
   const {
     category,
@@ -24,9 +24,9 @@ export default function InitiativeCard({
     organizer,
   } = initiative;
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("ar-DZ", {
+  const formatDate = (date: Date | string) => {
+    const dateObj = typeof date === "string" ? new Date(date) : date;
+    return dateObj.toLocaleDateString("ar-DZ", {
       day: "numeric",
       month: "long",
       year: "numeric",
@@ -43,11 +43,13 @@ export default function InitiativeCard({
         <div className="flex justify-between items-start">
           <CategoryBadge
             nameAr={category.nameAr}
-            bgColor={category.bgColor}
-            textColor={category.textColor}
+            bgColor={category.bgColor ?? "transparent"}
+            textColor={category.textColor ?? "inherit"}
           />
           <AvailabilityBadge
-            isAvailable={currentParticipants < maxParticipants}
+            isAvailable={
+              !maxParticipants || currentParticipants < maxParticipants
+            }
           />
         </div>
 
@@ -76,7 +78,7 @@ export default function InitiativeCard({
         {/* Location and participants */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <div className="flex items-center gap-2 text-neutrals-600 text-sm md:text-base">
-            <div className="flex-center size-full p-0.5 bg-primary-500 rounded-full">
+            <div className="flex-center size-fit p-0.5 bg-primary-500 rounded-full">
               <MapPin className="w-5 h-5 md:w-5 md:h-5 text-neutrals-100" />
             </div>
             <span>{city}</span>

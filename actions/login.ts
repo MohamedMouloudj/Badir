@@ -1,40 +1,35 @@
 "use server";
 
+import { AUTHORIZED_REDIRECTION } from "@/data/routes";
 import { auth } from "@/lib/auth";
+import { loginSchema, type LoginFormData } from "@/schemas/loginSchema";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
+import z from "zod";
 
 export type LoginState = {
   success?: boolean;
   message?: string;
   error?: string;
+  errors?: Partial<Record<keyof LoginFormData, string[]>>;
 };
 
-export async function loginAction(
-  prevState: LoginState | null,
-  formData: FormData
-): Promise<LoginState> {
+export async function loginAction(data: LoginFormData): Promise<LoginState> {
   try {
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-
-    console.log("Login action called with email:", email);
-
-    if (!email || !password) {
-      return {
-        success: false,
-        error: "يرجى إدخال البريد الإلكتروني وكلمة المرور",
-      };
-    }
+    // Server-side validation with Zod
+    const validatedData = loginSchema.parse(data);
 
     const response = await auth.api.signInEmail({
-      body: { email, password },
+      body: {
+        email: validatedData.email,
+        password: validatedData.password,
+      },
       headers: await headers(),
       asResponse: true,
     });
 
+    // Handle failed login
     if (!response.ok) {
-      // Simple error handling based on status code
       if (response.status === 401) {
         return {
           success: false,
@@ -52,44 +47,41 @@ export async function loginAction(
         };
       }
     }
-
-    // Success—redirect to dashboard or home
-    redirect("/");
   } catch (error) {
-    console.error("Login error:", error);
+    if (error instanceof z.ZodError) {
+      const treeError = z.treeifyError(error);
+      // Convert the tree structure to field errors format
+      const fieldErrors: Partial<Record<keyof LoginFormData, string[]>> = {};
 
-    // Re-throw redirect errors (this is normal Next.js behavior)
-    if (
-      error &&
-      typeof error === "object" &&
-      "digest" in error &&
-      typeof error.digest === "string" &&
-      error.digest.includes("NEXT_REDIRECT")
-    ) {
-      throw error;
+      // Extract field-specific errors from the tree structure
+      if (typeof treeError === "object" && treeError !== null) {
+        for (const [field, fieldError] of Object.entries(treeError)) {
+          if (
+            field !== "formErrors" &&
+            typeof fieldError === "object" &&
+            fieldError !== null &&
+            "errors" in fieldError
+          ) {
+            fieldErrors[field as keyof LoginFormData] = (
+              fieldError as { errors: string[] }
+            ).errors;
+          }
+        }
+      }
+
+      return {
+        success: false,
+        errors: fieldErrors,
+      };
     }
 
+    console.error("Login error:", error);
     return {
       success: false,
       error: "حدث خطأ أثناء تسجيل الدخول. يرجى المحاولة مرة أخرى",
     };
   }
-}
 
-// Keep the old function for backward compatibility if needed
-export async function login(formData: FormData) {
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
-
-  const response = await auth.api.signInEmail({
-    body: { email, password },
-    headers: await headers(),
-    asResponse: true,
-  });
-
-  if (!response.ok) {
-    return { error: "Sign-in failed" };
-  }
-
-  return { success: true };
+  // Success: redirect (this throws NEXT_REDIRECT which Next.js handles)
+  redirect(AUTHORIZED_REDIRECTION, RedirectType.replace);
 }

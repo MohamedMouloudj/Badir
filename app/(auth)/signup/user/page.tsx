@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function UserSignupPage() {
   return (
-    <section className="min-h-screen w-full flex items-center justify-center bg-primary-600">
+    <section className="min-h-screen w-full flex items-center justify-center bg-primary-600 p-4">
       <div className="w-full max-w-7xl flex flex-col lg:flex-row bg-neutrals-100 rounded-xl shadow-2xl overflow-hidden min-h-[600px]">
         {/* Image Section */}
         <div className="flex-1 relative h-64 lg:h-auto">

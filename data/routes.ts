@@ -62,16 +62,17 @@ const authRoutes: Record<string, any> = {
 };
 
 const forMiddleware = {
-  publicRoutes: [
-    "/",
-    "/organizations",
-    "/initiatives",
-    "/contact",
-    "/about",
-    "/form-demo",
-  ],
+  publicRoutes: ["/", "/organizations", "/initiatives", "/contact", "/about"],
   authRoutes: ["/signup", "/login", "/forgot-password"],
   apiAuthPrefix: "/api/auth",
 };
 
-export { landingRoute, appRoutes, authRoutes, forMiddleware };
+const AUTHORIZED_REDIRECTION = "/initiatives";
+
+export {
+  landingRoute,
+  appRoutes,
+  authRoutes,
+  forMiddleware,
+  AUTHORIZED_REDIRECTION,
+};

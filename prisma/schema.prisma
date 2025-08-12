@@ -15,6 +15,11 @@ enum UserType {
   both
 }
 
+enum Sex {
+  male
+  female
+}
+
 enum CertificateType {
   pdf
   image
@@ -111,7 +116,7 @@ model User {
   lastName     String    @map("last_name") @db.VarChar(100)
   phone        String?   @db.VarChar(20)
   dateOfBirth  DateTime? @map("date_of_birth") @db.Date
-  profileImage String?   @map("profile_image") @db.VarChar(500)
+  sex          Sex?      @default(male)
   bio          String?   @db.Text
   userType     UserType  @map("user_type")
   latitude     Decimal?  @db.Decimal(10, 8)
@@ -125,7 +130,6 @@ model User {
 
   // Relations
   qualifications          UserQualification[]     @relation("UserQualifications")
-  verifiedQualifications  UserQualification[]     @relation("QualificationVerifier")
   organizationMemberships OrganizationMember[]
   organizedInitiatives    Initiative[]            @relation("UserOrganizedInitiatives")
   createdInitiatives      Initiative[]            @relation("InitiativeCreator")
@@ -170,20 +174,14 @@ model Organization {
 model UserQualification {
   id                    BigInt          @id @default(autoincrement())
   userId                String          @map("user_id")
-  title                 String          @db.VarChar(200)
-  description           String          @db.Text
-  certificateType       CertificateType @map("certificate_type")
-  certificateUrl        String          @map("certificate_url") @db.VarChar(500)
-  isVerified            Boolean         @default(false) @map("is_verified")
-  verifiedBy            String?         @map("verified_by")
-  verifiedAt            DateTime?       @map("verified_at")
-  qualificationCategory String?         @map("qualification_category") @db.VarChar(100)
+  specification         String          @map("specification") @db.VarChar(100)
+  educationalLevel      String          @map("educational_level") @db.VarChar(100)
+  currentJob            String          @map("current_job") @db.VarChar(100)
   createdAt             DateTime        @default(now()) @map("created_at")
   updatedAt             DateTime        @default(now()) @updatedAt @map("updated_at")
 
   // Relations
   user     User  @relation("UserQualifications", fields: [userId], references: [id], onDelete: Cascade)
-  verifier User? @relation("QualificationVerifier", fields: [verifiedBy], references: [id], onDelete: SetNull)
 
   @@map("user_qualifications")
 }

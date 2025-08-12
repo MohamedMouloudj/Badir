@@ -28,7 +28,6 @@ export async function signupAction(
     // Validate the form data
     const validatedData = initialSignupSchema.parse(data);
 
-    // Check if user already exists in database
     const existingUser = await prisma.user.findUnique({
       where: {
         email: validatedData.email,
@@ -76,23 +75,10 @@ export async function signupAction(
       }
     }
 
-    // If successful, redirect to complete profile or home
     redirect("/complete-profile");
   } catch (error) {
     console.error("Signup error:", error);
 
-    // Re-throw redirect errors (this is normal Next.js behavior)
-    if (
-      error &&
-      typeof error === "object" &&
-      "digest" in error &&
-      typeof error.digest === "string" &&
-      error.digest.includes("NEXT_REDIRECT")
-    ) {
-      throw error;
-    }
-
-    // Handle validation errors specifically
     if (error && typeof error === "object" && "errors" in error) {
       return {
         success: false,

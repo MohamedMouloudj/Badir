@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
-import { forMiddleware } from "./data/routes";
+import { AUTHORIZED_REDIRECTION, forMiddleware } from "./data/routes";
 
 export default async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
@@ -31,7 +31,9 @@ export default async function middleware(request: NextRequest) {
       // if (!session?.user.profileCompleted && pathname !== "/complete-profile") {
       //   return NextResponse.redirect(new URL("/complete-profile", request.url));
       // } ---> Move it to component level validation
-      return NextResponse.redirect(new URL("/initiatives", request.url));
+      return NextResponse.redirect(
+        new URL(AUTHORIZED_REDIRECTION, request.url)
+      );
     }
     return null;
   }

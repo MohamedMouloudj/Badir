@@ -14,16 +14,16 @@ export const auth = betterAuth({
         type: "string",
         required: true,
       },
+      sex: {
+        type: "string",
+        required: false,
+      },
       phone: {
         type: "string",
         required: false,
       },
       dateOfBirth: {
         type: "date",
-        required: false,
-      },
-      profileImage: {
-        type: "string",
         required: false,
       },
       bio: {

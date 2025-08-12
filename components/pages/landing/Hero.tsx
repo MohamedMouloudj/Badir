@@ -50,7 +50,12 @@ export default function Hero() {
             والعمل ومُحتاجيه.
           </p>
           <div className="flex-center max-xl:justify-center max-sm:items-end gap-4 flex-1 py-6">
-            <AppButton type="outline" corner="rounded" size="lg">
+            <AppButton
+              type="outline"
+              corner="rounded"
+              size="lg"
+              url="/initiatives"
+            >
               اكتشف المبادرات
             </AppButton>
             <AppButton

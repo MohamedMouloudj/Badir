@@ -59,6 +59,73 @@ export interface FormInputProps {
   multiple?: boolean; // For multi-select combobox
 }
 
+/**
+ * A versatile form input component that supports multiple input types with consistent styling and error handling.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * // Text input example
+ * <FormInput
+ *   type="text"
+ *   label="Name"
+ *   name="name"
+ *   placeholder="Enter your name"
+ *   value={name}
+ *   onChange={(value) => setName(value as string)}
+ * />
+ *
+ * // Select example
+ * <FormInput
+ *   type="select"
+ *   label="Country"
+ *   name="country"
+ *   options={[
+ *     { value: "us", label: "United States" },
+ *     { value: "ca", label: "Canada" }
+ *   ]}
+ *   value={selectedCountry}
+ *   onChange={(value) => setSelectedCountry(value as string)}
+ * />
+ *
+ * // Multi-select combobox example
+ * <FormInput
+ *   type="combobox"
+ *   label="Skills"
+ *   name="skills"
+ *   multiple={true}
+ *   options={skillOptions}
+ *   value={selectedSkills}
+ *   onChange={(value) => setSelectedSkills(value as string[])}
+ * />
+ * ```
+ *
+ * @param {FormInputProps} props - The props for the form input component
+ * @param {("text" | "email" | "password" | "checkbox" | "switch" | "textarea" | "radio" | "select" | "combobox")} props.type - The type of input field to render
+ * @param {string} props.label - The label text displayed for the input field
+ * @param {string} props.name - The name attribute for the input field, used for form handling and accessibility
+ * @param {string} [props.placeholder] - Placeholder text shown when the input is empty
+ * @param {boolean} [props.isOptional=false] - Whether the field is optional (affects required indicator display)
+ * @param {string} [props.optionalText="اختياري"] - Text displayed for optional fields (defaults to Arabic "optional")
+ * @param {(string | boolean | string[])} [props.value] - The current value of the input field
+ * @param {(value: string | boolean | string[]) => void} [props.onChange] - Callback function called when the input value changes
+ * @param {() => void} [props.onBlur] - Callback function called when the input loses focus
+ * @param {string} [props.error] - Error message to display below the input field
+ * @param {boolean} [props.disabled=false] - Whether the input field is disabled
+ * @param {string} [props.className] - Additional CSS classes to apply to the root container
+ * @param {Option[]} [props.options=[]] - Array of options for radio, select, and combobox input types
+ * @param {number} [props.rows=4] - Number of rows for textarea input type
+ * @param {boolean} [props.rtl=true] - Whether to apply right-to-left text direction
+ * @param {boolean} [props.multiple=false] - Whether to allow multiple selections (for combobox type)
+ * @param {React.Ref<HTMLInputElement>} ref - Forwarded ref to the underlying input element
+ *
+ * @returns {React.ForwardRefExoticComponent} A forwardRef component that renders the appropriate input type with consistent styling
+ *
+ * @see {@link Option} for the structure of option objects used in select and combobox types
+ * @see {@link FormInputProps} for complete props interface definition
+ *
+ * @author Mohamed Mouloudj
+ */
 const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
   (
     {
@@ -126,7 +193,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
               id={name}
               name={name}
               placeholder={placeholder}
-              value={value as string}
+              value={(value as string) || ""}
               onChange={(e) => onChange?.(e.target.value)}
               onBlur={onBlur}
               disabled={disabled}
@@ -141,7 +208,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
               id={name}
               name={name}
               placeholder={placeholder}
-              value={value as string}
+              value={(value as string) || ""}
               onChange={(e) => onChange?.(e.target.value)}
               onBlur={onBlur}
               disabled={disabled}
@@ -157,10 +224,10 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
               <Checkbox
                 id={name}
                 name={name}
-                checked={value as boolean}
+                checked={(value as boolean) || false}
                 onCheckedChange={onChange}
                 disabled={disabled}
-                className="data-[state=checked]:bg-secondary-500 data-[state=checked]:border-secondary-500"
+                className="data-[state=checked]:bg-secondary-500 data-[state=checked]:border-secondary-500 border-neutrals-500"
               />
               <label
                 htmlFor={name}
@@ -179,7 +246,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
               </label>
               <Switch
                 id={name}
-                checked={value as boolean}
+                checked={(value as boolean) || false}
                 onCheckedChange={onChange}
                 disabled={disabled}
                 className="data-[state=checked]:bg-secondary-500"
@@ -190,24 +257,24 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         case "radio":
           return (
             <RadioGroup
-              value={value as string}
+              value={(value as string) || ""}
               onValueChange={onChange}
               disabled={disabled}
-              className="space-y-2"
+              className="flex-center gap-4 justify-center w-full flex-wrap"
             >
-              {options.map((option) => (
+              {options.map((option, index) => (
                 <div
-                  key={option.value}
-                  className="flex items-center space-x-2 space-x-reverse"
+                  key={option.value + "-" + index}
+                  className="flex items-center gap-2 space-x-4 space-x-reverse"
                 >
                   <RadioGroupItem
                     value={option.value}
                     id={`${name}-${option.value}`}
-                    className="data-[state=checked]:bg-secondary-500 data-[state=checked]:border-secondary-500"
+                    className="border-2 border-neutrals-300 bg-transparent data-[state=checked]:border-secondary-500 data-[state=focus]:ring-2 data-[state=focus]:ring-secondary-600 data-[state=focus]:ring-offset-2 data-[state=focus]:bg-transparent"
                   />
                   <label
                     htmlFor={`${name}-${option.value}`}
-                    className="text-neutrals-600 cursor-pointer"
+                    className="text-neutrals-600 cursor-pointer whitespace-nowrap"
                   >
                     {option.label}
                   </label>
@@ -216,22 +283,55 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
             </RadioGroup>
           );
 
+        // In FormInput.tsx, update the select case:
         case "select":
           return (
             <Select
-              value={value as string}
-              onValueChange={onChange}
+              value={(value as string) || ""}
+              onValueChange={(selectedValue) => onChange?.(selectedValue)}
               disabled={disabled}
             >
-              <SelectTrigger className={baseInputClasses}>
-                <SelectValue placeholder={placeholder} />
+              <SelectTrigger
+                className={cn(
+                  "w-full border border-neutrals-300 rounded-full px-3 py-2 placeholder:text-neutrals-300 text-neutrals-700 focus:border-secondary-600 focus:ring-1 focus:ring-secondary-600 focus:outline-none bg-neutrals-100",
+                  error &&
+                    "border-state-error focus:border-state-error focus:ring-state-error",
+                  disabled && "bg-neutrals-200 cursor-not-allowed",
+                  className
+                )}
+              >
+                <SelectValue placeholder={placeholder || `اختر ${label}`} />
               </SelectTrigger>
               <SelectContent>
-                {options.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
+                {options.map((option, index) => {
+                  // Handle option objects with key, value, and label
+                  if (
+                    option &&
+                    typeof option === "object" &&
+                    "value" in option &&
+                    "label" in option
+                  ) {
+                    const optionKey =
+                      index || `${option.value}-${Math.random()}`;
+                    return (
+                      <SelectItem key={optionKey} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    );
+                  }
+                  // Handle simple string arrays (fallback)
+                  else if (typeof option === "string") {
+                    return (
+                      <SelectItem
+                        key={`${option}-${Math.random()}`}
+                        value={option}
+                      >
+                        {option}
+                      </SelectItem>
+                    );
+                  }
+                  return null;
+                })}
               </SelectContent>
             </Select>
           );
@@ -240,7 +340,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
           const isMultiple = multiple;
           const currentValues = isMultiple
             ? (value as string[]) || []
-            : (value as string);
+            : (value as string) || "";
 
           const filteredOptions = options.filter((option) =>
             option.label.toLowerCase().includes(searchValue.toLowerCase())
@@ -262,7 +362,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
 
           const getDisplayValue = () => {
             if (isMultiple) {
-              const valuesArray = currentValues as string[];
+              const valuesArray = (currentValues as string[]) || [];
               const selected = options.filter((opt) =>
                 valuesArray.includes(opt.value)
               );
@@ -270,8 +370,9 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
                 ? `${selected.length} عنصر محدد`
                 : placeholder;
             }
-            return value
-              ? options.find((opt) => opt.value === value)?.label
+            const currentValue = (currentValues as string) || "";
+            return currentValue
+              ? options.find((opt) => opt.value === currentValue)?.label
               : placeholder;
           };
 
@@ -299,14 +400,14 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
                   <CommandEmpty>لا توجد نتائج</CommandEmpty>
                   <CommandGroup>
                     <CommandList>
-                      {filteredOptions.map((option) => {
+                      {filteredOptions.map((option, index) => {
                         const isSelected = isMultiple
                           ? (currentValues as string[]).includes(option.value)
                           : value === option.value;
 
                         return (
                           <CommandItem
-                            key={option.value}
+                            key={option.value + "-" + index}
                             value={option.value}
                             onSelect={() => handleSelect(option.value)}
                           >

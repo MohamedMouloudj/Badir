@@ -1,4 +1,4 @@
-import TestimonialCard from "@/components/pages/TestimonialCard";
+import TestimonialCard from "@/components/pages/landing/TestimonialCard";
 import { sampleRatings } from "@/data/statics";
 import React from "react";
 

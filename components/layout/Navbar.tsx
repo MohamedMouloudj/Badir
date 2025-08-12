@@ -5,9 +5,8 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import Logo from "../Logo";
-import SignInButton from "@/components/SignInButton";
-import SignUpButton from "@/components/SignUpButton";
+import { AuthProfileButtons } from "@/components/AuthProfileButtons";
+import Logo from "@/components/Logo";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -58,7 +57,9 @@ export default function Navbar() {
     <nav
       ref={navRef}
       dir="rtl"
-      className={`${isMenuOpen ? "shadow-none" : "shadow-md"} md:shadow-md`}
+      className={`app-navbar ${
+        isMenuOpen ? "shadow-none" : "shadow-md"
+      } md:shadow-md`}
     >
       {/* Mobile Burger Menu Button */}
       <button
@@ -93,10 +94,7 @@ export default function Navbar() {
             </li>
           ))}
         </ul>
-        <div className="flex items-center gap-4">
-          <SignUpButton />
-          <SignInButton />
-        </div>
+        <AuthProfileButtons isMobile={false} />
       </div>
 
       {/* Mobile Menu Overlay */}
@@ -127,11 +125,7 @@ export default function Navbar() {
             </ul>
 
             <div className="bg-secondary-200 h-0.25 w-full mb-6" />
-            {/* Mobile Auth Buttons */}
-            <div className="flex flex-col flex-1/3 gap-3">
-              <SignUpButton />
-              <SignInButton />
-            </div>
+            <AuthProfileButtons isMobile={true} />
           </div>
         </div>
       )}

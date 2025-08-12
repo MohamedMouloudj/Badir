@@ -1,0 +1,393 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserType {
+  helper
+  participant
+  both
+}
+
+enum Sex {
+  male
+  female
+}
+
+enum CertificateType {
+  pdf
+  image
+}
+
+enum OrganizationRole {
+  admin
+  manager
+  member
+}
+
+enum OrganizationStatus {
+  active
+  inactive
+  pending
+}
+
+enum OrganizerType {
+  user
+  organization
+}
+
+enum InitiativeStatus {
+  draft
+  published
+  ongoing
+  completed
+  cancelled
+}
+
+enum TargetAudience {
+  helpers
+  participants
+  both
+}
+
+enum ParticipationType {
+  direct
+  org_member
+  temporary_member
+}
+
+enum ParticipationStatus {
+  registered
+  approved
+  rejected
+  cancelled
+}
+
+enum ParticipantRole {
+  helper
+  participant
+}
+
+enum PostType {
+  announcement
+  update
+  instruction
+  media
+}
+
+enum SupportType {
+  logistical
+  media
+  human_resources
+  technical
+  financial
+  other
+}
+
+enum SupportUrgency {
+  low
+  medium
+  high
+  urgent
+}
+
+enum SupportStatus {
+  pending
+  in_review
+  approved
+  rejected
+  completed
+}
+
+model User {
+  id            String  @id @default(cuid())
+  name          String
+  image         String?
+  email         String  @unique
+  emailVerified Boolean
+
+  firstName    String    @map("first_name") @db.VarChar(100)
+  lastName     String    @map("last_name") @db.VarChar(100)
+  phone        String?   @db.VarChar(20)
+  dateOfBirth  DateTime? @map("date_of_birth") @db.Date
+  sex          Sex?      @default(male)
+  bio          String?   @db.Text
+  userType     UserType  @map("user_type")
+  latitude     Decimal?  @db.Decimal(10, 8)
+  longitude    Decimal?  @db.Decimal(11, 8)
+  city         String?   @db.VarChar(100)
+  state        String?   @db.VarChar(100)
+  country      String?   @default("Algeria") @db.VarChar(100)
+  isActive     Boolean   @default(true) @map("is_active")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  // Relations
+  qualifications          UserQualification[]     @relation("UserQualifications")
+  organizationMemberships OrganizationMember[]
+  organizedInitiatives    Initiative[]            @relation("UserOrganizedInitiatives")
+  createdInitiatives      Initiative[]            @relation("InitiativeCreator")
+  participations          InitiativeParticipant[]
+  posts                   InitiativePost[]
+  supportRequests         SupportRequest[]
+  ratings                 UserInitiativeRating[]
+  sessions                Session[]
+  accounts                Account[]
+
+  profileCompleted Boolean @default(false) @map("profile_completed")
+
+  @@map("users")
+}
+
+model Organization {
+  id           BigInt   @id @default(autoincrement())
+  name         String   @db.VarChar(200)
+  description  String?  @db.Text
+  logo         String?  @db.VarChar(500)
+  contactEmail String?  @map("contact_email") @db.VarChar(255)
+  contactPhone String?  @map("contact_phone") @db.VarChar(20)
+  website      String?  @db.VarChar(255)
+  address      String?  @db.Text
+  city         String?  @db.VarChar(100)
+  state        String?  @db.VarChar(100)
+  country      String?  @default("Algeria") @db.VarChar(100)
+  latitude     Decimal? @db.Decimal(10, 8)
+  longitude    Decimal? @db.Decimal(11, 8)
+  isVerified   Boolean  @default(false) @map("is_verified")
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
+
+  // Relations
+  members     OrganizationMember[]
+  initiatives Initiative[]         @relation("OrganizationInitiatives")
+
+  @@map("organizations")
+}
+
+model UserQualification {
+  id                    BigInt          @id @default(autoincrement())
+  userId                String          @map("user_id")
+  specification         String          @map("specification") @db.VarChar(100)
+  educationalLevel      String          @map("educational_level") @db.VarChar(100)
+  currentJob            String          @map("current_job") @db.VarChar(100)
+  createdAt             DateTime        @default(now()) @map("created_at")
+  updatedAt             DateTime        @default(now()) @updatedAt @map("updated_at")
+
+  // Relations
+  user     User  @relation("UserQualifications", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_qualifications")
+}
+
+model OrganizationMember {
+  id             BigInt             @id @default(autoincrement())
+  organizationId BigInt             @map("organization_id")
+  userId         String             @map("user_id")
+  role           OrganizationRole   @default(member)
+  status         OrganizationStatus @default(active)
+  joinedAt       DateTime           @default(now()) @map("joined_at")
+
+  // Relations
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId], name: "unique_membership")
+  @@map("organization_members")
+}
+
+model InitiativeCategory {
+  id            Int      @id @default(autoincrement())
+  nameAr        String   @map("name_ar") @db.VarChar(100)
+  nameEn        String?  @map("name_en") @db.VarChar(100)
+  descriptionAr String?  @map("description_ar") @db.Text
+  descriptionEn String?  @map("description_en") @db.Text
+  icon          String?  @db.VarChar(100)
+  bgColor       String?  @db.VarChar(7)
+  textColor     String?  @db.VarChar(7)
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  // Relations
+  initiatives Initiative[]
+
+  @@map("initiative_categories")
+}
+
+model Initiative {
+  id                       BigInt           @id @default(autoincrement())
+  organizerType            OrganizerType    @map("organizer_type")
+  organizerUserId          String?          @map("organizer_user_id")
+  organizerOrgId           BigInt?          @map("organizer_org_id")
+  createdByUserId          String           @map("created_by_user_id")
+  categoryId               Int              @map("category_id")
+  titleAr                  String           @map("title_ar") @db.VarChar(200)
+  titleEn                  String?          @map("title_en") @db.VarChar(200)
+  descriptionAr            String           @map("description_ar") @db.Text
+  descriptionEn            String?          @map("description_en") @db.Text
+  shortDescriptionAr       String?          @map("short_description_ar") @db.VarChar(500)
+  shortDescriptionEn       String?          @map("short_description_en") @db.VarChar(500)
+  location                 String           @db.VarChar(255)
+  city                     String           @db.VarChar(100)
+  state                    String?          @db.VarChar(100)
+  country                  String?          @default("Algeria") @db.VarChar(100)
+  latitude                 Decimal?         @db.Decimal(10, 8)
+  longitude                Decimal?         @db.Decimal(11, 8)
+  startDate                DateTime         @map("start_date")
+  endDate                  DateTime         @map("end_date")
+  registrationDeadline     DateTime?        @map("registration_deadline")
+  maxParticipants          Int?             @map("max_participants")
+  currentParticipants      Int              @default(0) @map("current_participants")
+  isOpenParticipation      Boolean          @default(true) @map("is_open_participation")
+  targetAudience           TargetAudience   @default(both) @map("target_audience")
+  requiredQualifications   Json?            @map("required_qualifications")
+  requiresOrgMembership    Boolean          @default(false) @map("requires_org_membership")
+  allowTemporaryMembership Boolean          @default(false) @map("allow_temporary_membership")
+  membershipFormFields     Json?            @map("membership_form_fields")
+  status                   InitiativeStatus @default(draft)
+  isFeatured               Boolean          @default(false) @map("is_featured")
+  coverImage               String?          @map("cover_image") @db.VarChar(500)
+  gallery                  Json?
+  createdAt                DateTime         @default(now()) @map("created_at")
+  updatedAt                DateTime         @default(now()) @updatedAt @map("updated_at")
+
+  // Relations
+  organizerUser   User?                   @relation("UserOrganizedInitiatives", fields: [organizerUserId], references: [id], onDelete: Cascade)
+  organizerOrg    Organization?           @relation("OrganizationInitiatives", fields: [organizerOrgId], references: [id], onDelete: Cascade)
+  createdBy       User                    @relation("InitiativeCreator", fields: [createdByUserId], references: [id], onDelete: Cascade)
+  category        InitiativeCategory      @relation(fields: [categoryId], references: [id])
+  participants    InitiativeParticipant[]
+  posts           InitiativePost[]
+  supportRequests SupportRequest[]
+  ratings         UserInitiativeRating[]
+
+  @@map("initiatives")
+}
+
+model InitiativeParticipant {
+  id                 BigInt              @id @default(autoincrement())
+  initiativeId       BigInt              @map("initiative_id")
+  userId             String              @map("user_id")
+  participationType  ParticipationType   @map("participation_type")
+  status             ParticipationStatus @default(registered)
+  participantRole    ParticipantRole     @map("participant_role")
+  membershipFormData Json?               @map("membership_form_data")
+  adminNotes         String?             @map("admin_notes") @db.Text
+  isCheckedIn        Boolean             @default(false) @map("is_checked_in")
+  checkInTime        DateTime?           @map("check_in_time")
+  checkOutTime       DateTime?           @map("check_out_time")
+  registeredAt       DateTime            @default(now()) @map("registered_at")
+  updatedAt          DateTime            @default(now()) @updatedAt @map("updated_at")
+
+  // Relations
+  initiative Initiative @relation(fields: [initiativeId], references: [id], onDelete: Cascade)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([initiativeId, userId], name: "unique_participation")
+  @@map("initiative_participants")
+}
+
+model InitiativePost {
+  id           BigInt   @id @default(autoincrement())
+  initiativeId BigInt   @map("initiative_id")
+  authorId     String   @map("author_id")
+  title        String?  @db.VarChar(200)
+  content      String   @db.Text
+  postType     PostType @default(announcement) @map("post_type")
+  attachments  Json?
+  isPinned     Boolean  @default(false) @map("is_pinned")
+  isVisible    Boolean  @default(true) @map("is_visible")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
+
+  // Relations
+  initiative Initiative @relation(fields: [initiativeId], references: [id], onDelete: Cascade)
+  author     User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@map("initiative_posts")
+}
+
+model SupportRequest {
+  id           BigInt         @id @default(autoincrement())
+  initiativeId BigInt         @map("initiative_id")
+  requesterId  String         @map("requester_id")
+  supportType  SupportType    @map("support_type")
+  title        String         @db.VarChar(200)
+  description  String         @db.Text
+  urgency      SupportUrgency @default(medium)
+  status       SupportStatus  @default(pending)
+  adminNotes   String?        @map("admin_notes") @db.Text
+  requestedAt  DateTime       @default(now()) @map("requested_at")
+  updatedAt    DateTime       @default(now()) @updatedAt @map("updated_at")
+
+  // Relations
+  initiative Initiative @relation(fields: [initiativeId], references: [id], onDelete: Cascade)
+  requester  User       @relation(fields: [requesterId], references: [id], onDelete: Cascade)
+
+  @@map("support_requests")
+}
+
+model UserInitiativeRating {
+  id           Int     @id @default(autoincrement())
+  userId       String  @map("user_id")
+  initiativeId BigInt  @map("initiative_id")
+  rating       Int?
+  comment      String? @db.Text
+
+  // Relations
+  user       User       @relation(fields: [userId], references: [id])
+  initiative Initiative @relation(fields: [initiativeId], references: [id])
+
+  @@map("User_Initiative_Rating")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}

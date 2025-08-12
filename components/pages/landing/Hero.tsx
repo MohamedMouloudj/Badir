@@ -1,7 +1,7 @@
 "use client";
 
 import AppButton from "@/components/AppButton";
-import HeroCarousel from "@/components/pages/HeroCarousel";
+import HeroCarousel from "@/components/pages/landing/HeroCarousel";
 import { ArrowUpLeft } from "lucide-react";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
@@ -36,9 +36,6 @@ export default function Hero() {
     <section
       className="flex-center-column xl:flex-center justify-evenly items-stretch"
       dir="rtl"
-      style={{
-        padding: "calc(var(--navbar-height) - 2rem) 0 4rem",
-      }}
     >
       <div className="flex-center-column max-xl:text-center gap-10 justify-between items-center h-full flex-1/2 xl:pr-8">
         <div className="flex-center-column gap-8 justify-between h-full">
@@ -53,7 +50,12 @@ export default function Hero() {
             والعمل ومُحتاجيه.
           </p>
           <div className="flex-center max-xl:justify-center max-sm:items-end gap-4 flex-1 py-6">
-            <AppButton type="outline" corner="rounded" size="lg">
+            <AppButton
+              type="outline"
+              corner="rounded"
+              size="lg"
+              url="/initiatives"
+            >
               اكتشف المبادرات
             </AppButton>
             <AppButton

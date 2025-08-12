@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { InitiativeCategory } from "@/types";
+import { InitiativeCategory } from "@prisma/client";
 import React from "react";
 import { Badge } from "../ui/badge";
 
@@ -21,8 +21,8 @@ export default function CategoryBadge({
         textColor === undefined && "text-secondary-600"
       )}
       style={{
-        backgroundColor: bgColor,
-        color: textColor,
+        backgroundColor: bgColor ?? "transparent",
+        color: textColor ?? "inherit",
       }}
     >
       {categoryName}

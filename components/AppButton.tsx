@@ -4,18 +4,19 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 type ButtonProps = {
-  type: "primary" | "outline";
+  type: "primary" | "outline" | "submit";
   children?: ReactNode;
   className?: string;
   url?: string;
   size?: "sm" | "md" | "lg";
   corner?: "default" | "rounded";
   icon?: ReactNode;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
+  dir?: "ltr" | "rtl";
 };
 
-/*
+/**
  * Reusable button component that can be used throughout the application.
  * It supports different types, sizes, and can be used as a link or a regular button
  *
@@ -29,6 +30,8 @@ type ButtonProps = {
  * @param {function} [props.onClick] - A function to call when the button is clicked.
  * @param {boolean} [props.disabled=false] - Whether the button is disabled.
  * @return {JSX.Element} The rendered button component.
+ *
+ * @author Mohamed Mouloudj
  * */
 function AppButton({
   children,
@@ -40,6 +43,7 @@ function AppButton({
   icon,
   onClick,
   disabled = false,
+  dir = "ltr",
 }: ButtonProps) {
   const sizeClasses = {
     sm: "text-button-sm sm:text-button-md px-3 sm:px-4 h-8 sm:h-10",
@@ -52,7 +56,8 @@ function AppButton({
       className={cn(
         "font-medium transition-all flex-center cursor-pointer",
         sizeClasses[size],
-        type === "primary" && "bg-primary-500 text-white hover:bg-primary-400",
+        (type === "primary" || type === "submit") &&
+          "bg-primary-500 text-white hover:bg-primary-400",
         type === "outline" &&
           "border border-primary-500 text-primary-500 bg-transparent hover:bg-primary-100 hover:text-primary-400",
         corner === "rounded" && "rounded-full",
@@ -61,8 +66,8 @@ function AppButton({
       )}
       onClick={onClick}
       disabled={disabled}
-      type="button"
-      dir="ltr"
+      type={type === "submit" ? "submit" : "button"}
+      dir={dir}
     >
       {icon} {url ? <Link href={url}>{children}</Link> : children}
     </ShadcnButton>

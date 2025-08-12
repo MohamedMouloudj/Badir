@@ -1,4 +1,4 @@
-import Stat from "@/components/pages/Stat";
+import Stat from "@/components/pages/landing/Stat";
 import statistics from "@/data/statistics";
 import React from "react";
 

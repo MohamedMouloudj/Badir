@@ -1,36 +1,165 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Badir - Community Initiative Platform
 
-## Getting Started
+**Badir** is a comprehensive platform designed to connect volunteers and participants with meaningful community initiatives. The platform enables organizations and individuals to create, manage, and participate in social impact projects across various categories.
 
-First, run the development server:
+**Purpose**: Badir aims to build stronger communities by facilitating collaboration between initiative organizers and community members, making it easier to discover, join, and contribute to positive social change initiatives.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Tech Stack
+
+### Frontend
+
+- **Next.js 15** - React framework with App Router
+- **React 19** - UI library
+- **TypeScript** - Type-safe development
+- **Tailwind CSS 4** - Utility-first CSS framework
+- **Shadcn/UI** - Component library built on Radix UI
+- **Lucide React** - Icon library
+- **React Hook Form** - Form management
+- **Zod** - Schema validation
+
+### Backend & Database
+
+- **PostgreSQL** - Primary database
+- **Prisma ORM** - Database toolkit and query builder
+- **Better Auth** - Authentication system
+- **Next.js API Routes** - Server-side API endpoints
+
+### UI/UX
+
+- **GSAP** - Advanced animations
+- **Embla Carousel** - Touch-friendly carousels
+- **React Fast Marquee** - Scrolling animations
+- **React Responsive** - Responsive design utilities
+
+### Development Tools
+
+- **ESLint** - Code linting
+- **Prisma Studio** - Database management
+- **TSX** - TypeScript execution
+- **Turbopack** - Fast bundler (Next.js)
+
+## Architecture
+
+### Project Structure
+
+```
+badir-bunian-hackathon/
+├── app/                          # Next.js App Router
+│   ├── (auth)/                   # Authentication routes
+│   ├── api/                      # API endpoints
+│   ├── initiatives/              # Initiatives pages
+│   └── about/                    # Static pages
+├── components/                   # Reusable UI components
+│   ├── ui/                       # Base UI components (Shadcn)
+│   ├── pages/                    # Page-specific components
+│   └── layout/                   # Layout components
+├── lib/                          # Utilities and configurations
+│   ├── auth.ts                   # Authentication config
+│   ├── db.ts                     # Database connection
+│   └── utils.ts                  # Helper functions
+├── services/                     # Business logic layer
+│   ├── initiatives.ts            # Initiative CRUD operations
+│   └── categories.ts             # Category management
+├── schemas/                      # Zod validation schemas
+├── types/                        # TypeScript type definitions
+├── prisma/                       # Database schema and migrations
+│   ├── schema.prisma             # Database schema
+│   └── seed.ts                   # Database seeding
+└── public/                       # Static assets
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Database Architecture
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+Users ←→ Initiatives (Many-to-Many via Participations)
+  ↓
+Organizations ←→ Users (Many-to-Many via Memberships)
+  ↓
+Categories ←→ Initiatives (One-to-Many)
+  ↓
+Certificates ← Participations (One-to-One)
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Key Features Architecture (Implemented ones)
 
-## Learn More
+#### Authentication System
 
-To learn more about Next.js, take a look at the following resources:
+- **Better Auth** integration with Prisma adapter
+- Support for both individual users and organizations
+- JWT-based session management
+- Role-based access control (Admin, Manager, Member)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### Initiative Management
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **CRUD Operations**: Create, read, update, delete initiatives
+- **Advanced Filtering**: By category, status, location, organizer type
+- **Search Functionality**: Full-text search across initiatives
+- **Pagination**: Efficient data loading with cursor-based pagination
 
-## Deploy on Vercel
+#### User Management
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Dual User Types**: Helpers (volunteers) and Participants (beneficiaries)
+- **Profile Completion**: Step-by-step profile setup
+- **Geolocation Support**: Location-based initiative discovery
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+#### Organization System (In development)
+
+- **Multi-role Organizations**: Admin, Manager, Member roles
+- **Organization Initiatives**: Organizations can create and manage initiatives
+- **Membership Management**: Invite and manage organization members
+
+#### UI/UX Design
+
+- **Responsive Design**: Mobile-first approach with Tailwind CSS
+- **RTL Support**: Arabic language support with right-to-left layout
+- **Accessibility**: WCAG compliant components from Radix UI
+- **Dark Mode**: Theme switching support
+
+### API Architecture
+
+```
+/api/initiatives/     # Initiative CRUD operations
+├── GET /             # List initiatives with filters
+├── POST /            # Create new initiative
+├── GET /[id]         # Get initiative details
+├── PUT /[id]         # Update initiative
+└── DELETE /[id]      # Delete initiative
+
+/api/auth/            # Authentication endpoints
+└── [...all]/         # Better Auth handlers
+```
+
+### Data Flow
+
+1. **Client Request** → Next.js API Route
+2. **API Route** → Service Layer (Business Logic)
+3. **Service Layer** → Prisma ORM
+4. **Prisma** → PostgreSQL Database
+5. **Response** → Client via JSON
+
+### State Management
+
+- **React State**: Local component state with useState/useReducer
+- **Server State**: API data fetching with native fetch
+- **Form State**: React Hook Form for complex forms
+- **Theme State**: Next Themes for dark/light mode
+
+## Core Functionalities
+
+- **Initiative Discovery**: Browse and search community initiatives
+- **User Authentication**: Secure login/signup for individuals and organizations
+- **Profile Management**: Complete user profiles with location and preferences
+- **Initiative Participation**: Join initiatives as helper or participant
+- **Organization Management**: Create and manage organizational accounts
+- **Certificate Generation**: Issue participation certificates
+- **Multi-language Support**: Arabic and English interface
+- **Responsive Design**: Optimized for desktop, tablet, and mobile
+
+### Setup Instructions
+
+1. **Clone the repository**
+2. **Install dependencies**: `npm install`
+3. **Set up environment variables**: Copy `.env.example` to `.env.local`
+4. **Set up database**: Run `npx prisma migrate dev`
+5. **Seed database**: Run `npx prisma db seed`
+6. **Start development server**: `npm run dev`

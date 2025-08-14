@@ -14,6 +14,8 @@ import {
   UserType,
 } from "@prisma/client";
 
+const BADIR_EMAIL = "badircontact@gmail.com";
+
 const heroCarouselItems: CarouselImage[] = [
   {
     id: 1,
@@ -312,4 +314,5 @@ export {
   sampleInitiatives,
   partners,
   aboutInfo,
+  BADIR_EMAIL,
 };

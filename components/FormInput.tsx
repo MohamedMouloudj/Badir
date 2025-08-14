@@ -154,7 +154,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
     const isSwitch = type === "switch";
 
     const baseInputClasses = cn(
-      "w-full border border-neutrals-300 rounded-full px-3 py-2",
+      "w-full border border-neutrals-300 rounded-full px-4 py-2",
       "placeholder:text-neutrals-300 text-neutrals-700",
       "focus:border-secondary-600 focus:ring-1 focus:ring-secondary-600 focus:outline-none",
       "disabled:opacity-50 disabled:cursor-not-allowed",
@@ -213,7 +213,15 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
               onBlur={onBlur}
               disabled={disabled}
               rows={rows}
-              className={baseInputClasses}
+              className={cn(
+                baseInputClasses,
+                "resize-none scrollbar-rtl",
+                className
+              )}
+              style={{
+                direction: rtl ? "rtl" : "ltr",
+                textAlign: rtl ? "right" : "left",
+              }}
               {...props}
             />
           );

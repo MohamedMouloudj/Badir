@@ -12,9 +12,9 @@ export default function Policies() {
         <div className="bg-primary-500 p-4 rounded-full mb-4">
           <ShieldUser className="w-8 h-8 text-white" />
         </div>
-        <h1 className="text-primary-500 text-primary-md font-bold mb-2">
+        <h2 className="text-primary-500 section-title font-bold mb-2">
           سياسة الخصوصية
-        </h1>
+        </h2>
         <p className="text-neutrals-600 text-center text-secondary-sm font-semibold max-w-2xl">
           نحن ملتزمون بحماية خصوصيتك وبياناتك الشخصية. تحدد هذه السياسة كيفية
           جمع واستخدام وحماية معلوماتك

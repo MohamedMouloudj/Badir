@@ -1,5 +1,5 @@
 // components/pages/footer-pages/Terms.tsx
-import { ScrollText } from "lucide-react";
+import { Scale } from "lucide-react";
 import { FooterPageSection } from "@/components/pages/FooterPageSection";
 import { FooterPageItem } from "@/components/pages/FooterPageItem";
 import AppButton from "@/components/AppButton";
@@ -11,11 +11,11 @@ export default function Terms() {
       {/* Header */}
       <div className="flex flex-col items-center justify-center mb-8">
         <div className="bg-primary-500 p-4 rounded-full mb-4">
-          <ScrollText className="w-8 h-8 text-white" />
+          <Scale className="w-8 h-8 text-white" />
         </div>
-        <h1 className="text-primary-500 text-primary-md font-bold mb-2">
+        <h2 className="text-primary-500 section-title font-bold mb-2">
           شروط الاستخدام
-        </h1>
+        </h2>
         <p className="text-neutrals-600 text-center text-secondary-sm font-semibold max-w-2xl">
           اقرأ بعناية وتأكد من استخدام منصتنا وفقًا لشروط استخدامنا
         </p>

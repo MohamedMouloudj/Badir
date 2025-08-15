@@ -25,7 +25,7 @@ export default function GuideItem({
   return (
     <div className="flex items-start">
       <div className="flex-1">
-        <h3 className="text-primary-500 font-bold text-lg inline-block ml-2">
+        <h3 className="text-primary-500 font-bold text-secondary-sm inline-block ml-2">
           {title}:
         </h3>{" "}
         <span className="text-neutrals-700">{content}</span>

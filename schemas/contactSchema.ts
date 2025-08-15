@@ -13,6 +13,7 @@ const inquiryTypes = [
   "شكوى",
   "استفسار إعلامي",
   "معلومات قانونية",
+  "تمويل المنصة",
 ] as const;
 
 const contactSchema = z.object({

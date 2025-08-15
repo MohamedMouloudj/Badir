@@ -6,9 +6,9 @@ export default function OrganizationGuidePage() {
   return (
     <section className="container mx-auto px-4 py-12" dir="rtl">
       {/* Main Title */}
-      <h1 className="text-3xl md:text-4xl font-bold text-primary-500 text-center mb-10">
+      <h2 className="text-3xl md:text-4xl font-bold text-primary-500 text-center mb-10">
         دليل المنظمة
-      </h1>
+      </h2>
 
       {/* Guide Card */}
       <Card className="bg-neutrals-200 border border-neutrals-300 rounded-3xl shadow-sm max-w-4xl mx-auto p-0">

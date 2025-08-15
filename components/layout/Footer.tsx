@@ -46,7 +46,7 @@ export default function Footer() {
                   href="/how-it-works"
                   className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
                 >
-                  كيف نعمل
+                  كيف تعمل
                 </Link>
               </li>
               <li>
@@ -74,7 +74,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/initiatives"
+                  href="/assistance"
                   className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
                 >
                   ابحث عن مبادرات

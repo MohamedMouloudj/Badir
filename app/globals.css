@@ -209,7 +209,8 @@
     padding: calc(var(--navbar-height)) 0 0;
 
     section {
-      @apply gap-4 md:gap-6 px-8;
+      @apply gap-4 md:gap-6 px-8 bg-neutrals-100;
+      padding: 2rem 0 0;
     }
 
     section:last-child {
@@ -298,6 +299,32 @@
       15s / var(--number-marquee) * (var(--number-marquee) - var(--position)) *
         -1
     );
+  }
+
+  /* Text area scrollbar styles for RTL */
+  .scrollbar-rtl {
+    /* Move scrollbar to right side even in RTL context */
+    direction: ltr;
+    text-align: right;
+  }
+
+  /* Ensure the text inside maintains RTL behavior */
+  .scrollbar-rtl::placeholder {
+    text-align: right;
+  }
+
+  /* Improve the scrollbar appearance */
+  .scrollbar-rtl::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scrollbar-rtl::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+
+  .scrollbar-rtl::-webkit-scrollbar-track {
+    background: transparent;
   }
 }
 

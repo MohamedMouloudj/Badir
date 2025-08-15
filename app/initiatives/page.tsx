@@ -4,7 +4,7 @@ import { CategoryService } from "@/services/categories";
 import InitiativesList from "@/components/pages/initiatives/InitiativesList";
 
 export default async function Page() {
-  const session = await getSessionWithCheckProfile();
+  await getSessionWithCheckProfile();
 
   try {
     // Fetch initial data for the page

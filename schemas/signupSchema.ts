@@ -80,7 +80,7 @@ export const step2Schema = z.object({
     .optional()
     .refine(
       (currentJob) => !currentJob || currentJob.length <= 100,
-      "الوظيفة الحالية يجب أن تكون أقل من 100 حرف"
+      "الوظيفة الحالية يجب ألا تتجاوز 100 حرف"
     ),
   bio: z
     .string()

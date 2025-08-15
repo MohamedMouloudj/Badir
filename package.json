@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@better-fetch/fetch": "^1.1.18",
+    "@emailjs/browser": "^4.4.1",
     "@gsap/react": "^2.1.2",
     "@hookform/resolvers": "^5.2.1",
     "@prisma/client": "^6.13.0",

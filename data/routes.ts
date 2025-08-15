@@ -62,7 +62,20 @@ const authRoutes: Record<string, any> = {
 };
 
 const forMiddleware = {
-  publicRoutes: ["/", "/organizations", "/initiatives", "/contact", "/about"],
+  publicRoutes: [
+    "/",
+    "/organizations",
+    "/initiatives",
+    "/contact",
+    "/about",
+    "/privacy-policy",
+    "/terms",
+    "/organization-guide",
+    "/volunteer-guide",
+    "/faq",
+    "/how-it-works",
+    "/assistance",
+  ],
   authRoutes: ["/signup", "/login", "/forgot-password"],
   apiAuthPrefix: "/api/auth",
 };

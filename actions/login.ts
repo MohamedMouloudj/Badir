@@ -16,7 +16,6 @@ export type LoginState = {
 
 export async function loginAction(data: LoginFormData): Promise<LoginState> {
   try {
-    // Server-side validation with Zod
     const validatedData = loginSchema.parse(data);
 
     const response = await auth.api.signInEmail({
@@ -28,7 +27,6 @@ export async function loginAction(data: LoginFormData): Promise<LoginState> {
       asResponse: true,
     });
 
-    // Handle failed login
     if (!response.ok) {
       if (response.status === 401) {
         return {

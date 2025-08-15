@@ -14,6 +14,7 @@ import PaginationControls from "@/components/PaginationControls";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import api from "@/services/api";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface InitiativesListProps {
   initialData: PaginatedResponse<InitiativeCardType>;
@@ -198,16 +199,17 @@ export default function InitiativesList({
             {/* Additional Filters */}
             <div className="mt-4 flex flex-wrap gap-4">
               <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
+                <Checkbox
+                  id="hasAvailableSpots"
+                  name="hasAvailableSpots"
                   checked={filters.hasAvailableSpots || false}
-                  onChange={(e) =>
+                  onCheckedChange={(checked) =>
                     handleFilterChange(
                       "hasAvailableSpots",
-                      e.target.checked ? "true" : ""
+                      checked ? "true" : ""
                     )
                   }
-                  className="w-4 h-4 text-primary-500 border-neutrals-300 rounded focus:ring-primary-500"
+                  className="data-[state=checked]:bg-secondary-500 data-[state=checked]:border-secondary-500 border-neutrals-500"
                 />
                 <span className="text-sm text-neutrals-600">متاح للانضمام</span>
               </label>

@@ -1,9 +1,6 @@
-"use client";
-
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import AppButton from "../AppButton";
+import AppButton from "@/components/AppButton";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -131,7 +128,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/volunteer-guide"
+                  href="/organization-guide"
                   className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
                 >
                   دليل المنظمة

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import emailjs from "@emailjs/browser";
 import { toast } from "sonner";
 import {
   ContactFormData,
@@ -13,9 +12,11 @@ import {
 import AppButton from "@/components/AppButton";
 import FormInput from "@/components/FormInput";
 import { Loader2 } from "lucide-react";
+import api from "@/services/api";
 
 export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const {
     control,
     handleSubmit,
@@ -23,45 +24,34 @@ export default function ContactForm() {
     reset,
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
-    defaultValues: {
-      email: "",
-      fullName: "",
-      title: "",
-      inquiryType: inquiryTypes[0],
-      message: "",
-    },
   });
 
-  const onSubmit = async (data: ContactFormData) => {
+  const onSubmit = async (formData: ContactFormData) => {
     setIsSubmitting(true);
+
     try {
-      const templateParams = {
-        from_name: data.fullName,
-        from_email: data.email,
-        subject: data.title,
-        inquiry_type: data.inquiryType,
-        message: data.message,
-      };
-      emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!);
+      const response = await api.post("/api/contact", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-      const result = await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-        templateParams
-      );
+      const data = response.data;
 
-      if (result.status === 200) {
-        toast.success("تم إرسال رسالتك بنجاح! سنتواصل معك قريباً");
+      if (data.success) {
+        toast.success(data.message || "تم إرسال رسالتك بنجاح!");
         reset();
+      } else {
+        toast.error(data.error || "حدث خطأ أثناء إرسال الرسالة");
       }
     } catch (error) {
-      console.error("EmailJS Error:", error);
-      toast.error("حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة مرة أخرى");
+      console.error("Form submission error:", error);
+      toast.error("حدث خطأ غير متوقع");
     } finally {
       setIsSubmitting(false);
     }
   };
-
   return (
     <div className="size-full flex-2/3 mx-auto" dir="rtl">
       <div className="h-full bg-neutrals-50 border-2 border-neutrals-300 rounded-3xl p-6 md:p-8 lg:p-10 shadow-sm flex-center-column">

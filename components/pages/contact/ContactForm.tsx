@@ -13,6 +13,7 @@ import {
 import AppButton from "@/components/AppButton";
 import FormInput from "@/components/FormInput";
 import { Loader2 } from "lucide-react";
+import emailConfig from "@/lib/email";
 
 export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -42,11 +43,11 @@ export default function ContactForm() {
         inquiry_type: data.inquiryType,
         message: data.message,
       };
-      emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!);
+      emailjs.init(emailConfig.publicKey);
 
       const result = await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+        emailConfig.serviceId,
+        emailConfig.templates.contactUs,
         templateParams
       );
 

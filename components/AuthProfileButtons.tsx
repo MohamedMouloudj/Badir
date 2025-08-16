@@ -3,7 +3,7 @@
 import { useSession } from "@/lib/auth-client";
 import React, { useState, useTransition, useEffect } from "react";
 import { logoutAction } from "@/actions/logout";
-import { LogOut, User, Settings } from "lucide-react";
+import { LogOut, User, Settings, Star } from "lucide-react";
 import SignInButton from "./SignInButton";
 import SignUpButton from "./SignUpButton";
 import {
@@ -128,6 +128,14 @@ export function AuthProfileButtons({
                     <Settings className="h-4 w-4" />
                     الملف الشخصي
                   </Link>
+                  <Link
+                    href="/feedback"
+                    className="flex items-center gap-2 px-3 py-2 text-sm text-neutrals-600 hover:bg-neutrals-200 rounded-md transition-colors"
+                    onClick={handleProfileClick}
+                  >
+                    <Star className="h-4 w-4" />
+                    التقييم
+                  </Link>
 
                   {/* Logout Button */}
                   <button
@@ -185,6 +193,14 @@ export function AuthProfileButtons({
                   >
                     <Settings className="h-4 w-4" />
                     الملف الشخصي
+                  </Link>
+                  <Link
+                    href="/feedback"
+                    className="flex items-center gap-2 px-3 py-2 text-sm text-neutrals-600 hover:bg-neutrals-200 rounded-md transition-colors"
+                    onClick={handleProfileClick}
+                  >
+                    <Star className="h-4 w-4" />
+                    التقييم
                   </Link>
 
                   {/* Logout Button */}

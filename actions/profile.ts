@@ -19,18 +19,6 @@ export type ProfileState = {
   errors?: Partial<Record<keyof RegistrationFormData, string[]>>;
 };
 
-export async function acceptTerms() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (!session) throw new Error("Not authenticated");
-
-  await prisma.user.update({
-    where: { id: session.user.id },
-    data: { profileCompleted: true },
-  });
-}
-
 export async function updateProfile(formData: FormData) {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -43,13 +31,11 @@ export async function updateProfile(formData: FormData) {
   const lastName = formData.get("lastName") as string;
   const phone = formData.get("phone") as string;
 
-  // Save in your DB
   await prisma.user.update({
     where: { id: session.user.id },
     data: { firstName, lastName, phone, profileCompleted: true },
   });
 
-  // Redirect to dashboard
   redirect(AUTHORIZED_REDIRECTION);
 }
 
@@ -72,7 +58,6 @@ export async function completeProfileAction(
     // Server-side validation with Zod
     const validatedData = registrationSchema.parse(data);
 
-    // Update user profile in database - single batch update
     await prisma.user.update({
       where: { id: session.user.id },
       data: {

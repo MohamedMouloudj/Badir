@@ -56,7 +56,7 @@ export default function CompleteProfileForm() {
       educationalLevel: "",
       currentJob: "",
       bio: "",
-      userType: undefined,
+      userType: "both",
 
       // Step 3: Terms & Conditions
       acceptConditions: false,

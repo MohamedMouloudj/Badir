@@ -38,7 +38,7 @@ function AppButton({
   className = "",
   size = "md",
   type = "primary",
-  corner = "default",
+  corner = "rounded",
   url = "",
   icon,
   onClick,

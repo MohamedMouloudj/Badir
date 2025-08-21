@@ -11,7 +11,7 @@ export default function UserSignupPage() {
         {/* Image Section */}
         <div className="flex-1 relative h-64 lg:h-auto">
           <Image
-            src="/images/auth-form-aside.png"
+            src="/images/auth-form-aside2.png"
             alt="Volunteer"
             fill
             className="object-cover md:rounded-r-4xl"

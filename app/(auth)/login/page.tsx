@@ -40,9 +40,9 @@ export default function LoginPage() {
             </div>
 
             {/* Title */}
-            <h1 className="text-2xl md:text-3xl text-primary-600 font-bold text-center md:text-right mb-4 md:mb-8">
+            <h2 className="text-primary-sm text-primary-600 font-bold text-center md:text-right">
               تسجيل الدخول
-            </h1>
+            </h2>
 
             {/* Form */}
             <LoginForm />

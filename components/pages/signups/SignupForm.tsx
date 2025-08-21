@@ -7,8 +7,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
 import AppButton from "@/components/AppButton";
 import { ChevronLeft, Loader2 } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export function SignupForm() {
+  const pathname = usePathname();
+  const isUserSigningUp = pathname.includes("user");
   const [state, formAction, isPending] = useActionState<
     SignupState | null,
     FormData
@@ -20,6 +23,7 @@ export function SignupForm() {
     email: "",
     password: "",
     confirmPassword: "",
+    userType: isUserSigningUp ? "both" : "organization",
   });
 
   // Effect to show toast based on the server action's result
@@ -56,6 +60,9 @@ export function SignupForm() {
               name="confirmPassword"
               value={formData.confirmPassword}
             />
+            <input type="hidden" name="userType" value={formData.userType} />
+
+            {/* Form Inputs */}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <FormInput
@@ -102,12 +109,6 @@ export function SignupForm() {
               value={formData.confirmPassword}
               onChange={(value) => handleInputChange("confirmPassword", value)}
             />
-
-            {state?.error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 sm:px-4 sm:py-3 rounded-lg text-center text-xs sm:text-sm">
-                {state.error}
-              </div>
-            )}
 
             <div className="flex-center justify-center mt-8">
               <AppButton

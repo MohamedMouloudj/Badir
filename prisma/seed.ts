@@ -1,14 +1,18 @@
+// prisma/seed.ts
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("Starting seed...");
+  console.log("🌱 Starting to seed the database...");
 
   // Create Users
+  console.log("👤 Creating users...");
   const users = await Promise.all([
-    prisma.user.create({
-      data: {
+    prisma.user.upsert({
+      where: { email: "mohamed@example.com" },
+      update: {},
+      create: {
         id: "user_mohamed",
         name: "Mohamed Mouloudj",
         email: "mohamed@example.com",
@@ -19,10 +23,14 @@ async function main() {
         profileCompleted: true,
         city: "الجزائر العاصمة",
         country: "Algeria",
+        sex: "male",
+        isActive: true,
       },
     }),
-    prisma.user.create({
-      data: {
+    prisma.user.upsert({
+      where: { email: "admin@example.com" },
+      update: {},
+      create: {
         id: "user_admin",
         name: "Admin User",
         email: "admin@example.com",
@@ -33,46 +41,114 @@ async function main() {
         profileCompleted: true,
         city: "الجزائر العاصمة",
         country: "Algeria",
+        sex: "male",
+        isActive: true,
+      },
+    }),
+    prisma.user.upsert({
+      where: { email: "sara@example.com" },
+      update: {},
+      create: {
+        id: "user_sara",
+        name: "Sara Ahmed",
+        email: "sara@example.com",
+        emailVerified: true,
+        firstName: "Sara",
+        lastName: "Ahmed",
+        userType: "participant",
+        profileCompleted: true,
+        city: "وهران",
+        country: "Algeria",
+        sex: "female",
+        isActive: true,
       },
     }),
   ]);
 
-  console.log("Users created");
+  // Create User Qualifications
+  console.log("🎓 Creating user qualifications...");
+  await Promise.all([
+    prisma.userQualification.create({
+      data: {
+        userId: "user_mohamed",
+        specification: "هندسة البرمجيات",
+        educationalLevel: "ماجستير",
+        currentJob: "مطور برمجيات",
+      },
+    }),
+    prisma.userQualification.create({
+      data: {
+        userId: "user_admin",
+        specification: "إدارة الأعمال",
+        educationalLevel: "بكالوريوس",
+        currentJob: "مدير مشروع",
+      },
+    }),
+    prisma.userQualification.create({
+      data: {
+        userId: "user_sara",
+        specification: "علم النفس",
+        educationalLevel: "ماجستير",
+        currentJob: "أخصائية نفسية",
+      },
+    }),
+  ]);
 
   // Create Organizations
+  console.log("🏢 Creating organizations...");
   const organizations = await Promise.all([
     prisma.organization.create({
       data: {
+        userId: "user_mohamed",
         name: "جمعية الأمل الخيرية",
+        shortName: "الأمل",
         description: "جمعية خيرية تهدف إلى خدمة المجتمع",
+        contactEmail: "info@amal.org",
+        state: "الجزائر",
         city: "الجزائر العاصمة",
         country: "Algeria",
+        organizationType: "charity",
+        workAreas: ["education", "health", "humanitarian"],
+        userRole: "manager",
         isVerified: true,
       },
     }),
     prisma.organization.create({
       data: {
+        userId: "user_admin",
         name: "مشروع فسيلة",
+        shortName: "فسيلة",
         description: "مشروع يهتم بتنمية الشباب",
+        contactEmail: "info@faseela.org",
+        state: "سطيف",
         city: "سطيف",
         country: "Algeria",
+        organizationType: "youth",
+        workAreas: ["education", "culture"],
+        userRole: "manager",
         isVerified: true,
       },
     }),
     prisma.organization.create({
       data: {
+        userId: "user_sara",
         name: "برنامج بنيان",
+        shortName: "بنيان",
         description: "برنامج للدعم النفسي",
+        contactEmail: "contact@bunyan.org",
+        state: "الجزائر",
         city: "الجزائر العاصمة",
         country: "Algeria",
+        organizationType: "health",
+        workAreas: ["health", "education", "humanRights"],
+        userRole: "manager",
         isVerified: true,
       },
     }),
   ]);
 
-  console.log("Organizations created");
-
   // Create Initiative Categories
+  console.log("📂 Creating initiative categories...");
   const categories = await Promise.all([
     prisma.initiativeCategory.create({
       data: {
@@ -83,6 +159,7 @@ async function main() {
         icon: "book",
         bgColor: "#3B82F6",
         textColor: "#FFFFFF",
+        isActive: true,
       },
     }),
     prisma.initiativeCategory.create({
@@ -94,6 +171,7 @@ async function main() {
         icon: "heart",
         bgColor: "#10B981",
         textColor: "#FFFFFF",
+        isActive: true,
       },
     }),
     prisma.initiativeCategory.create({
@@ -105,6 +183,7 @@ async function main() {
         icon: "users",
         bgColor: "#F59E0B",
         textColor: "#FFFFFF",
+        isActive: true,
       },
     }),
     prisma.initiativeCategory.create({
@@ -116,6 +195,7 @@ async function main() {
         icon: "lightbulb",
         bgColor: "#8B5CF6",
         textColor: "#FFFFFF",
+        isActive: true,
       },
     }),
     prisma.initiativeCategory.create({
@@ -127,41 +207,43 @@ async function main() {
         icon: "home",
         bgColor: "#EF4444",
         textColor: "#FFFFFF",
+        isActive: true,
+      },
+    }),
+    prisma.initiativeCategory.create({
+      data: {
+        nameAr: "التكنولوجيا والابتكار",
+        nameEn: "Technology and Innovation",
+        descriptionAr: "مبادرات تقنية وابتكارية",
+        descriptionEn: "Technology and innovation initiatives",
+        icon: "cpu",
+        bgColor: "#6366F1",
+        textColor: "#FFFFFF",
+        isActive: true,
+      },
+    }),
+    prisma.initiativeCategory.create({
+      data: {
+        nameAr: "الرياضة والترفيه",
+        nameEn: "Sports and Recreation",
+        descriptionAr: "مبادرات رياضية وترفيهية",
+        descriptionEn: "Sports and recreational initiatives",
+        icon: "trophy",
+        bgColor: "#F97316",
+        textColor: "#FFFFFF",
+        isActive: true,
       },
     }),
   ]);
 
-  console.log("Categories created");
-
-  // Create Organization Members
-  await Promise.all([
-    prisma.organizationMember.create({
-      data: {
-        organizationId: organizations[0].id,
-        userId: users[0].id,
-        role: "admin",
-        status: "active",
-      },
-    }),
-    prisma.organizationMember.create({
-      data: {
-        organizationId: organizations[1].id,
-        userId: users[0].id,
-        role: "manager",
-        status: "active",
-      },
-    }),
-  ]);
-
-  console.log("Organization members created");
-
-  // Create Initiatives - Bader Group
-  const baderInitiatives = await Promise.all([
+  // Create Initiatives
+  console.log("🚀 Creating initiatives...");
+  const initiatives = await Promise.all([
+    // Bader Platform Initiatives
     prisma.initiative.create({
       data: {
         organizerType: "organization",
         organizerOrgId: organizations[0].id,
-        createdByUserId: users[0].id,
         categoryId: categories[2].id,
         titleAr: "وين نعاون؟",
         titleEn: "Where Can I Help?",
@@ -174,8 +256,8 @@ async function main() {
         location: "الجزائر",
         city: "الجزائر العاصمة",
         country: "Algeria",
-        startDate: new Date("2025-08-15"),
-        endDate: new Date("2025-12-31"),
+        startDate: new Date("2025-08-15T00:00:00.000Z"),
+        endDate: new Date("2025-12-31T00:00:00.000Z"),
         status: "published",
       },
     }),
@@ -183,7 +265,6 @@ async function main() {
       data: {
         organizerType: "organization",
         organizerOrgId: organizations[0].id,
-        createdByUserId: users[0].id,
         categoryId: categories[2].id,
         titleAr: "دليل المبادرات",
         titleEn: "Initiatives Directory",
@@ -196,64 +277,16 @@ async function main() {
         location: "الجزائر",
         city: "الجزائر العاصمة",
         country: "Algeria",
-        startDate: new Date("2025-08-20"),
-        endDate: new Date("2025-12-31"),
+        startDate: new Date("2025-08-20T00:00:00.000Z"),
+        endDate: new Date("2025-12-31T00:00:00.000Z"),
         status: "published",
       },
     }),
-    prisma.initiative.create({
-      data: {
-        organizerType: "organization",
-        organizerOrgId: organizations[0].id,
-        createdByUserId: users[0].id,
-        categoryId: categories[2].id,
-        titleAr: "رأيك يهمنا",
-        titleEn: "Your Opinion Matters",
-        descriptionAr:
-          "مساحة نسمع فيها لآراء وأفكار مستخدمي بادِر من متطوعين وزوار، لنطوّر المنصة معًا ونصنع أثرًا أكبر.",
-        descriptionEn:
-          "A space where we listen to the opinions and ideas of Bader's volunteers and visitors to improve the platform together and make a bigger impact.",
-        shortDescriptionAr: "منصة لمشاركة الآراء",
-        shortDescriptionEn: "Platform to share opinions",
-        location: "الجزائر",
-        city: "الجزائر العاصمة",
-        country: "Algeria",
-        startDate: new Date("2025-08-25"),
-        endDate: new Date("2025-12-31"),
-        status: "published",
-      },
-    }),
-    prisma.initiative.create({
-      data: {
-        organizerType: "organization",
-        organizerOrgId: organizations[0].id,
-        createdByUserId: users[0].id,
-        categoryId: categories[2].id,
-        titleAr: "شركاء في العطاء",
-        titleEn: "Partners in Giving",
-        descriptionAr:
-          "نافذة للتعاون والشراكات مع منصة بادِر، لمدّ جسور الدعم وتوسيع أثر العمل التطوعي.",
-        descriptionEn:
-          "A window for cooperation and partnerships with Bader platform to extend support and expand the impact of volunteering.",
-        shortDescriptionAr: "شراكات لدعم التطوع",
-        shortDescriptionEn: "Partnerships to support volunteering",
-        location: "الجزائر",
-        city: "الجزائر العاصمة",
-        country: "Algeria",
-        startDate: new Date("2025-09-01"),
-        endDate: new Date("2025-12-31"),
-        status: "published",
-      },
-    }),
-  ]);
-
-  // Professional Development Initiatives (Group 3)
-  const professionalInitiatives = await Promise.all([
+    // Education Initiatives
     prisma.initiative.create({
       data: {
         organizerType: "organization",
         organizerOrgId: organizations[1].id,
-        createdByUserId: users[0].id,
         categoryId: categories[0].id,
         titleAr: "كواليس المهنة",
         titleEn: "Behind the Scenes of Professions",
@@ -266,558 +299,231 @@ async function main() {
         location: "الجزائر",
         city: "الجزائر العاصمة",
         country: "Algeria",
-        startDate: new Date("2025-09-15"),
-        endDate: new Date("2025-09-20"),
-        status: "draft",
+        startDate: new Date("2025-09-15T00:00:00.000Z"),
+        endDate: new Date("2025-09-20T00:00:00.000Z"),
+        status: "published",
+        maxParticipants: 50,
       },
     }),
+    // Technology Initiative
     prisma.initiative.create({
       data: {
-        organizerType: "organization",
-        organizerOrgId: organizations[1].id,
-        createdByUserId: users[0].id,
-        categoryId: categories[0].id,
-        titleAr: "ابدأ مشروعك صح",
-        titleEn: "Start Your Project Right",
+        organizerType: "user",
+        organizerUserId: "user_mohamed",
+        categoryId: categories[5].id,
+        titleAr: "هاكاثون الابتكار",
+        titleEn: "Innovation Hackathon",
         descriptionAr:
-          "ورشات شبابية لتأسيس المشاريع التجارية أو التطوعية بخطوات مدروسة وانطلاقة قوية.",
+          "مسابقة برمجية لحل المشاكل المجتمعية باستخدام التكنولوجيا",
         descriptionEn:
-          "Youth workshops for establishing commercial or volunteer projects with studied steps and strong start.",
-        shortDescriptionAr: "ورشات تأسيس المشاريع",
-        shortDescriptionEn: "Project foundation workshops",
+          "Programming competition to solve community problems using technology",
+        shortDescriptionAr: "مسابقة برمجية",
+        shortDescriptionEn: "Programming competition",
         location: "الجزائر",
         city: "وهران",
         country: "Algeria",
-        startDate: new Date("2025-09-22"),
-        endDate: new Date("2025-09-25"),
+        startDate: new Date("2025-10-01T00:00:00.000Z"),
+        endDate: new Date("2025-10-03T00:00:00.000Z"),
         status: "draft",
+        maxParticipants: 100,
       },
     }),
-    prisma.initiative.create({
-      data: {
-        organizerType: "organization",
-        organizerOrgId: organizations[1].id,
-        createdByUserId: users[0].id,
-        categoryId: categories[0].id,
-        titleAr: "فرص تربص ميدانية",
-        titleEn: "Field Internship Opportunities",
-        descriptionAr:
-          "برنامج يتيح للشباب خوض تجربة العمل الميداني بالتعاون مع شركات محلية، لاكتساب الخبرة والمهارات.",
-        descriptionEn:
-          "Program that allows youth to experience field work in cooperation with local companies to gain experience and skills.",
-        shortDescriptionAr: "برنامج التربص الميداني",
-        shortDescriptionEn: "Field internship program",
-        location: "الجزائر",
-        city: "قسنطينة",
-        country: "Algeria",
-        startDate: new Date("2025-09-28"),
-        endDate: new Date("2025-10-05"),
-        status: "draft",
-      },
-    }),
-    prisma.initiative.create({
-      data: {
-        organizerType: "organization",
-        organizerOrgId: organizations[1].id,
-        createdByUserId: users[0].id,
-        categoryId: categories[0].id,
-        titleAr: "لنتعلم مهارة",
-        titleEn: "Let's Learn a Skill",
-        descriptionAr:
-          "ورشات في المهارات الشخصية والتقنية تجهّز الشباب للحياة العملية وسوق العمل.",
-        descriptionEn:
-          "Workshops in personal and technical skills preparing youth for work life and job market.",
-        shortDescriptionAr: "ورشات المهارات",
-        shortDescriptionEn: "Skills workshops",
-        location: "الجزائر",
-        city: "سطيف",
-        country: "Algeria",
-        startDate: new Date("2025-10-10"),
-        endDate: new Date("2025-10-15"),
-        status: "draft",
-      },
-    }),
-  ]);
-
-  // Mental Health and Identity Initiatives (Group 4)
-  const mentalHealthInitiatives = await Promise.all([
+    // Health Initiative
     prisma.initiative.create({
       data: {
         organizerType: "organization",
         organizerOrgId: organizations[2].id,
-        createdByUserId: users[0].id,
-        categoryId: categories[3].id,
-        titleAr: "احكي نسمعك",
-        titleEn: "Speak, We Listen",
-        descriptionAr:
-          "فضاء آمن يمنح المراهقين الدعم النفسي، ويشجعهم على التعبير ومواجهة تحدياتهم بثقة.",
-        descriptionEn:
-          "A safe space that provides psychological support to teenagers and encourages them to express themselves and face their challenges with confidence.",
-        shortDescriptionAr: "دعم نفسي للمراهقين",
-        shortDescriptionEn: "Psychological support for teenagers",
-        location: "الجزائر",
-        city: "الجزائر العاصمة",
-        country: "Algeria",
-        startDate: new Date("2025-10-20"),
-        endDate: new Date("2025-10-25"),
-        status: "draft",
-      },
-    }),
-    prisma.initiative.create({
-      data: {
-        organizerType: "user",
-        organizerUserId: users[0].id,
-        createdByUserId: users[0].id,
-        categoryId: categories[3].id,
-        titleAr: "سراطانات فكرية",
-        titleEn: "Intellectual Cancers",
-        descriptionAr:
-          "مواجهة التغريب والإلحاد الناعم وأفكار التفكيك عبر محتوى واعٍ وحوارات بنّاءة.",
-        descriptionEn:
-          "Confronting westernization and soft atheism and deconstructive ideas through conscious content and constructive dialogues.",
-        shortDescriptionAr: "مواجهة الأفكار المدمرة",
-        shortDescriptionEn: "Confronting destructive ideas",
-        location: "الجزائر",
-        city: "وهران",
-        country: "Algeria",
-        startDate: new Date("2025-10-28"),
-        endDate: new Date("2025-11-02"),
-        status: "draft",
-      },
-    }),
-    prisma.initiative.create({
-      data: {
-        organizerType: "user",
-        organizerUserId: users[0].id,
-        createdByUserId: users[0].id,
-        categoryId: categories[3].id,
-        titleAr: "هويتي",
-        titleEn: "My Identity",
-        descriptionAr:
-          "معالجة قضايا الانتماء للدين والهوية الإسلامية بطريقة واقعية وقريبة من لغة الشباب.",
-        descriptionEn:
-          "Addressing issues of religious belonging and Islamic identity in a realistic way close to youth language.",
-        shortDescriptionAr: "بناء الهوية الإسلامية",
-        shortDescriptionEn: "Building Islamic identity",
-        location: "الجزائر",
-        city: "قسنطينة",
-        country: "Algeria",
-        startDate: new Date("2025-11-05"),
-        endDate: new Date("2025-11-10"),
-        status: "draft",
-      },
-    }),
-  ]);
-
-  // Volunteer Training Initiative (Group 5)
-  const volunteerTraining = await prisma.initiative.create({
-    data: {
-      organizerType: "organization",
-      organizerOrgId: organizations[1].id,
-      createdByUserId: users[0].id,
-      categoryId: categories[2].id,
-      titleAr: "عدة",
-      titleEn: "Equipment",
-      descriptionAr:
-        "مبادرة تُعنى بتأهيل المتطوعين وتزويدهم بالمهارات والوعي اللازم، ليكونوا طاقات فاعلة تصنع الأثر بوعي ومسؤولية.",
-      descriptionEn:
-        "Initiative concerned with qualifying volunteers and providing them with necessary skills and awareness to be effective energies that make impact with consciousness and responsibility.",
-      shortDescriptionAr: "تأهيل المتطوعين",
-      shortDescriptionEn: "Volunteer qualification",
-      location: "الجزائر",
-      city: "سطيف",
-      country: "Algeria",
-      startDate: new Date("2025-11-15"),
-      endDate: new Date("2025-11-20"),
-      status: "draft",
-    },
-  });
-
-  // Family and Social Initiatives (Group 6)
-  const familyInitiatives = await Promise.all([
-    prisma.initiative.create({
-      data: {
-        organizerType: "user",
-        organizerUserId: users[0].id,
-        createdByUserId: users[0].id,
-        categoryId: categories[4].id,
-        titleAr: "امرأة سويّة، رجل سويّ",
-        titleEn: "Balanced Woman, Balanced Man",
-        descriptionAr:
-          "مبادرة لتصحيح وضبط المفاهيم بين الجنسين، كالقوامة والمساواة، بما يحقق التوازن والاحترام المتبادل.",
-        descriptionEn:
-          "Initiative to correct and adjust concepts between genders, such as guardianship and equality, achieving balance and mutual respect.",
-        shortDescriptionAr: "توازن العلاقات بين الجنسين",
-        shortDescriptionEn: "Balance in gender relations",
-        location: "الجزائر",
-        city: "سطيف",
-        country: "Algeria",
-        startDate: new Date("2025-12-01"),
-        endDate: new Date("2025-12-05"),
-        status: "draft",
-      },
-    }),
-    prisma.initiative.create({
-      data: {
-        organizerType: "user",
-        organizerUserId: users[0].id,
-        createdByUserId: users[0].id,
-        categoryId: categories[4].id,
-        titleAr: "ربّ أبناءك صح",
-        titleEn: "Raise Your Children Right",
-        descriptionAr:
-          "مبادرة لتوعية الوالدين بأسس التربية السليمة، لغرس القيم وبناء جيل واعٍ، سويّ، ومتوازن.",
-        descriptionEn:
-          "Initiative to educate parents about proper upbringing foundations to instill values and build a conscious, healthy, and balanced generation.",
-        shortDescriptionAr: "تربية الأطفال",
-        shortDescriptionEn: "Child upbringing",
-        location: "الجزائر",
-        city: "سطيف",
-        country: "Algeria",
-        startDate: new Date("2025-12-10"),
-        endDate: new Date("2025-12-15"),
-        status: "draft",
-      },
-    }),
-    prisma.initiative.create({
-      data: {
-        organizerType: "user",
-        organizerUserId: users[0].id,
-        createdByUserId: users[0].id,
-        categoryId: categories[4].id,
-        titleAr: "اختر شريكك صح",
-        titleEn: "Choose Your Partner Right",
-        descriptionAr:
-          "مبادرة لتوعية الشباب بأسس اختيار شريك الحياة، لبناء أسر مستقرة وواعية.",
-        descriptionEn:
-          "Initiative to educate youth about the foundations of choosing a life partner to build stable and conscious families.",
-        shortDescriptionAr: "اختيار شريك الحياة",
-        shortDescriptionEn: "Choosing life partner",
-        location: "الجزائر",
-        city: "سطيف",
-        country: "Algeria",
-        startDate: new Date("2025-12-20"),
-        endDate: new Date("2025-12-25"),
-        status: "draft",
-      },
-    }),
-  ]);
-
-  // Educational Initiatives (Group 7)
-  const educationalInitiatives = await Promise.all([
-    prisma.initiative.create({
-      data: {
-        organizerType: "user",
-        organizerUserId: users[0].id,
-        createdByUserId: users[0].id,
-        categoryId: categories[0].id,
-        titleAr: "زدني علما",
-        titleEn: "Increase My Knowledge",
-        descriptionAr:
-          "دروس دعم مجانية للأطفال في المناطق النائية، تجمع بين التعليم الأكاديمي وغرس القيم التربوية والإيمانية.",
-        descriptionEn:
-          "Free support lessons for children in remote areas, combining academic education with instilling educational and faith values.",
-        shortDescriptionAr: "دروس دعم مجانية",
-        shortDescriptionEn: "Free support lessons",
-        location: "الجزائر",
-        city: "سطيف",
-        country: "Algeria",
-        startDate: new Date("2025-12-01"),
-        endDate: new Date("2025-12-15"),
-        status: "draft",
-      },
-    }),
-    prisma.initiative.create({
-      data: {
-        organizerType: "user",
-        organizerUserId: users[0].id,
-        createdByUserId: users[0].id,
-        categoryId: categories[0].id,
-        titleAr: "التعلم الذاتي والبحث العلمي",
-        titleEn: "Self-Learning and Scientific Research",
-        descriptionAr:
-          "مبادرة لتمكين الشباب من مهارات التعلم المستقل وأساليب البحث، وتنمية روح الاكتشاف والإبداع العلمي.",
-        descriptionEn:
-          "Initiative to empower youth with independent learning skills and research methods, developing the spirit of discovery and scientific creativity.",
-        shortDescriptionAr: "مهارات التعلم المستقل",
-        shortDescriptionEn: "Independent learning skills",
-        location: "الجزائر",
-        city: "سطيف",
-        country: "Algeria",
-        startDate: new Date("2025-12-20"),
-        endDate: new Date("2025-12-30"),
-        status: "draft",
-      },
-    }),
-    prisma.initiative.create({
-      data: {
-        organizerType: "user",
-        organizerUserId: users[0].id,
-        createdByUserId: users[0].id,
-        categoryId: categories[0].id,
-        titleAr: "نفهم معاك",
-        titleEn: "We Understand With You",
-        descriptionAr:
-          "دروس وشروحات مبسطة بلغة الإشارة أو لغة ميسّرة، لتمكين ذوي الإعاقات السمعية أو الذهنية من التعلم والفهم.",
-        descriptionEn:
-          "Simplified lessons and explanations in sign language or facilitated language to enable people with hearing or mental disabilities to learn and understand.",
-        shortDescriptionAr: "تعليم ذوي الإعاقة",
-        shortDescriptionEn: "Education for people with disabilities",
-        location: "الجزائر",
-        city: "سطيف",
-        country: "Algeria",
-        startDate: new Date("2026-01-05"),
-        endDate: new Date("2026-01-15"),
-        status: "draft",
-      },
-    }),
-  ]);
-
-  // Health and Environmental Initiatives (Group 8)
-  const healthInitiatives = await Promise.all([
-    prisma.initiative.create({
-      data: {
-        organizerType: "user",
-        organizerUserId: users[0].id,
-        createdByUserId: users[0].id,
         categoryId: categories[1].id,
-        titleAr: "قاوم إدمانك",
-        titleEn: "Fight Your Addiction",
-        descriptionAr:
-          "مبادرة لدعم الأفراد في مواجهة الإدمان والتعافي منه، عبر التوعية والمرافقة النفسية والاجتماعية.",
-        descriptionEn:
-          "Initiative to support individuals in facing addiction and recovering from it through awareness and psychological and social accompaniment.",
-        shortDescriptionAr: "مكافحة الإدمان",
-        shortDescriptionEn: "Fighting addiction",
-        location: "الجزائر",
-        city: "سطيف",
-        country: "Algeria",
-        startDate: new Date("2025-11-01"),
-        endDate: new Date("2025-11-15"),
-        status: "draft",
-      },
-    }),
-    prisma.initiative.create({
-      data: {
-        organizerType: "user",
-        organizerUserId: users[0].id,
-        createdByUserId: users[0].id,
-        categoryId: categories[1].id,
-        titleAr: "الوعي البيئي",
-        titleEn: "Environmental Awareness",
-        descriptionAr:
-          "مبادرة للتشجير وحملات النظافة والتوعية، لغرس حب البيئة والحفاظ على مواردها.",
-        descriptionEn:
-          "Initiative for afforestation, cleanliness and awareness campaigns to instill love for the environment and preserve its resources.",
-        shortDescriptionAr: "حماية البيئة",
-        shortDescriptionEn: "Environmental protection",
-        location: "الجزائر",
-        city: "سطيف",
-        country: "Algeria",
-        startDate: new Date("2025-11-20"),
-        endDate: new Date("2025-11-30"),
-        status: "draft",
-      },
-    }),
-    prisma.initiative.create({
-      data: {
-        organizerType: "user",
-        organizerUserId: users[0].id,
-        createdByUserId: users[0].id,
-        categoryId: categories[1].id,
-        titleAr: "التبرع بالدم والأدوية",
-        titleEn: "Blood and Medicine Donation",
-        descriptionAr:
-          "مبادرة لإنقاذ الأرواح عبر تنظيم حملات للتبرع بالدم وجمع الأدوية للمحتاجين.",
-        descriptionEn:
-          "Initiative to save lives by organizing blood donation campaigns and collecting medicines for those in need.",
+        titleAr: "حملة التبرع بالدم",
+        titleEn: "Blood Donation Campaign",
+        descriptionAr: "حملة للتبرع بالدم لمساعدة المرضى المحتاجين",
+        descriptionEn: "Blood donation campaign to help patients in need",
         shortDescriptionAr: "التبرع بالدم",
         shortDescriptionEn: "Blood donation",
         location: "الجزائر",
-        city: "سطيف",
+        city: "قسنطينة",
         country: "Algeria",
-        startDate: new Date("2025-12-05"),
-        endDate: new Date("2025-12-10"),
-        status: "draft",
+        startDate: new Date("2025-09-25T00:00:00.000Z"),
+        endDate: new Date("2025-09-25T00:00:00.000Z"),
+        status: "ongoing",
       },
     }),
+    // Sports Initiative
     prisma.initiative.create({
       data: {
         organizerType: "user",
-        organizerUserId: users[0].id,
-        createdByUserId: users[0].id,
-        categoryId: categories[1].id,
-        titleAr: "مسعف",
-        titleEn: "Paramedic",
-        descriptionAr:
-          "مبادرة لتدريب الشباب على مهارات الإسعافات الأولية، لتمكينهم من إنقاذ الأرواح في المواقف الطارئة.",
-        descriptionEn:
-          "Initiative to train youth in first aid skills to enable them to save lives in emergency situations.",
-        shortDescriptionAr: "تدريب الإسعافات الأولية",
-        shortDescriptionEn: "First aid training",
+        organizerUserId: "user_sara",
+        categoryId: categories[6].id,
+        titleAr: "ماراثون الجزائر",
+        titleEn: "Algeria Marathon",
+        descriptionAr: "ماراثون سنوي لتشجيع الرياضة والصحة",
+        descriptionEn: "Annual marathon to promote sports and health",
+        shortDescriptionAr: "ماراثون سنوي",
+        shortDescriptionEn: "Annual marathon",
         location: "الجزائر",
-        city: "سطيف",
+        city: "الجزائر العاصمة",
         country: "Algeria",
-        startDate: new Date("2025-12-15"),
-        endDate: new Date("2025-12-25"),
+        startDate: new Date("2025-11-15T00:00:00.000Z"),
+        endDate: new Date("2025-11-15T00:00:00.000Z"),
         status: "draft",
+        maxParticipants: 500,
       },
     }),
   ]);
 
-  console.log("Initiatives created");
-
-  // Create some sample posts for published initiatives
-  const posts = await Promise.all([
+  // Create Initiative Posts
+  console.log("📝 Creating initiative posts...");
+  await Promise.all([
     prisma.initiativePost.create({
       data: {
-        initiativeId: baderInitiatives[0].id,
-        authorId: users[0].id,
+        initiativeId: initiatives[0].id,
+        authorId: "user_mohamed",
         title: "مرحباً بكم في منصة بادر",
         content: "نرحب بجميع المتطوعين في منصة بادر للعمل التطوعي",
         postType: "announcement",
         isPinned: true,
+        status: "published",
       },
     }),
     prisma.initiativePost.create({
       data: {
-        initiativeId: baderInitiatives[1].id,
-        authorId: users[0].id,
+        initiativeId: initiatives[1].id,
+        authorId: "user_mohamed",
         title: "دليل المبادرات الجديد",
         content: "تم إطلاق الدليل الجديد للمبادرات التطوعية",
         postType: "update",
+        isPinned: false,
+        status: "published",
+      },
+    }),
+    prisma.initiativePost.create({
+      data: {
+        initiativeId: initiatives[2].id,
+        authorId: "user_admin",
+        title: "شروط المشاركة",
+        content: "للمشاركة في اللقاء، يرجى التسجيل مبكراً",
+        postType: "instruction",
+        isPinned: true,
+        status: "published",
       },
     }),
   ]);
 
-  console.log("Posts created");
-
-  // Create some sample participants
-  const participants = await Promise.all([
+  // Create Initiative Participants
+  console.log("👥 Creating initiative participants...");
+  await Promise.all([
     prisma.initiativeParticipant.create({
       data: {
-        initiativeId: baderInitiatives[0].id,
-        userId: users[1].id,
-        participationType: "direct",
+        initiativeId: initiatives[0].id,
+        userId: "user_admin",
         participantRole: "helper",
         status: "approved",
       },
     }),
     prisma.initiativeParticipant.create({
       data: {
-        initiativeId: baderInitiatives[1].id,
-        userId: users[1].id,
-        participationType: "direct",
+        initiativeId: initiatives[1].id,
+        userId: "user_admin",
         participantRole: "participant",
+        status: "registered",
+      },
+    }),
+    prisma.initiativeParticipant.create({
+      data: {
+        initiativeId: initiatives[2].id,
+        userId: "user_sara",
+        participantRole: "participant",
+        status: "approved",
+        isCheckedIn: true,
+        checkInTime: new Date(),
+      },
+    }),
+    prisma.initiativeParticipant.create({
+      data: {
+        initiativeId: initiatives[3].id,
+        userId: "user_admin",
+        participantRole: "helper",
         status: "registered",
       },
     }),
   ]);
 
-  console.log("Participants created");
-
-  // Create some sample support requests
-  const supportRequests = await Promise.all([
+  // Create Support Requests
+  console.log("🆘 Creating support requests...");
+  await Promise.all([
     prisma.supportRequest.create({
       data: {
-        initiativeId: baderInitiatives[0].id,
-        requesterId: users[0].id,
+        organizationId: organizations[0].id,
         supportType: "technical",
         title: "دعم تقني للموقع",
         description: "نحتاج دعم تقني لتطوير الموقع الإلكتروني",
         urgency: "medium",
-        status: "pending",
+        status: "active",
       },
     }),
     prisma.supportRequest.create({
       data: {
-        initiativeId: baderInitiatives[1].id,
-        requesterId: users[0].id,
+        organizationId: organizations[1].id,
         supportType: "media",
         title: "تصميم مواد إعلامية",
         description: "نحتاج تصميم مواد إعلامية للمبادرة",
         urgency: "high",
-        status: "in_review",
+        status: "active",
+      },
+    }),
+    prisma.supportRequest.create({
+      data: {
+        organizationId: organizations[2].id,
+        supportType: "financial",
+        title: "دعم مالي للحملة",
+        description: "نحتاج دعم مالي لتنظيم حملة التبرع بالدم",
+        urgency: "urgent",
+        status: "closed",
       },
     }),
   ]);
 
-  console.log("Support requests created");
-
-  // Create some sample ratings
-  const ratings = await Promise.all([
+  // Create User Initiative Ratings
+  console.log("⭐ Creating ratings...");
+  await Promise.all([
     prisma.userInitiativeRating.create({
       data: {
-        userId: users[1].id,
-        initiativeId: baderInitiatives[0].id,
+        userId: "user_admin",
+        initiativeId: initiatives[0].id,
         rating: 5,
         comment: "مبادرة رائعة ومفيدة جداً",
       },
     }),
     prisma.userInitiativeRating.create({
       data: {
-        userId: users[1].id,
-        initiativeId: baderInitiatives[1].id,
+        userId: "user_admin",
+        initiativeId: initiatives[1].id,
         rating: 4,
         comment: "مبادرة جيدة تحتاج لبعض التحسينات",
       },
     }),
-  ]);
-
-  console.log("Ratings created");
-
-  // Create some user qualifications
-  const qualifications = await Promise.all([
-    prisma.userQualification.create({
+    prisma.userInitiativeRating.create({
       data: {
-        userId: users[0].id,
-        specification: "هندسة البرمجيات",
-        educationalLevel: "ماجستير",
-        currentJob: "مطور برمجيات",
-      },
-    }),
-    prisma.userQualification.create({
-      data: {
-        userId: users[1].id,
-        specification: "إدارة الأعمال",
-        educationalLevel: "بكالوريوس",
-        currentJob: "مدير مشروع",
+        userId: "user_sara",
+        initiativeId: initiatives[2].id,
+        rating: 5,
+        comment: "لقاء مفيد جداً، تعلمت الكثير",
       },
     }),
   ]);
 
-  console.log("User qualifications created");
+  // Platform Ratings section removed as requested
 
-  console.log("Seed completed successfully!");
-
-  // Print summary
-  console.log("\n=== Seed Summary ===");
-  console.log(`Created ${users.length} users`);
-  console.log(`Created ${organizations.length} organizations`);
-  console.log(`Created ${categories.length} categories`);
-
-  const totalInitiatives =
-    baderInitiatives.length +
-    professionalInitiatives.length +
-    mentalHealthInitiatives.length +
-    1 + // volunteerTraining
-    familyInitiatives.length +
-    educationalInitiatives.length +
-    healthInitiatives.length;
-
-  console.log(`Created ${totalInitiatives} initiatives`);
-  console.log(`Created ${posts.length} posts`);
-  console.log(`Created ${participants.length} participants`);
-  console.log(`Created ${supportRequests.length} support requests`);
-  console.log(`Created ${ratings.length} ratings`);
-  console.log(`Created ${qualifications.length} user qualifications`);
+  console.log("✅ Seeding completed successfully!");
 }
 
 main()
   .catch((e) => {
-    console.error("Error during seed:", e);
+    console.error("❌ Error during seeding:", e);
     process.exit(1);
   })
   .finally(async () => {
+    // Disconnect from the database
     await prisma.$disconnect();
+    console.log("🔌 Disconnected from database");
   });

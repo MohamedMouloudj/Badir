@@ -14,7 +14,7 @@ export default function Footer() {
           width={160}
           height={40}
           quality={100}
-          className="object-contain"
+          className="object-contain w-auto h-auto"
         />
         <div className="h-16 w-0.5 bg-neutrals-100" />
         <Image
@@ -23,7 +23,7 @@ export default function Footer() {
           width={160}
           height={40}
           quality={100}
-          className="object-contain"
+          className="object-contain w-auto h-auto"
         />
       </div>
       <div className="max-w-7xl mx-auto">

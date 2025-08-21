@@ -1,3 +1,4 @@
+import emailConfig from "@/lib/email";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
 
 export default function ContactInfo() {
@@ -31,7 +32,7 @@ export default function ContactInfo() {
                 href="mailto:info@badir.org"
                 className="text-primary-500 text-paragraph-md font-medium hover:text-primary-600 transition-colors underline decoration-2 underline-offset-4"
               >
-                info@badir.org
+                {emailConfig.adminEmail}
               </a>
               <p className="text-neutrals-500 text-paragraph-md mt-1">
                 راسلنا في أي وقت
@@ -94,7 +95,7 @@ export default function ContactInfo() {
                 ساعات العمل
               </h3>
               <p className="text-neutrals-700 text-paragraph-md font-medium">
-                8:00 صباحا - 16:00 مساء
+                9:00 صباحا - 15:00 مساء
               </p>
               <p className="text-neutrals-500 text-paragraph-md mt-1">
                 من السبت إلى الخميس

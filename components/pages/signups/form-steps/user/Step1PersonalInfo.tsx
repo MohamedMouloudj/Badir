@@ -2,15 +2,17 @@
 
 import { Controller, useFormContext } from "react-hook-form";
 import FormInput from "@/components/FormInput";
-import { sexOptions, Step1FormData } from "@/schemas/signupSchema";
+import { sexOptions, Step1FormData } from "@/schemas/signupUserSchema";
 import { useEffect, useMemo } from "react";
 import country from "country-list-js";
+import { toast } from "sonner";
 
 export default function Step1PersonalInfo() {
   const {
     control,
     formState: { errors },
     setValue,
+    watch,
   } = useFormContext<Step1FormData>();
 
   useEffect(() => {
@@ -27,6 +29,7 @@ export default function Step1PersonalInfo() {
         );
       } else {
         console.error("Geolocation is not supported by this browser.");
+        toast.error("تعذر الحصول على الموقع الحالي");
       }
     };
 
@@ -94,22 +97,35 @@ export default function Step1PersonalInfo() {
           )}
         />
 
-        <Controller
-          name="phone"
-          control={control}
-          render={({ field: { onChange, value, onBlur } }) => (
-            <FormInput
-              type="text"
-              name="phone"
-              label="رقم الهاتف"
-              placeholder="+213xxxxxxxxx"
-              value={value}
-              onChange={onChange}
-              onBlur={onBlur}
-              error={errors.phone?.message}
-            />
-          )}
-        />
+        <div className="flex gap-4">
+          <Controller
+            name="phoneCountryCode"
+            control={control}
+            render={({ field }) => <input type="hidden" {...field} />}
+          />
+          <Controller
+            name="phone"
+            control={control}
+            render={({ field: { onChange, value, onBlur } }) => {
+              const countryCode = watch("phoneCountryCode") || "DZ";
+
+              return (
+                <FormInput
+                  type="tel"
+                  name="phone"
+                  label="رقم الهاتف"
+                  placeholder="5xxxxxxxx"
+                  value={value}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  error={errors.phone?.message}
+                  countryCode={countryCode}
+                  onCountryChange={(code) => setValue("phoneCountryCode", code)}
+                />
+              );
+            }}
+          />
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Controller

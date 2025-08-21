@@ -46,7 +46,7 @@ export default function PlatformRatingForm() {
       if (result.success) {
         if (result.message) {
           toast.success(result.message);
-          // reset();
+          reset();
         }
         if (result.criticalAlertSent) {
           emailjs.init(emailConfig.publicKey);

@@ -14,52 +14,10 @@ export const auth = betterAuth({
         type: "string",
         required: true,
       },
-      sex: {
-        type: "string",
-        required: false,
-      },
-      phone: {
-        type: "string",
-        required: false,
-      },
-      dateOfBirth: {
-        type: "date",
-        required: false,
-      },
-      bio: {
-        type: "string",
-        required: false,
-      },
       userType: {
         type: "string",
         required: true,
         defaultValue: "participant",
-      },
-      latitude: {
-        type: "number",
-        required: false,
-      },
-      longitude: {
-        type: "number",
-        required: false,
-      },
-      city: {
-        type: "string",
-        required: false,
-      },
-      state: {
-        type: "string",
-        required: false,
-      },
-      country: {
-        type: "string",
-        required: false,
-        defaultValue: "Algeria",
-      },
-      isActive: {
-        type: "boolean",
-        required: false,
-        defaultValue: true,
       },
       profileCompleted: {
         type: "boolean",

@@ -9,6 +9,7 @@ import {
   InitiativeCategory,
   InitiativeStatus,
   OrganizerType,
+  Sex,
   TargetAudience,
   User,
   UserType,
@@ -58,7 +59,7 @@ const aboutInfo: AboutInfo[] = [
 ];
 
 const educationCategory: InitiativeCategory = {
-  id: 1,
+  id: "1",
   nameAr: "التعليم",
   isActive: true,
   nameEn: null,
@@ -71,7 +72,7 @@ const educationCategory: InitiativeCategory = {
 };
 
 const healthCategory: InitiativeCategory = {
-  id: 2,
+  id: "2",
   nameAr: "الصحة",
   isActive: true,
   nameEn: null,
@@ -84,7 +85,7 @@ const healthCategory: InitiativeCategory = {
 };
 
 const mindCategory: InitiativeCategory = {
-  id: 3,
+  id: "3",
   nameAr: "الفكر",
   isActive: true,
   nameEn: null,
@@ -115,7 +116,7 @@ const sampleUsers: User[] = [
     name: "",
     image: null,
     emailVerified: false,
-    sex: null,
+    sex: Sex.male,
     bio: null,
     latitude: null,
     longitude: null,
@@ -138,7 +139,7 @@ const sampleUsers: User[] = [
     name: "",
     image: null,
     emailVerified: false,
-    sex: null,
+    sex: Sex.female,
     bio: null,
     latitude: null,
     longitude: null,
@@ -161,7 +162,7 @@ const sampleUsers: User[] = [
     name: "",
     image: null,
     emailVerified: false,
-    sex: null,
+    sex: Sex.male,
     bio: null,
     latitude: null,
     longitude: null,
@@ -172,7 +173,7 @@ const sampleUsers: User[] = [
 // Sample Initiatives
 const sampleInitiatives: InitiativeCard[] = [
   {
-    id: BigInt(1),
+    id: "1",
     titleAr: "برنامج محو الأمية للكبار",
     titleEn: "Adult Literacy Program",
     shortDescriptionAr: "تعليم القراءة والكتابة للكبار",
@@ -185,7 +186,6 @@ const sampleInitiatives: InitiativeCard[] = [
     currentParticipants: 25,
     targetAudience: TargetAudience.both,
     status: InitiativeStatus.published,
-    isFeatured: true,
     category: {
       nameAr: "التعليم",
       nameEn: "Education",
@@ -201,7 +201,7 @@ const sampleInitiatives: InitiativeCard[] = [
     distance: 2.5,
   },
   {
-    id: BigInt(2),
+    id: "2",
     titleAr: "حملة التبرع بالدم",
     titleEn: "Blood Donation Campaign",
     shortDescriptionAr: "تبرع بالدم وأنقذ حياة",
@@ -214,7 +214,6 @@ const sampleInitiatives: InitiativeCard[] = [
     currentParticipants: 67,
     targetAudience: TargetAudience.both,
     status: InitiativeStatus.published,
-    isFeatured: false,
     category: {
       nameAr: "الصحة",
       nameEn: "Health",
@@ -229,7 +228,7 @@ const sampleInitiatives: InitiativeCard[] = [
     distance: 5.2,
   },
   {
-    id: BigInt(3),
+    id: "3",
     titleAr: "ورشة الكتابة الإبداعية للشباب",
     titleEn: "Creative Writing Workshop for Youth",
     shortDescriptionAr: "تعلم الكتابة الإبداعية",
@@ -242,7 +241,6 @@ const sampleInitiatives: InitiativeCard[] = [
     currentParticipants: 18,
     targetAudience: TargetAudience.both,
     status: InitiativeStatus.published,
-    isFeatured: true,
     category: {
       nameAr: "الفكر",
       nameEn: "Mind",

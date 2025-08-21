@@ -2,7 +2,7 @@ import { prisma } from "@/lib/db";
 import { InitiativeCategory, Prisma } from "@prisma/client";
 
 export interface CategoryCard {
-  id: number;
+  id: string;
   nameAr: string;
   nameEn?: string | null;
   descriptionAr?: string | null;
@@ -63,7 +63,7 @@ export class CategoryService {
   }
 
   // Get single category by ID
-  static async getById(id: number): Promise<CategoryCard | null> {
+  static async getById(id: string): Promise<CategoryCard | null> {
     try {
       const category = await prisma.initiativeCategory.findUnique({
         where: { id },
@@ -119,7 +119,7 @@ export class CategoryService {
 
   // Update category
   static async update(
-    id: number,
+    id: string,
     data: Prisma.InitiativeCategoryUpdateInput
   ): Promise<InitiativeCategory> {
     try {
@@ -135,7 +135,7 @@ export class CategoryService {
   }
 
   // Delete category
-  static async delete(id: number): Promise<void> {
+  static async delete(id: string): Promise<void> {
     try {
       await prisma.initiativeCategory.delete({
         where: { id },

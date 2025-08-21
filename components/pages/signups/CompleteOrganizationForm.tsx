@@ -2,68 +2,81 @@
 
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { useForm, FormProvider } from "react-hook-form";
-import {
-  profileDefaultValues,
-  registrationSchema,
-  validateStep,
-  type RegistrationFormData,
-} from "@/schemas/signupUserSchema";
-import AppButton from "@/components/AppButton";
-import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { completeProfileAction } from "@/actions/profile";
+import { completeOrgProfileAction } from "@/actions/profile";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import AppButton from "@/components/AppButton";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import {
+  organizationDefaultValues,
+  OrgRegistrationFormData,
+  orgRegistrationSchema,
+  validateOrgStep,
+} from "@/schemas";
 
-// Import step components
-import Step1PersonalInfo from "./form-steps/user/Step1PersonalInfo";
-import Step2Qualifications from "./form-steps/user/Step2Qualifications";
-import Step3TemsAndConditions from "./form-steps/user/Step3TemsAndConditions";
+import Step1BasicInfoForm from "./form-steps/organization/Step1BasicInfo";
+import Step2SocialLinks from "./form-steps/organization/Step2SocialLinks";
+import Step3OrgTypeForm from "./form-steps/organization/Step3OrgType";
+import Step4DescriptionsForm from "./form-steps/organization/Step4Descriptions";
+import Step5PersonalContactForm from "./form-steps/organization/Step5PersonalContact";
+import Step6DocumentsForm from "./form-steps/organization/Step6Documents";
+import Step7TermsForm from "./form-steps/organization/Step7TemsAndConditions";
+
 import { AUTHORIZED_REDIRECTION } from "@/data/routes";
 
 const asideImage1 = "/images/auth-form-aside.png";
 const asideImage2 = "/images/auth-form-aside2.png";
 
-const TOTAL_STEPS = 3;
+const TOTAL_STEPS = 7;
 const stepConfig = [
   {
-    component: Step1PersonalInfo,
+    component: Step1BasicInfoForm,
   },
   {
-    component: Step2Qualifications,
+    component: Step2SocialLinks,
   },
   {
-    component: Step3TemsAndConditions,
+    component: Step3OrgTypeForm,
+  },
+  {
+    component: Step4DescriptionsForm,
+  },
+  {
+    component: Step5PersonalContactForm,
+  },
+  {
+    component: Step6DocumentsForm,
+  },
+  {
+    component: Step7TermsForm,
   },
 ];
 
-export default function CompleteProfileForm() {
+export default function CompleteOrganizationForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
-  const methods = useForm<RegistrationFormData>({
+  const methods = useForm<OrgRegistrationFormData>({
     mode: "onChange",
-    defaultValues: profileDefaultValues,
+    defaultValues: organizationDefaultValues,
   });
-
   const { handleSubmit, getValues, setError, clearErrors } = methods;
 
   const validateCurrentStep = async () => {
     const currentData = getValues();
-
-    // Clear previous errors for current step
     clearErrors();
 
-    const validationResult = validateStep(currentStep, currentData);
+    const validationResult = validateOrgStep(currentStep, currentData);
 
     if (validationResult.success) {
       return true;
     } else {
       validationResult.error.issues.forEach((issue) => {
         if (issue.path && issue.path.length > 0) {
-          setError(issue.path[0] as keyof RegistrationFormData, {
+          setError(issue.path[0] as keyof OrgRegistrationFormData, {
             type: "validation",
             message: issue.message,
           });
@@ -75,13 +88,12 @@ export default function CompleteProfileForm() {
   };
 
   const handleNext = async (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
 
     const isStepValid = await validateCurrentStep();
 
     if (isStepValid) {
       setCurrentStep((prev) => Math.min(prev + 1, TOTAL_STEPS));
-      // Only show success toast for completing the final step before submission
       if (currentStep === TOTAL_STEPS - 1) {
         toast.success("تم التحقق من البيانات بنجاح! يمكنك الآن إتمام التسجيل");
       }
@@ -91,23 +103,21 @@ export default function CompleteProfileForm() {
   };
 
   const handlePrevious = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
-  const onSubmit = async (data: RegistrationFormData) => {
+  const onSubmit = async (data: OrgRegistrationFormData) => {
     try {
       setIsSubmitting(true);
 
-      // Final validation
-      const finalValidation = registrationSchema.safeParse(data);
+      const finalValidation = orgRegistrationSchema.safeParse(data);
       if (!finalValidation.success) {
         toast.error("يرجى التحقق من جميع البيانات");
         return;
       }
 
-      // Submit to server action
-      const result = await completeProfileAction(data);
+      const result = await completeOrgProfileAction(data);
 
       if (result.success) {
         toast.success("تم إكمال الملف الشخصي بنجاح!");
@@ -129,7 +139,7 @@ export default function CompleteProfileForm() {
     <div className="w-full max-w-7xl flex flex-col lg:flex-row bg-neutrals-100 rounded-xl shadow-2xl overflow-hidden min-h-[600px]">
       <div className="flex-1 relative h-64 lg:h-auto">
         <Image
-          src={currentStep % 2 === 0 ? asideImage2 : asideImage1}
+          src={currentStep % 2 === 1 ? asideImage2 : asideImage1}
           alt="Volunteer"
           fill
           className="object-cover md:rounded-r-4xl"

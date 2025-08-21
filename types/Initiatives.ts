@@ -16,7 +16,6 @@ export interface InitiativeCard
     | "currentParticipants"
     | "targetAudience"
     | "status"
-    | "isFeatured"
   > {
   category: Pick<
     InitiativeCategory,

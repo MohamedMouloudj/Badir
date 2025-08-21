@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
+import { UserType } from "@prisma/client";
 
 export type SignupState = {
   success?: boolean;
@@ -13,9 +14,10 @@ export type SignupState = {
 };
 
 export async function signupAction(
-  prevState: SignupState | null,
+  _prevState: SignupState | null,
   formData: FormData
 ): Promise<SignupState> {
+  let completeRoute = "";
   try {
     const data: InitialSignupFormData = {
       email: formData.get("email") as string,
@@ -23,14 +25,21 @@ export async function signupAction(
       confirmPassword: formData.get("confirmPassword") as string,
       firstName: formData.get("firstName") as string,
       lastName: formData.get("lastName") as string,
+      userType: formData.get("userType") as UserType,
     };
 
-    // Validate the form data
-    const validatedData = initialSignupSchema.parse(data);
+    const validatedData = initialSignupSchema.safeParse(data);
+
+    if (!validatedData.success) {
+      return {
+        success: false,
+        error: "البيانات المدخلة غير صحيحة. يرجى التحقق من جميع الحقول.",
+      };
+    }
 
     const existingUser = await prisma.user.findUnique({
       where: {
-        email: validatedData.email,
+        email: validatedData.data.email,
       },
     });
 
@@ -44,11 +53,15 @@ export async function signupAction(
 
     const res = await auth.api.signUpEmail({
       body: {
-        firstName: validatedData.firstName,
-        lastName: validatedData.lastName,
-        email: validatedData.email,
-        password: validatedData.password,
-        name: `${validatedData.firstName} ${validatedData.lastName}`,
+        firstName: validatedData.data.firstName,
+        lastName: validatedData.data.lastName,
+        email: validatedData.data.email,
+        password: validatedData.data.password,
+        name: `${validatedData.data.firstName} ${validatedData.data.lastName}`,
+        userType:
+          validatedData.data.userType === "both"
+            ? undefined
+            : validatedData.data.userType,
       },
       headers: await headers(),
       asResponse: true,
@@ -75,7 +88,11 @@ export async function signupAction(
       }
     }
 
-    redirect("/complete-profile");
+    if (validatedData.data.userType === "both") {
+      completeRoute = "/complete-profile/user";
+    } else {
+      completeRoute = "/complete-profile/organization";
+    }
   } catch (error) {
     console.error("Signup error:", error);
 
@@ -91,4 +108,6 @@ export async function signupAction(
       error: "حدث خطأ أثناء إنشاء الحساب. يرجى المحاولة مرة أخرى.",
     };
   }
+
+  redirect(completeRoute);
 }

@@ -124,15 +124,14 @@ export class InitiativeService {
 
       // Available spots filter
       if (filters.hasAvailableSpots) {
-        where.OR = [
-          { maxParticipants: null },
-          {
-            AND: [
-              { maxParticipants: { not: null } },
-              { maxParticipants: { gt: 0 } }, // Simplified for now
-            ],
-          },
-        ];
+        const initiativesWithSpots = await prisma.$queryRaw<{ id: string }[]>`
+          SELECT id FROM "initiatives" 
+          WHERE "max_participants" IS NULL 
+          OR "current_participants" < "max_participants"
+        `;
+
+        const availableIds = initiativesWithSpots.map((item) => item.id);
+        where.id = { in: availableIds };
       }
 
       // Date filters

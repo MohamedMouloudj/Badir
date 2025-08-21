@@ -67,7 +67,6 @@ export async function completeProfileAction(
       };
     }
 
-    // Server-side validation with Zod
     const validatedData = registrationSchema.parse(data);
 
     await prisma.user.update({
@@ -254,8 +253,7 @@ export async function completeOrgProfileAction(
         logo: processedFormData.logo || undefined,
         website: undefined,
         socialLinks: {},
-        address: undefined,
-        city: undefined,
+        city: processedFormData.city || undefined,
         state: processedFormData.state,
         country: processedFormData.country,
         organizationType: processedFormData.organizationType,
@@ -278,8 +276,7 @@ export async function completeOrgProfileAction(
         logo: processedFormData.logo || undefined,
         website: undefined,
         socialLinks: {},
-        address: undefined,
-        city: undefined,
+        city: processedFormData.city || undefined,
         state: processedFormData.state,
         country: processedFormData.country,
         organizationType: processedFormData.organizationType,
@@ -294,7 +291,7 @@ export async function completeOrgProfileAction(
       },
     });
 
-    // Update user record to set type to organizer if needed
+    // Update user record to set type to organizer
     await prisma.user.update({
       where: { id: userId },
       data: {

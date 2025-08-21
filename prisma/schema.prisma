@@ -150,13 +150,10 @@ model Organization {
   membersCount    Int?     @map("members_count")
   website         String?  @db.VarChar(255)
   socialLinks     Json?    @map("social_links")
-  address         String?  @db.Text
   headquarters    String?  @map("headquarters") @db.VarChar(255)
   city            String?  @db.VarChar(100)
   state           String   @db.VarChar(100)
   country         String   @default("Algeria") @db.VarChar(100)
-  latitude        Decimal? @db.Decimal(10, 8)
-  longitude       Decimal? @db.Decimal(11, 8)
   isVerified      Boolean  @default(false) @map("is_verified")
 
   // I should not set it like this, but i am , for simplicity (it must be intermediate table - many to many)

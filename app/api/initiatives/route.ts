@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     if (search) filters.search = search;
 
     const categoryId = searchParams.get("categoryId");
-    if (categoryId) filters.categoryId = parseInt(categoryId);
+    if (categoryId) filters.categoryId = categoryId;
 
     const city = searchParams.get("city");
     if (city) filters.city = city;

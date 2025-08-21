@@ -10,7 +10,7 @@ import { BUCKETS } from "@/types/Statics";
  */
 export async function getPublicStorageUrl(
   bucket: BUCKETS,
-  path: string
+  path: string | null
 ): Promise<string | null> {
   if (!bucket || !path) return null;
   const storage = new StorageHelpers();

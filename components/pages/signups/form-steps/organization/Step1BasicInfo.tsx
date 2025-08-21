@@ -115,22 +115,42 @@ export default function Step1BasicInfoForm() {
         />
       </div>
 
-      <Controller
-        name="headquarters"
-        control={control}
-        render={({ field, fieldState }) => (
-          <FormInput
-            type="text"
-            label="المقر الرئيسي"
-            name={field.name}
-            placeholder="المقر الرئيسي"
-            value={field.value || ""}
-            onChange={field.onChange}
-            error={fieldState.error?.message}
-            rtl={true}
-          />
-        )}
-      />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Controller
+          name="city"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormInput
+              type="text"
+              label="المدينة"
+              name={field.name}
+              placeholder="المدينة"
+              isOptional={true}
+              value={field.value || ""}
+              onChange={field.onChange}
+              error={fieldState.error?.message}
+              rtl={true}
+            />
+          )}
+        />
+
+        <Controller
+          name="headquarters"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormInput
+              type="text"
+              label="المقر الرئيسي"
+              name={field.name}
+              placeholder="المقر الرئيسي"
+              value={field.value || ""}
+              onChange={field.onChange}
+              error={fieldState.error?.message}
+              rtl={true}
+            />
+          )}
+        />
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Controller

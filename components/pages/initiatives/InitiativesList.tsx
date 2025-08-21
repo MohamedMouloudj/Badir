@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import {
   InitiativeCard as InitiativeCardType,
   InitiativeFilters,
+  InitiativeService,
   PaginatedResponse,
 } from "@/services/initiatives";
 import { CategoryCard } from "@/services/categories";
@@ -85,7 +86,9 @@ export default function InitiativesList({
       params.append("page", page.toString());
       params.append("limit", "12");
 
-      const response = await api.get(`/initiatives?${params.toString()}`);
+      const response = await api.get(
+        `${InitiativeService.API_PATH}?${params.toString()}`
+      );
       const data = response.data;
 
       if (data.success) {
@@ -106,7 +109,7 @@ export default function InitiativesList({
       delete newFilters[key];
     } else {
       if (key === "categoryId") {
-        newFilters[key] = parseInt(value);
+        newFilters[key] = value;
       } else if (key === "hasAvailableSpots") {
         newFilters[key] = value === "true";
       } else {
@@ -150,17 +153,16 @@ export default function InitiativesList({
         {/* Filters Section */}
         <Card className="mb-8 bg-transparent shadow-none border-none">
           <CardContent className="p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-              {/* Search */}
-              <div className="md:col-span-2">
-                <SearchInput
-                  value={filters.search || ""}
-                  onChange={handleSearch}
-                  placeholder="ابحث في المبادرات..."
-                  className="w-full"
-                />
-              </div>
-
+            {/* Search */}
+            <div className="max-w-full md:max-w-1/2 mb-4">
+              <SearchInput
+                value={filters.search || ""}
+                onChange={handleSearch}
+                placeholder="ابحث في المبادرات..."
+                className="w-full"
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Category Filter */}
               <FilterSelect
                 value={filters.categoryId?.toString() || "all"}

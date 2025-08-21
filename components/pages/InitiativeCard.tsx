@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowUpLeft, MapPin } from "lucide-react";
 import { InitiativeCard as InitiativeCardType } from "@/services/initiatives";

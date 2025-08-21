@@ -23,6 +23,12 @@ export const signupOrgStep1Schema = z.object({
 
   headquarters: z.string().max(255, "المقر الرئيسي طويل جدًا").optional(),
 
+  city: z
+    .string()
+    .min(2, "الرجاء إدخال المدينة")
+    .max(100, "اسم المدينة طويل جدًا")
+    .optional(),
+
   state: z
     .string()
     .min(2, "الرجاء إدخال الولاية")
@@ -225,6 +231,7 @@ export const organizationDefaultValues: OrgRegistrationFormData = {
   foundingDate: undefined,
   membersCount: undefined,
   headquarters: "",
+  city: "",
   state: "",
   country: "Algeria",
   contactPhoneOrg: "",

@@ -6,7 +6,7 @@ import {
   educationalLevelOptions,
   Step2FormData,
   userTypeOptions,
-} from "@/schemas/signupSchema";
+} from "@/schemas/signupUserSchema";
 
 export default function Step2Qualifications() {
   //? in future: we can fill form automatically based on locations

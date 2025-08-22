@@ -1,4 +1,5 @@
 import { auth } from "@/lib/auth";
+import { UserType } from "@prisma/client";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -8,7 +9,11 @@ const getSessionWithCheckProfile = async () => {
   });
 
   if (session && !session.user.profileCompleted) {
-    redirect("/complete-profile");
+    if (session.user.userType === UserType.organization) {
+      redirect("/complete-profile/organization");
+    } else {
+      redirect("/complete-profile/user");
+    }
   }
   return session;
 };

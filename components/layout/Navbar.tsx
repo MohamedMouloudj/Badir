@@ -82,11 +82,7 @@ export default function Navbar() {
           {landingRoute.map((navRoute) => (
             <li key={navRoute.url}>
               <Link
-                className={`${
-                  pathname === "/" + navRoute.url
-                    ? "font-bold"
-                    : "font-semibold"
-                }`}
+                className={`${pathname === navRoute.url ? "underline" : ""}`}
                 href={`${navRoute.url}`}
               >
                 {navRoute.label}
@@ -111,9 +107,7 @@ export default function Navbar() {
                 <li key={navRoute.url}>
                   <Link
                     className={`py-2 px-3 ${
-                      pathname === "/" + navRoute.url
-                        ? "font-bold"
-                        : "font-semibold"
+                      pathname === navRoute.url ? "underline" : ""
                     }`}
                     href={`${navRoute.url}`}
                     onClick={closeMenu}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef } from "react";
+import React, { forwardRef, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
@@ -23,8 +23,74 @@ import {
   CommandList,
 } from "./ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Check, ChevronsUpDown } from "lucide-react";
+import {
+  Check,
+  CheckCircle,
+  CheckCircle2,
+  CheckIcon,
+  ChevronsUpDown,
+  Upload,
+} from "lucide-react";
 import { Button } from "./ui/button";
+import { getCountries, getCountryCallingCode } from "libphonenumber-js";
+
+const priorityCountries = [
+  "DZ",
+  "SA",
+  "AE",
+  "KW",
+  "QA",
+  "BH",
+  "OM",
+  "JO",
+  "LB",
+  "EG",
+  "MA",
+  "TN",
+  "LY",
+  "SD",
+  "SY",
+  "YE",
+  "IQ",
+  "PS",
+];
+const generateCountryOptions = () => {
+  const countries = getCountries();
+
+  const countryOptions = countries
+    .map((countryCode) => {
+      try {
+        const callingCode = getCountryCallingCode(countryCode);
+        return {
+          code: countryCode,
+          name: countryCode,
+          callingCode: `+${callingCode}`,
+        };
+      } catch {
+        return null;
+      }
+    })
+    .filter(Boolean) as { code: string; name: string; callingCode: string }[];
+
+  // Sort: priority countries first, then alphabetically by country code
+  return countryOptions.sort((a, b) => {
+    if (priorityCountries) {
+      const aPriority = priorityCountries.indexOf(a.code);
+      const bPriority = priorityCountries.indexOf(b.code);
+
+      // If both are priority countries, sort by priority order
+      if (aPriority !== -1 && bPriority !== -1) {
+        return aPriority - bPriority;
+      }
+
+      // If only one is priority, priority comes first
+      if (aPriority !== -1) return -1;
+      if (bPriority !== -1) return 1;
+    }
+
+    return a.code.localeCompare(b.code);
+  });
+};
 
 export interface Option {
   value: string;
@@ -36,12 +102,17 @@ export interface FormInputProps {
     | "text"
     | "email"
     | "password"
+    | "number"
+    | "tel"
+    | "date"
     | "checkbox"
+    | "checkbox-group"
     | "switch"
     | "textarea"
     | "radio"
     | "select"
-    | "combobox";
+    | "combobox"
+    | "file";
   label: string;
   name: string;
   placeholder?: string;
@@ -57,6 +128,12 @@ export interface FormInputProps {
   rows?: number; // For textarea
   rtl?: boolean; // Right-to-left support
   multiple?: boolean; // For multi-select combobox
+  fileAccept?: string[] | string;
+  fileMaxSize?: number;
+  onFileChange?: (file: File | null, onChange: (value: string) => void) => void;
+  showFilePreview?: boolean;
+  countryCode?: string;
+  onCountryChange?: (countryCode: string) => void;
 }
 
 /**
@@ -98,10 +175,32 @@ export interface FormInputProps {
  *   value={selectedSkills}
  *   onChange={(value) => setSelectedSkills(value as string[])}
  * />
+ *
+ * // Phone number input example
+ * <FormInput
+ *   type="tel"
+ *   label="Phone Number"
+ *   name="phone"
+ *   placeholder="5xxxxxxxx"
+ *   value={phoneNumber}
+ *   countryCode={selectedCountry}
+ *   onChange={(value) => setPhoneNumber(value as string)}
+ *   onCountryChange={(code) => setSelectedCountry(code)}
+ * />
+ *
+ * // Number input example
+ * <FormInput
+ *   type="number"
+ *   label="Age"
+ *   name="age"
+ *   placeholder="Enter your age"
+ *   value={age}
+ *   onChange={(value) => setAge(value as string)}
+ * />
  * ```
  *
  * @param {FormInputProps} props - The props for the form input component
- * @param {("text" | "email" | "password" | "checkbox" | "switch" | "textarea" | "radio" | "select" | "combobox")} props.type - The type of input field to render
+ * @param {("text" | "email" | "password" | "number" | "tel" | "date" | "checkbox" | "switch" | "textarea" | "radio" | "select" | "combobox")} props.type - The type of input field to render
  * @param {string} props.label - The label text displayed for the input field
  * @param {string} props.name - The name attribute for the input field, used for form handling and accessibility
  * @param {string} [props.placeholder] - Placeholder text shown when the input is empty
@@ -117,6 +216,8 @@ export interface FormInputProps {
  * @param {number} [props.rows=4] - Number of rows for textarea input type
  * @param {boolean} [props.rtl=true] - Whether to apply right-to-left text direction
  * @param {boolean} [props.multiple=false] - Whether to allow multiple selections (for combobox type)
+ * @param {string} [props.countryCode="DZ"] - The selected country code for phone input (ISO 3166-1 alpha-2)
+ * @param {(countryCode: string) => void} [props.onCountryChange] - Callback function called when country code changes (for tel type)
  * @param {React.Ref<HTMLInputElement>} ref - Forwarded ref to the underlying input element
  *
  * @returns {React.ForwardRefExoticComponent} A forwardRef component that renders the appropriate input type with consistent styling
@@ -145,6 +246,11 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
       rows = 4,
       rtl = true,
       multiple = false,
+      countryCode = "DZ",
+      onCountryChange,
+      fileAccept,
+      fileMaxSize,
+      onFileChange,
       ...props
     },
     ref
@@ -152,6 +258,12 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
     const [open, setOpen] = React.useState(false);
     const [searchValue, setSearchValue] = React.useState("");
     const isSwitch = type === "switch";
+
+    const countryOptions = useMemo(() => {
+      if (type === "tel") {
+        return generateCountryOptions();
+      }
+    }, [type]);
 
     const baseInputClasses = cn(
       "w-full border border-neutrals-300 rounded-full px-4 py-2",
@@ -186,6 +298,8 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         case "text":
         case "email":
         case "password":
+        case "number":
+        case "date":
           return (
             <Input
               ref={ref}
@@ -202,6 +316,72 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
             />
           );
 
+        case "tel": {
+          const selectedCountry =
+            countryOptions!.find(
+              (country) => country.code === (countryCode || "DZ")
+            ) || countryOptions![0];
+
+          return (
+            <div className="flex gap-2">
+              {/* Phone Number Input */}
+              <Input
+                ref={ref}
+                type="text"
+                id={name}
+                name={name}
+                placeholder={placeholder || "Enter phone number"}
+                value={(value as string) || ""}
+                onChange={(e) => {
+                  // Remove non-numeric characters except + and spaces
+                  const cleanedValue = e.target.value.replace(/[^\d\s]/g, "");
+                  onChange?.(cleanedValue);
+                }}
+                onBlur={onBlur}
+                disabled={disabled}
+                className={cn(baseInputClasses, "flex-1")}
+                style={{ direction: "ltr", textAlign: "left" }}
+                {...props}
+              />
+              {/* Country Code Selector */}
+              <Select
+                value={selectedCountry?.code}
+                onValueChange={(value) => onCountryChange?.(value)}
+                disabled={disabled}
+              >
+                <SelectTrigger
+                  className={cn(
+                    "w-32 border border-neutrals-300 rounded-full px-3 py-2 bg-neutrals-100",
+                    "focus:border-secondary-600 focus:ring-1 focus:ring-secondary-600 focus:outline-none",
+                    error &&
+                      "border-state-error focus:border-state-error focus:ring-state-error",
+                    disabled && "bg-neutrals-200 cursor-not-allowed"
+                  )}
+                >
+                  <SelectValue>
+                    <span className="text-sm">
+                      {selectedCountry?.callingCode}
+                    </span>
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {countryOptions!.map((country) => (
+                    <SelectItem key={country.code} value={country.code}>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">
+                          {country.callingCode}
+                        </span>
+                        <span className="text-xs text-neutrals-500">
+                          {country.name}
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          );
+        }
         case "textarea":
           return (
             <Textarea
@@ -243,6 +423,54 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
               >
                 {placeholder || label}
               </label>
+            </div>
+          );
+        case "checkbox-group":
+          return (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {options.map((option, index) => {
+                const isChecked =
+                  Array.isArray(value) && value.includes(option.value);
+
+                return (
+                  <div
+                    key={`${name}-${option.value}-${index}`}
+                    className="flex items-center space-x-2 space-x-reverse"
+                  >
+                    <Checkbox
+                      id={`${name}-${option.value}-${index}`}
+                      checked={isChecked}
+                      onCheckedChange={(checked) => {
+                        if (!Array.isArray(value)) {
+                          onChange?.(checked ? [option.value] : []);
+                          return;
+                        }
+
+                        const currentValues = [...value];
+                        if (checked) {
+                          // Add value if not already present
+                          if (!currentValues.includes(option.value)) {
+                            onChange?.([...currentValues, option.value]);
+                          }
+                        } else {
+                          // Remove value if present
+                          onChange?.(
+                            currentValues.filter((val) => val !== option.value)
+                          );
+                        }
+                      }}
+                      disabled={disabled}
+                      className="data-[state=checked]:bg-secondary-500 data-[state=checked]:border-secondary-500 border-neutrals-500"
+                    />
+                    <label
+                      htmlFor={`${name}-${option.value}-${index}`}
+                      className="text-neutrals-600 cursor-pointer"
+                    >
+                      {option.label}
+                    </label>
+                  </div>
+                );
+              })}
             </div>
           );
 
@@ -436,6 +664,87 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
             </Popover>
           );
 
+        case "file":
+          const normalizedFileAccept = Array.isArray(fileAccept)
+            ? fileAccept
+            : fileAccept?.split(",") || [];
+
+          // Check if a file has been selected (using existing value prop)
+          const hasFile =
+            value && typeof value === "string" && value.length > 0;
+
+          // Show file name if value is a JSON string (from Step6Documents)
+          let selectedFileName = "";
+          try {
+            if (hasFile) {
+              const parsed = JSON.parse(value as string);
+              selectedFileName = parsed?.name || value;
+            }
+          } catch {
+            selectedFileName = value as string;
+          }
+
+          return (
+            <div className="relative">
+              <input
+                ref={ref}
+                type="file"
+                id={name}
+                name={name}
+                accept={
+                  Array.isArray(fileAccept) ? fileAccept.join(",") : fileAccept
+                }
+                disabled={disabled}
+                className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
+                onChange={(e) => {
+                  const file = e.target.files?.[0] || null;
+                  onFileChange?.(file, (val: string) => onChange?.(val));
+                }}
+                {...props}
+              />
+              <div
+                className={cn(
+                  "flex items-center justify-center w-full h-32 px-4 py-2 border-2 border-dashed rounded-lg",
+                  "bg-neutrals-100 hover:bg-neutrals-200 transition-colors cursor-pointer",
+                  hasFile ? "border-green-500" : "border-neutrals-300", // Green border when file exists
+                  error && "border-state-error",
+                  disabled && "opacity-50 cursor-not-allowed"
+                )}
+              >
+                <div className="text-center">
+                  {/* File status indicator */}
+                  {hasFile ? (
+                    <div className="flex flex-col items-center">
+                      <div className="bg-green-100 rounded-full p-2 mb-2">
+                        <CheckIcon className="h-6 w-6 text-green-600" />
+                      </div>
+                      <p className="text-sm font-medium text-green-600">
+                        تم اختيار: {selectedFileName}
+                      </p>
+                      <p className="text-xs text-neutrals-500 mt-1">
+                        انقر لاختيار ملف آخر
+                      </p>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex justify-center mb-2">
+                        <Upload className="h-6 w-6 text-neutrals-400" />
+                      </div>
+                      <p className="text-sm font-medium">
+                        {`انقر لاختيار ${placeholder || "ملف"}`}
+                      </p>
+                      <p className="mt-1 text-xs text-neutrals-400">
+                        {normalizedFileAccept.join(", ")}
+                        {normalizedFileAccept.length
+                          ? ` حتى ${fileMaxSize || 10}MB`
+                          : "حجم الملف الأقصى 10MB"}
+                      </p>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
         default:
           return null;
       }

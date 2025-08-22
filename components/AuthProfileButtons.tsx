@@ -14,6 +14,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
+import { OrganizationService } from "@/services/organizations";
+import { UserType } from "@prisma/client";
+import { getOrganizationLogo } from "@/actions/profile";
+import { getPublicStorageUrl } from "@/actions/supabaseHelpers";
 
 export function AuthProfileButtons({
   isMobile,
@@ -24,6 +28,9 @@ export function AuthProfileButtons({
 }) {
   const { data: session, isPending: isSessionPending, refetch } = useSession();
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [organizationImage, setOrganizationImage] = useState<string | null>(
+    null
+  );
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const pathname = usePathname();
@@ -68,6 +75,24 @@ export function AuthProfileButtons({
     });
   };
 
+  useEffect(() => {
+    if (!session?.user) return;
+    if (session.user.userType !== UserType.organization) return;
+
+    async function fetchOrganizationLogo() {
+      const logoPath = await getOrganizationLogo();
+      if (!logoPath) {
+        setOrganizationImage(null);
+        return;
+      }
+      const logo = await getPublicStorageUrl("avatars", logoPath);
+
+      setOrganizationImage(logo);
+    }
+
+    fetchOrganizationLogo();
+  }, [session, session?.user]);
+
   const handleProfileClick = () => {
     setIsPopoverOpen(false);
     onMenuAction?.();
@@ -94,7 +119,7 @@ export function AuthProfileButtons({
                 >
                   <Avatar className="h-10 w-10 cursor-pointer hover:ring-2 hover:ring-primary-400 ring-offset-1 transition-all">
                     <AvatarImage
-                      src={session.user.image || ""}
+                      src={organizationImage || session.user.image || ""}
                       alt={session.user.name || "المستخدم"}
                     />
                     <AvatarFallback className="border-2 border-primary-500 text-primary-500 font-semibold">
@@ -160,7 +185,7 @@ export function AuthProfileButtons({
                 >
                   <Avatar className="h-10 w-10 md:h-12 md:w-12 cursor-pointer hover:ring-2 hover:ring-primary-400 ring-offset-1 transition-all">
                     <AvatarImage
-                      src={session.user.image || ""}
+                      src={organizationImage || session.user.image || ""}
                       alt={session.user.name || "المستخدم"}
                     />
                     <AvatarFallback className="border-2 border-primary-500 text-primary-500 font-semibold">

@@ -1,4 +1,8 @@
-import { InitiativeStatus, OrganizerType, TargetAudience } from "./Inititaives";
+import {
+  InitiativeStatus,
+  OrganizerType,
+  TargetAudience,
+} from "@prisma/client";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type CarouselImage = {
@@ -83,3 +87,36 @@ export interface ProximitySearch {
   longitude: number;
   radiusKm?: number;
 }
+
+// ======== Supabase Storage ========
+
+export type BUCKETS = "avatars" | "documents" | "post-images";
+
+export const BUCKET_MIME_TYPES = {
+  avatars: ["image/jpeg", "image/jpg", "image/png", "image/jpg"],
+
+  // DOCUMENTS BUCKET (Organization verification docs)
+  documents: [
+    // Images
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+
+    // PDFs
+    "application/pdf",
+  ],
+
+  // POST-IMAGES BUCKET
+  "post-images": [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/gif",
+    "image/svg+xml",
+  ],
+};
+export const BUCKET_SIZE_LIMITS = {
+  avatars: 10 * 1024 * 1024, // 10MB
+  documents: 15 * 1024 * 1024, // 15MB
+  "post-images": 30 * 1024 * 1024, // 30MB
+};

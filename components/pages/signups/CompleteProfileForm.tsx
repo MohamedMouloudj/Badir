@@ -4,23 +4,28 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useForm, FormProvider } from "react-hook-form";
 import {
+  profileDefaultValues,
   registrationSchema,
   validateStep,
   type RegistrationFormData,
-} from "@/schemas/signupSchema";
+} from "@/schemas/signupUserSchema";
 import AppButton from "@/components/AppButton";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { completeProfileAction } from "@/actions/profile";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 // Import step components
-import Step1PersonalInfo from "./form-steps/Step1PersonalInfo";
-import Step2Qualifications from "./form-steps/Step2Qualifications";
-import Step3LocationAndFinal from "./form-steps/Step3LocationAndFinal";
+import Step1PersonalInfo from "./form-steps/user/Step1PersonalInfo";
+import Step2Qualifications from "./form-steps/user/Step2Qualifications";
+import Step3TemsAndConditions from "./form-steps/user/Step3TemsAndConditions";
+import { AUTHORIZED_REDIRECTION } from "@/data/routes";
+
+const asideImage1 = "/images/auth-form-aside.png";
+const asideImage2 = "/images/auth-form-aside2.png";
 
 const TOTAL_STEPS = 3;
-
 const stepConfig = [
   {
     component: Step1PersonalInfo,
@@ -29,7 +34,7 @@ const stepConfig = [
     component: Step2Qualifications,
   },
   {
-    component: Step3LocationAndFinal,
+    component: Step3TemsAndConditions,
   },
 ];
 
@@ -40,27 +45,7 @@ export default function CompleteProfileForm() {
 
   const methods = useForm<RegistrationFormData>({
     mode: "onChange",
-    defaultValues: {
-      // Step 1: Personal Information
-      dateOfBirth: "",
-      sex: undefined,
-      phone: "",
-      city: "",
-      state: "",
-      country: "Algeria",
-      latitude: undefined,
-      longitude: undefined,
-
-      // Step 2: Educational & Professional Information
-      specification: "",
-      educationalLevel: "",
-      currentJob: "",
-      bio: "",
-      userType: "both",
-
-      // Step 3: Terms & Conditions
-      acceptConditions: false,
-    },
+    defaultValues: profileDefaultValues,
   });
 
   const { handleSubmit, getValues, setError, clearErrors } = methods;
@@ -126,7 +111,7 @@ export default function CompleteProfileForm() {
 
       if (result.success) {
         toast.success("تم إكمال الملف الشخصي بنجاح!");
-        router.push("/initiatives");
+        router.push(AUTHORIZED_REDIRECTION);
       } else {
         toast.error(result.error || "حدث خطأ أثناء حفظ البيانات");
       }
@@ -141,70 +126,87 @@ export default function CompleteProfileForm() {
   const CurrentStepComponent = stepConfig[currentStep - 1].component;
 
   return (
-    <div className="w-full max-w-4xl mx-auto md:p-6" dir="rtl">
-      <Card className="bg-transparent shadow-none border-0 ">
-        <CardContent className="px-0 py-0">
-          <FormProvider {...methods}>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              <div className="min-h-[400px]">
-                <CurrentStepComponent />
-              </div>
+    <div className="w-full max-w-7xl flex flex-col lg:flex-row bg-neutrals-100 rounded-xl shadow-2xl overflow-hidden min-h-[600px]">
+      <div className="flex-1 relative h-64 lg:h-auto">
+        <Image
+          src={currentStep % 2 === 0 ? asideImage2 : asideImage1}
+          alt="Volunteer"
+          fill
+          className="object-cover md:rounded-r-4xl"
+          priority
+          style={{
+            boxShadow: "3px 0 5px 0 rgba(0, 0, 0, 0.1)",
+          }}
+        />
+      </div>
 
-              {/* Navigation Buttons */}
-              <div className="flex justify-between items-center pt-4 md:pt-6 border-t border-neutrals-200 w-full">
-                <AppButton
-                  type="outline"
-                  size="md"
-                  onClick={handlePrevious}
-                  disabled={currentStep === 1}
-                  className="flex items-center gap-2"
-                  corner="rounded"
-                  icon={<ChevronRight className="w-4 h-4 md:w-6 md:h-6" />}
-                  dir="rtl"
-                >
-                  السابق
-                </AppButton>
+      <div className="flex-1 flex items-center justify-center p-8">
+        <div className="w-full max-w-4xl mx-auto md:p-6" dir="rtl">
+          <Card className="bg-transparent shadow-none border-0 ">
+            <CardContent className="px-0 py-0">
+              <FormProvider {...methods}>
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                  <div className="min-h-[400px]">
+                    <CurrentStepComponent />
+                  </div>
 
-                <div className="text-center">
-                  <span className="text-sm text-neutrals-500">
-                    الخطوة {currentStep} من {TOTAL_STEPS}
-                  </span>
-                </div>
+                  {/* Navigation Buttons */}
+                  <div className="flex justify-between items-center pt-4 md:pt-6 border-t border-neutrals-200 w-full">
+                    <AppButton
+                      type="outline"
+                      size="md"
+                      onClick={handlePrevious}
+                      disabled={currentStep === 1}
+                      className="flex items-center gap-2"
+                      corner="rounded"
+                      icon={<ChevronRight className="w-4 h-4 md:w-6 md:h-6" />}
+                      dir="rtl"
+                    >
+                      السابق
+                    </AppButton>
 
-                {currentStep < TOTAL_STEPS ? (
-                  <AppButton
-                    type="primary"
-                    size="md"
-                    onClick={handleNext}
-                    className="flex items-center gap-2"
-                    corner="rounded"
-                    icon={<ChevronLeft className="w-4 h-4 md:w-6 md:h-6" />}
-                  >
-                    التالي
-                  </AppButton>
-                ) : (
-                  <AppButton
-                    type="submit"
-                    size="md"
-                    disabled={isSubmitting}
-                    className="flex items-center gap-2"
-                    corner="rounded"
-                    icon={
-                      isSubmitting ? (
-                        <Loader2 className="w-4 h-4 md:w-6 md:h-6" />
-                      ) : (
-                        ""
-                      )
-                    }
-                  >
-                    {isSubmitting ? "جاري الحفظ..." : "إكمال التسجيل"}
-                  </AppButton>
-                )}
-              </div>
-            </form>
-          </FormProvider>
-        </CardContent>
-      </Card>
+                    <div className="text-center">
+                      <span className="text-sm text-neutrals-500">
+                        الخطوة {currentStep} من {TOTAL_STEPS}
+                      </span>
+                    </div>
+
+                    {currentStep < TOTAL_STEPS ? (
+                      <AppButton
+                        type="primary"
+                        size="md"
+                        onClick={handleNext}
+                        className="flex items-center gap-2"
+                        corner="rounded"
+                        icon={<ChevronLeft className="w-4 h-4 md:w-6 md:h-6" />}
+                      >
+                        التالي
+                      </AppButton>
+                    ) : (
+                      <AppButton
+                        type="submit"
+                        size="md"
+                        disabled={isSubmitting}
+                        className="flex items-center gap-2"
+                        corner="rounded"
+                        icon={
+                          isSubmitting ? (
+                            <Loader2 className="w-4 h-4 md:w-6 md:h-6" />
+                          ) : (
+                            ""
+                          )
+                        }
+                      >
+                        {isSubmitting ? "جاري الحفظ..." : "إكمال التسجيل"}
+                      </AppButton>
+                    )}
+                  </div>
+                </form>
+              </FormProvider>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }

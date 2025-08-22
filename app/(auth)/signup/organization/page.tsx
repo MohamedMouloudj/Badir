@@ -1,7 +1,10 @@
-import LoginForm from "@/components/pages/login/LoginForm";
-import Image from "next/image";
+"use client";
 
-export default function page() {
+import { SignupForm } from "@/components/pages/signups/SignupForm";
+import Image from "next/image";
+import Link from "next/link";
+
+export default function UserSignupPage() {
   return (
     <section className="min-h-screen w-full flex items-center justify-center bg-primary-600 p-4">
       <div className="w-full max-w-7xl flex flex-col lg:flex-row bg-neutrals-100 rounded-xl shadow-2xl overflow-hidden min-h-[600px]">
@@ -24,7 +27,7 @@ export default function page() {
           className="flex-1 flex flex-col justify-center max-md:justify-start items-start p-6 md:p-8 md:px-10"
           dir="rtl"
         >
-          <div className="w-full max-w-md flex-center-column gap-6 md:gap-10 h-full">
+          <div className="w-full flex-center-column gap-6 md:gap-10 h-full">
             {/* Logo */}
             <div className="flex justify-start mb-8 self-start max-md:hidden">
               <Image
@@ -37,13 +40,31 @@ export default function page() {
               />
             </div>
 
-            {/* Title */}
-            <h1 className="text-2xl md:text-3xl text-primary-600 font-bold text-center md:text-right mb-8">
-              تسجيل الدخول
-            </h1>
+            {/* Right side - Form */}
+            <div className="flex flex-col items-center justify-center space-y-6">
+              <div className="text-center md:text-right space-y-2">
+                <h1 className="text-3xl lg:text-4xl font-bold text-primary-500">
+                  مرحباً بك في منصة العمل التطوعي
+                </h1>
+                <p className="text-gray-600 text-lg max-w-md">
+                  ابدأ رحلتك في التطوع وساهم في بناء مجتمع أفضل
+                </p>
+              </div>
 
-            {/* Form */}
-            <LoginForm />
+              <SignupForm />
+
+              <div className="text-center text-sm text-gray-600">
+                <p>
+                  لديك حساب بالفعل؟{" "}
+                  <Link
+                    href="/login"
+                    className="text-green-600 hover:text-green-700 font-medium hover:underline"
+                  >
+                    ادخل لحسابك
+                  </Link>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

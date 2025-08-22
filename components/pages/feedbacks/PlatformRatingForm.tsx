@@ -46,7 +46,7 @@ export default function PlatformRatingForm() {
       if (result.success) {
         if (result.message) {
           toast.success(result.message);
-          // reset();
+          reset();
         }
         if (result.criticalAlertSent) {
           emailjs.init(emailConfig.publicKey);
@@ -192,7 +192,7 @@ export default function PlatformRatingForm() {
 
             {/* Useful Sections */}
             <div>
-              <p className="text-neutrals-600 font-medium border-b border-neutrals-400 mb-2">
+              <p className="text-neutrals-600 font-medium mb-2">
                 أي الأقسام كانت أكثر فائدة لك؟{" "}
                 <span className="text-state-error">*</span>
               </p>

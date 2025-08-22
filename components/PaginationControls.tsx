@@ -21,6 +21,16 @@ interface PaginationControlsProps {
   dir?: "ltr" | "rtl";
 }
 
+/**
+ * Pagination controls for navigating through pages of content.
+ * Displays page numbers, next/previous buttons, and handles page changes.
+ *
+ * @param currentPage - The current active page number.
+ * @param totalPages - The total number of pages available.
+ * @param hasNext - Whether there is a next page.
+ * @param hasPrev - Whether there is a previous page.
+ * @param onPageChange - Callback function to handle page changes.
+ */
 export default function PaginationControls({
   currentPage,
   totalPages,

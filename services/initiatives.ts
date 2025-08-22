@@ -36,7 +36,7 @@ export interface InitiativeCard {
 
 export interface InitiativeFilters {
   search?: string;
-  categoryId?: number;
+  categoryId?: string;
   city?: string;
   status?: InitiativeStatus;
   targetAudience?: TargetAudience;
@@ -124,15 +124,14 @@ export class InitiativeService {
 
       // Available spots filter
       if (filters.hasAvailableSpots) {
-        where.OR = [
-          { maxParticipants: null },
-          {
-            AND: [
-              { maxParticipants: { not: null } },
-              { maxParticipants: { gt: 0 } }, // Simplified for now
-            ],
-          },
-        ];
+        const initiativesWithSpots = await prisma.$queryRaw<{ id: string }[]>`
+          SELECT id FROM "initiatives" 
+          WHERE "max_participants" IS NULL 
+          OR "current_participants" < "max_participants"
+        `;
+
+        const availableIds = initiativesWithSpots.map((item) => item.id);
+        where.id = { in: availableIds };
       }
 
       // Date filters
@@ -247,7 +246,7 @@ export class InitiativeService {
   static async getById(id: string) {
     try {
       const initiative = await prisma.initiative.findUnique({
-        where: { id: BigInt(id) },
+        where: { id: id },
         include: {
           category: true,
           organizerUser: {
@@ -276,79 +275,6 @@ export class InitiativeService {
     } catch (error) {
       console.error("Error fetching initiative:", error);
       throw new Error("Failed to fetch initiative");
-    }
-  }
-
-  // Get featured initiatives
-  static async getFeatured(limit: number = 6): Promise<InitiativeCard[]> {
-    try {
-      const initiatives = await prisma.initiative.findMany({
-        where: {
-          status: "published",
-          isFeatured: true,
-        },
-        include: {
-          category: {
-            select: {
-              nameAr: true,
-              nameEn: true,
-              icon: true,
-              bgColor: true,
-              textColor: true,
-            },
-          },
-          organizerUser: {
-            select: {
-              id: true,
-              name: true,
-              image: true,
-            },
-          },
-          organizerOrg: {
-            select: {
-              id: true,
-              name: true,
-              logo: true,
-            },
-          },
-        },
-        orderBy: { createdAt: "desc" },
-        take: limit,
-      });
-
-      return initiatives.map((initiative) => ({
-        id: initiative.id.toString(),
-        titleAr: initiative.titleAr,
-        titleEn: initiative.titleEn,
-        shortDescriptionAr: initiative.shortDescriptionAr,
-        shortDescriptionEn: initiative.shortDescriptionEn,
-        city: initiative.city,
-        startDate: initiative.startDate,
-        endDate: initiative.endDate,
-        maxParticipants: initiative.maxParticipants,
-        currentParticipants: initiative.currentParticipants,
-        targetAudience: initiative.targetAudience,
-        status: initiative.status,
-        category: {
-          nameAr: initiative.category.nameAr,
-          nameEn: initiative.category.nameEn,
-          icon: initiative.category.icon,
-          bgColor: initiative.category.bgColor,
-          textColor: initiative.category.textColor,
-        },
-        organizer: {
-          type: initiative.organizerType,
-          name:
-            initiative.organizerUser?.name ||
-            initiative.organizerOrg?.name ||
-            "غير محدد",
-          image:
-            initiative.organizerUser?.image || initiative.organizerOrg?.logo,
-        },
-      }));
-    } catch (error) {
-      console.error("Error fetching featured initiatives:", error);
-      throw new Error("Failed to fetch featured initiatives");
     }
   }
 }

@@ -2,9 +2,9 @@
 
 import { Controller, useFormContext } from "react-hook-form";
 import FormInput from "@/components/FormInput";
-import { Step3FormData } from "@/schemas/signupSchema";
+import { Step3FormData } from "@/schemas/signupUserSchema";
 
-export default function Step3LocationAndFinal() {
+export default function Step3TemsAndConditions() {
   const {
     control,
     formState: { errors },

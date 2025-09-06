@@ -21,6 +21,18 @@ interface FilterSelectProps {
   dir?: "ltr" | "rtl";
 }
 
+/**
+ * FilterSelect component for selecting a filter option.
+ * @param param0 - Props for the FilterSelect component.
+ * @param value - The currently selected value.
+ * @param onChange - Callback function when the value changes.
+ * @param options - Array of options to select from.
+ * @param placeholder - Placeholder text when no option is selected.
+ * @param className - Additional CSS classes for styling.
+ * @param dir - Direction of the select component, either 'ltr' or 'rtl'. Default is 'rtl'.
+ * @returns JSX.Element
+ */
+
 export default function FilterSelect({
   value,
   onChange,

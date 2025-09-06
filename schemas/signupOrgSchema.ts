@@ -13,7 +13,14 @@ export const signupOrgStep1Schema = z.object({
 
   contactEmail: z.email("الرجاء إدخال بريد إلكتروني صحيح").trim().toLowerCase(),
 
-  foundingDate: z.date().optional(),
+  foundingDate: z
+    .date()
+    .optional()
+    .refine((date) => {
+      if (!date) return true; // allow empty
+      const today = new Date();
+      return date <= today;
+    }, "تاريخ التأسيس لا يمكن أن يكون في المستقبل"),
 
   membersCount: z
     .number()

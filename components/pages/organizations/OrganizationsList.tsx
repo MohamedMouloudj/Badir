@@ -3,12 +3,12 @@ import { useState } from "react";
 import {
   OrganizationCard as OrganizationCardType,
   OrganizationService,
-  PaginatedResponse,
 } from "@/services/organizations";
 import OrganizationCard from "@/components/pages/OrganizationCard";
 import PaginationControls from "@/components/PaginationControls";
 import SearchInput from "@/components/SearchInput";
 import api from "@/services/api";
+import { PaginatedResponse } from "@/types/Pagination";
 
 export default function OrganizationsList({
   initialData,

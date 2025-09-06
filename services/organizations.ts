@@ -1,5 +1,6 @@
 import { getPublicStorageUrl } from "@/actions/supabaseHelpers";
 import { prisma } from "@/lib/db";
+import { PaginatedResponse, PaginationParams } from "@/types/Pagination";
 import { Prisma } from "@prisma/client";
 
 export interface OrganizationCard {
@@ -17,23 +18,6 @@ export interface OrganizationCard {
 
 export interface OrganizationFilters {
   search?: string;
-}
-
-export interface PaginationParams {
-  page: number;
-  limit: number;
-}
-
-export interface PaginatedResponse<T> {
-  data: T[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-    hasNext: boolean;
-    hasPrev: boolean;
-  };
 }
 
 export class OrganizationService {

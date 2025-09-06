@@ -3,7 +3,6 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { Decimal } from "@prisma/client/runtime/library";
 import z from "zod";
 import { v4 as uuidv4 } from "uuid";
@@ -19,10 +18,12 @@ import {
 import { AUTHORIZED_REDIRECTION } from "@/data/routes";
 import { UserType } from "@prisma/client";
 import { StorageHelpers } from "@/services/supabase-storage";
-import { BUCKET_MIME_TYPES, BUCKETS } from "@/types/Statics";
+import { BUCKETS } from "@/types/Statics";
 import { OrganizationService } from "@/services/organizations";
-import { mimeTypeToExtension } from "@/lib/utils";
+import { getCallingCodeFromCountry, mimeTypeToExtension } from "@/lib/utils";
 import path from "path";
+import { UserProfile, validateUserProfile } from "@/schemas";
+import { UserService } from "@/services/user";
 
 export type ProfileState = {
   success?: boolean;
@@ -31,24 +32,150 @@ export type ProfileState = {
   errors?: Partial<Record<keyof RegistrationFormData, string[]>>;
 };
 
-export async function updateProfile(formData: FormData) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (!session) {
-    redirect("/login");
+export async function updateUserProfileAction(
+  data: UserProfile
+): Promise<ProfileState> {
+  try {
+    // Just in case
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session || !session.user) {
+      return {
+        success: false,
+        error: "يجب تسجيل الدخول لتحديث بياناتك الشخصية",
+      };
+    }
+
+    validateUserProfile(data);
+
+    const userId = session.user.id;
+    let imageUrl: string | undefined;
+
+    // Handle image upload if provided
+    if (data.image && typeof data.image === "string" && data.image.length > 0) {
+      try {
+        const { base64, name, type } = JSON.parse(data.image);
+
+        const fileBuffer = Buffer.from(base64, "base64");
+        let ext = path.extname(name);
+        if (!ext && type) {
+          ext = mimeTypeToExtension(type) || ".bin";
+        }
+
+        const fileName = `${uuidv4()}.${name
+          .replace(/\s+/g, "-")
+          .replace(ext, "")}${ext}`;
+
+        const filePath = `${userId}/${fileName}`;
+        const storage = new StorageHelpers();
+
+        const result = await storage.uploadFile(
+          "avatars",
+          filePath,
+          fileBuffer,
+          type
+        );
+
+        imageUrl = result.path;
+      } catch (error) {
+        console.error("Error uploading profile image:", error);
+        return {
+          success: false,
+          error: "حدث خطأ أثناء رفع الصورة الشخصية، يرجى المحاولة مرة أخرى",
+        };
+      }
+    }
+
+    const formattedPhone = data.phone
+      ? data.phoneCountryCode
+        ? `+${getCallingCodeFromCountry(data.phoneCountryCode)} ${data.phone}`
+        : "+213 " + data.phone
+      : undefined;
+
+    // Update user record
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        phone: formattedPhone,
+        city: data.city,
+        state: data.state,
+        country: data.country,
+        bio: data.bio || null,
+        image: imageUrl || undefined, // Only update if new image was uploaded
+        latitude: data.latitude ? new Decimal(data.latitude) : null,
+        longitude: data.longitude ? new Decimal(data.longitude) : null,
+        updatedAt: new Date(),
+      },
+    });
+
+    // Update qualifications record
+    if (data.qualifications) {
+      const existingQualification = await prisma.userQualification.findFirst({
+        where: { userId },
+      });
+
+      if (existingQualification) {
+        await prisma.userQualification.update({
+          where: { id: existingQualification.id },
+          data: {
+            specification: data.qualifications.specification,
+            educationalLevel: data.qualifications.educationalLevel,
+            currentJob: data.qualifications.currentJob || "",
+            updatedAt: new Date(),
+          },
+        });
+      } else {
+        await prisma.userQualification.create({
+          data: {
+            userId,
+            specification: data.qualifications.specification,
+            educationalLevel: data.qualifications.educationalLevel,
+            currentJob: data.qualifications.currentJob || "",
+          },
+        });
+      }
+    }
+
+    // Revalidate the profile page to reflect the changes
+    revalidatePath("/profile");
+
+    return {
+      success: true,
+      message: "تم تحديث البيانات الشخصية بنجاح",
+    };
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    if (error instanceof z.ZodError) {
+      const treeError = z.treeifyError(error);
+      const fieldErrors: Partial<Record<keyof UserProfile, string[]>> = {};
+
+      if (typeof treeError === "object" && treeError !== null) {
+        for (const [field, fieldError] of Object.entries(treeError)) {
+          if (
+            field !== "formErrors" &&
+            typeof fieldError === "object" &&
+            fieldError !== null &&
+            "errors" in fieldError
+          ) {
+            fieldErrors[field as keyof UserProfile] = (
+              fieldError as { errors: string[] }
+            ).errors;
+          }
+        }
+      }
+      return {
+        success: false,
+        errors: fieldErrors,
+      };
+    }
+    return {
+      success: false,
+      error: "حدث خطأ أثناء تحديث البيانات الشخصية، يرجى المحاولة مرة أخرى",
+    };
   }
-
-  const firstName = formData.get("firstName") as string;
-  const lastName = formData.get("lastName") as string;
-  const phone = formData.get("phone") as string;
-
-  await prisma.user.update({
-    where: { id: session.user.id },
-    data: { firstName, lastName, phone, profileCompleted: true },
-  });
-
-  redirect(AUTHORIZED_REDIRECTION);
 }
 
 export async function completeProfileAction(
@@ -232,11 +359,15 @@ export async function completeOrgProfileAction(
     };
 
     const formattedPhone = processedFormData.contactPhone
-      ? `+${processedFormData.contactPhoneCountryCode}${processedFormData.contactPhone}`
+      ? `+${getCallingCodeFromCountry(
+          processedFormData.contactPhoneCountryCode
+        )} ${processedFormData.contactPhone}`
       : undefined;
 
     const formattedPhoneOrg = processedFormData.contactPhoneOrg
-      ? `+${processedFormData.contactPhoneOrgCountryCode}${processedFormData.contactPhoneOrg}`
+      ? `+${getCallingCodeFromCountry(
+          processedFormData.contactPhoneOrgCountryCode
+        )} ${processedFormData.contactPhoneOrg}`
       : undefined;
 
     const organization = await prisma.organization.upsert({
@@ -344,6 +475,10 @@ export async function completeOrgProfileAction(
   }
 }
 
+/**
+ * Fetch the organization logo for the currently logged-in user.
+ * @returns the logo path or null
+ */
 export async function getOrganizationLogo(): Promise<string | null> {
   try {
     const session = await auth.api.getSession({
@@ -351,13 +486,27 @@ export async function getOrganizationLogo(): Promise<string | null> {
     });
     if (!session?.user) return null;
 
-    const organization = await OrganizationService.getOrganizationLogo(
-      session.user.id
-    );
+    const data = await OrganizationService.getOrganizationLogo(session.user.id);
 
-    return organization?.logo || null;
+    return data?.logo || null;
   } catch (error) {
     console.error("Failed to fetch organization logo:", error);
+    return null;
+  }
+}
+
+/** Fetch the user image for the currently logged-in user. */
+export async function getUserImage(): Promise<string | null> {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session?.user) return null;
+
+    const data = await UserService.getUserImage(session.user.id);
+    return data?.image || null;
+  } catch (error) {
+    console.error("Failed to fetch user image:", error);
     return null;
   }
 }

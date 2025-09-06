@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { PaginatedResponse, PaginationParams } from "@/types/Pagination";
 import {
   Prisma,
   InitiativeStatus,
@@ -48,24 +49,6 @@ export interface InitiativeFilters {
   endDateTo?: Date;
 }
 
-export interface PaginationParams {
-  page: number;
-  limit: number;
-}
-
-export interface PaginatedResponse<T> {
-  data: T[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-    hasNext: boolean;
-    hasPrev: boolean;
-  };
-}
-
-// Initiative CRUD Operations
 export class InitiativeService {
   static API_PATH = "/initiatives";
   // Get paginated initiatives with filters

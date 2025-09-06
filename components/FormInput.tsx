@@ -23,14 +23,7 @@ import {
   CommandList,
 } from "./ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import {
-  Check,
-  CheckCircle,
-  CheckCircle2,
-  CheckIcon,
-  ChevronsUpDown,
-  Upload,
-} from "lucide-react";
+import { Check, CheckIcon, ChevronsUpDown, Upload } from "lucide-react";
 import { Button } from "./ui/button";
 import { getCountries, getCountryCallingCode } from "libphonenumber-js";
 

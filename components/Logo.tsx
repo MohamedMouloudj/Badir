@@ -12,6 +12,7 @@ export default function Logo({ withText = true }: { withText?: boolean }) {
           width={104}
           height={40}
           className="object-contain h-auto w-auto"
+          priority
         />
         <Link href="/" className="absolute inset-0" />
       </div>
@@ -25,6 +26,7 @@ export default function Logo({ withText = true }: { withText?: boolean }) {
         width={104}
         height={40}
         className="object-contain h-auto w-auto"
+        priority
       />
       <Link href="/" className="absolute inset-0" />
     </div>

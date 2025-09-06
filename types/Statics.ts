@@ -51,23 +51,6 @@ export interface FormField {
   };
 }
 
-// ===== API RESPONSE TYPES =====
-export interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
-  message?: string;
-  errors?: string[];
-}
-
-export interface PaginatedResponse<T> extends ApiResponse<T[]> {
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
-}
-
 // ===== SEARCH & FILTER TYPES =====
 export interface InitiativeFilters {
   search?: string;
@@ -93,7 +76,7 @@ export interface ProximitySearch {
 export type BUCKETS = "avatars" | "documents" | "post-images";
 
 export const BUCKET_MIME_TYPES = {
-  avatars: ["image/jpeg", "image/jpg", "image/png", "image/jpg"],
+  avatars: ["image/jpeg", "image/jpg", "image/png"],
 
   // DOCUMENTS BUCKET (Organization verification docs)
   documents: [

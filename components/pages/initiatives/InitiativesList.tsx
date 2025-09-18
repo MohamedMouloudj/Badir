@@ -5,7 +5,6 @@ import {
   InitiativeCard as InitiativeCardType,
   InitiativeFilters,
   InitiativeService,
-  PaginatedResponse,
 } from "@/services/initiatives";
 import { CategoryCard } from "@/services/categories";
 import InitiativeCard from "@/components/pages/InitiativeCard";
@@ -16,6 +15,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import api from "@/services/api";
 import { Checkbox } from "@/components/ui/checkbox";
+import { PaginatedResponse } from "@/types/Pagination";
 
 interface InitiativesListProps {
   initialData: PaginatedResponse<InitiativeCardType>;
@@ -51,7 +51,6 @@ export default function InitiativesList({
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState<InitiativeFilters>({});
 
-  // Filter options
   const categoryOptions = useMemo(() => {
     return [
       { value: "all", label: "جميع الفئات" },
@@ -122,7 +121,6 @@ export default function InitiativesList({
     fetchInitiatives(newFilters, 1);
   };
 
-  // Handle search
   const handleSearch = (searchTerm: string) => {
     const newFilters = { ...filters };
     if (searchTerm.trim() === "") {
@@ -135,7 +133,6 @@ export default function InitiativesList({
     fetchInitiatives(newFilters, 1);
   };
 
-  // Handle page change
   const handlePageChange = (page: number) => {
     fetchInitiatives(filters, page);
   };

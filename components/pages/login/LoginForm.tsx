@@ -33,11 +33,11 @@ export default function LoginForm() {
     startTransition(async () => {
       const result = await loginAction(data);
 
-      if (result.success) {
+      if (result.success && result.redirectTo) {
         if (result.message) {
           toast.success(result.message);
         }
-        // Redirect will happen in the server action
+        window.location.href = result.redirectTo;
       } else {
         if (result.errors) {
           // Set field-specific errors from server

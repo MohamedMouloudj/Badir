@@ -1,11 +1,8 @@
 "use client";
 import { Controller, useFormContext } from "react-hook-form";
 import FormInput from "@/components/FormInput";
-import {
-  OrgRegistrationFormData,
-  organizationTypeOptions,
-  workAreaOptions,
-} from "@/schemas/signupOrgSchema";
+import { OrgRegistrationFormData } from "@/schemas/signupOrgSchema";
+import { organizationTypeOptions, workAreaOptions } from "@/types/Profile";
 
 export default function Step3OrgType() {
   const { control } = useFormContext<OrgRegistrationFormData>();

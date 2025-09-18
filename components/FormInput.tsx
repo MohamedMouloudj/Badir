@@ -23,14 +23,7 @@ import {
   CommandList,
 } from "./ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import {
-  Check,
-  CheckCircle,
-  CheckCircle2,
-  CheckIcon,
-  ChevronsUpDown,
-  Upload,
-} from "lucide-react";
+import { Check, CheckIcon, ChevronsUpDown, Upload } from "lucide-react";
 import { Button } from "./ui/button";
 import { getCountries, getCountryCallingCode } from "libphonenumber-js";
 
@@ -706,7 +699,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
                 className={cn(
                   "flex items-center justify-center w-full h-32 px-4 py-2 border-2 border-dashed rounded-lg",
                   "bg-neutrals-100 hover:bg-neutrals-200 transition-colors cursor-pointer",
-                  hasFile ? "border-green-500" : "border-neutrals-300", // Green border when file exists
+                  hasFile ? "border-green-500" : "border-neutrals-300",
                   error && "border-state-error",
                   disabled && "opacity-50 cursor-not-allowed"
                 )}

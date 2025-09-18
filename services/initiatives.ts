@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { PaginatedResponse, PaginationParams } from "@/types/Pagination";
 import {
   Prisma,
   InitiativeStatus,
@@ -48,27 +49,31 @@ export interface InitiativeFilters {
   endDateTo?: Date;
 }
 
-export interface PaginationParams {
-  page: number;
-  limit: number;
+export interface InitiativeWithAvgRating
+  extends Prisma.InitiativeGetPayload<{
+    include: {
+      category: true;
+      organizerOrg: {
+        select: {
+          id: true;
+          name: true;
+          logo: true;
+        };
+      };
+      _count: { select: { participants: true } };
+    };
+  }> {
+  avgRating: number | null;
 }
 
-export interface PaginatedResponse<T> {
-  data: T[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-    hasNext: boolean;
-    hasPrev: boolean;
-  };
-}
-
-// Initiative CRUD Operations
 export class InitiativeService {
   static API_PATH = "/initiatives";
-  // Get paginated initiatives with filters
+  /**
+   * Get paginated initiatives with filters
+   * @param filters InitiativeFilters
+   * @param pagination PaginationParams
+   * @returns PaginatedResponse<InitiativeCard>
+   */
   static async getMany(
     filters: InitiativeFilters = {},
     pagination: PaginationParams = { page: 1, limit: 12 }
@@ -275,6 +280,66 @@ export class InitiativeService {
     } catch (error) {
       console.error("Error fetching initiative:", error);
       throw new Error("Failed to fetch initiative");
+    }
+  }
+
+  /**
+   * Get all initiatives for a specific organization with their average ratings.
+   * @param orgId Organization ID
+   * @returns List of initiatives with average ratings
+   */
+  static async getOrgInitiativesWithAvgRating(
+    orgId: string
+  ): Promise<InitiativeWithAvgRating[]> {
+    try {
+      const initiatives = await prisma.initiative.findMany({
+        where: {
+          organizerOrgId: orgId,
+        },
+        include: {
+          category: true,
+          organizerOrg: {
+            select: {
+              id: true,
+              name: true,
+              logo: true,
+            },
+          },
+          _count: {
+            select: {
+              participants: true,
+            },
+          },
+        },
+      });
+
+      const initiativeIds = initiatives.map((i) => i.id);
+      const ratingAverages = await prisma.userInitiativeRating.groupBy({
+        by: ["initiativeId"],
+        _avg: {
+          rating: true,
+        },
+        where: {
+          initiativeId: {
+            in: initiativeIds,
+          },
+        },
+      });
+
+      const initiativesWithAvgRating = initiatives.map((initiative) => {
+        const ratingData = ratingAverages.find(
+          (r) => r.initiativeId === initiative.id
+        );
+        return {
+          ...initiative,
+          avgRating: Number(ratingData?._avg.rating) ?? null,
+        };
+      });
+
+      return initiativesWithAvgRating;
+    } catch (error) {
+      console.error("Error fetching organization initiatives:", error);
+      throw new Error("Failed to fetch organization initiatives");
     }
   }
 }

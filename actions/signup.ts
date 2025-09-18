@@ -68,7 +68,6 @@ export async function signupAction(
     });
 
     if (!res.ok) {
-      // Simple error handling based on status code
       if (res.status === 409) {
         return {
           success: false,

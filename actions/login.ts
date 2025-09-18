@@ -4,7 +4,6 @@ import { AUTHORIZED_REDIRECTION } from "@/data/routes";
 import { auth } from "@/lib/auth";
 import { loginSchema, type LoginFormData } from "@/schemas/loginSchema";
 import { headers } from "next/headers";
-import { redirect, RedirectType } from "next/navigation";
 import z from "zod";
 
 export type LoginState = {
@@ -12,6 +11,7 @@ export type LoginState = {
   message?: string;
   error?: string;
   errors?: Partial<Record<keyof LoginFormData, string[]>>;
+  redirectTo?: string;
 };
 
 export async function loginAction(data: LoginFormData): Promise<LoginState> {
@@ -45,6 +45,12 @@ export async function loginAction(data: LoginFormData): Promise<LoginState> {
         };
       }
     }
+    return {
+      success: true,
+      message: "تم تسجيل الدخول بنجاح",
+      redirectTo: AUTHORIZED_REDIRECTION,
+    };
+    // Revalidate the session on the client side
   } catch (error) {
     if (error instanceof z.ZodError) {
       const treeError = z.treeifyError(error);
@@ -79,7 +85,4 @@ export async function loginAction(data: LoginFormData): Promise<LoginState> {
       error: "حدث خطأ أثناء تسجيل الدخول. يرجى المحاولة مرة أخرى",
     };
   }
-
-  // Success: redirect (this throws NEXT_REDIRECT which Next.js handles)
-  redirect(AUTHORIZED_REDIRECTION, RedirectType.replace);
 }

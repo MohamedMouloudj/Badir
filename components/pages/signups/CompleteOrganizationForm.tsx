@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { completeOrgProfileAction } from "@/actions/profile";
+import { completeOrgProfileAction } from "@/actions/organization-profile";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import AppButton from "@/components/AppButton";
@@ -121,7 +121,7 @@ export default function CompleteOrganizationForm() {
 
       if (result.success) {
         toast.success("تم إكمال الملف الشخصي بنجاح!");
-        router.push(AUTHORIZED_REDIRECTION);
+        router.replace(AUTHORIZED_REDIRECTION);
       } else {
         toast.error(result.error || "حدث خطأ أثناء حفظ البيانات");
       }

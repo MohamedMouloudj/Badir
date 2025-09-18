@@ -94,35 +94,35 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Menu Overlay */}
-      {isMenuOpen && (
-        <div
-          className="md:hidden absolute bg-neutrals-100 top-full left-0 right-0 z-50"
-          style={{
-            height: `calc(100vh - var(--navbar-height))`,
-          }}
-        >
-          <div className="flex flex-col justify-between p-4 h-full">
-            <ul>
-              {landingRoute.map((navRoute) => (
-                <li key={navRoute.url}>
-                  <Link
-                    className={`py-2 px-3 ${
-                      pathname === navRoute.url ? "underline" : ""
-                    }`}
-                    href={`${navRoute.url}`}
-                    onClick={closeMenu}
-                  >
-                    {navRoute.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
 
-            <div className="bg-secondary-200 h-0.25 w-full mb-6" />
-            <AuthProfileButtons isMobile={true} />
-          </div>
+      <div
+        className="md:hidden absolute bg-neutrals-100 top-full left-0 right-0 z-50"
+        style={{
+          height: `calc(100vh - var(--navbar-height))`,
+          visibility: isMenuOpen ? "visible" : "hidden",
+        }}
+      >
+        <div className="flex flex-col justify-between p-4 h-full">
+          <ul>
+            {landingRoute.map((navRoute) => (
+              <li key={navRoute.url}>
+                <Link
+                  className={`py-2 px-3 ${
+                    pathname === navRoute.url ? "underline" : ""
+                  }`}
+                  href={`${navRoute.url}`}
+                  onClick={closeMenu}
+                >
+                  {navRoute.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <div className="bg-secondary-200 h-0.25 w-full mb-6" />
+          <AuthProfileButtons isMobile={true} />
         </div>
-      )}
+      </div>
     </nav>
   );
 }

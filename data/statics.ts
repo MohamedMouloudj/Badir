@@ -21,7 +21,7 @@ const heroCarouselItems: CarouselImage[] = [
   {
     id: 1,
     src: "/images/carousel/carousel-1.jpg",
-    alt: "مساعدة النساء",
+    alt: "مساعدة المحتاجين",
   },
   {
     id: 2,

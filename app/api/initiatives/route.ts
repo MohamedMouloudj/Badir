@@ -10,11 +10,10 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
 
-    // Parse pagination parameters
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "12");
 
-    // Parse filter parameters
+    // filter parameters
     const filters: InitiativeFilters = {};
 
     const search = searchParams.get("search");

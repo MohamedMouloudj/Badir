@@ -7,7 +7,6 @@ export default async function Page() {
   await getSessionWithCheckProfile();
 
   try {
-    // Fetch initial data for the page
     const [initialInitiatives, categories] = await Promise.all([
       InitiativeService.getMany({}, { page: 1, limit: 12 }),
       CategoryService.getAll(),

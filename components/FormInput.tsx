@@ -699,7 +699,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
                 className={cn(
                   "flex items-center justify-center w-full h-32 px-4 py-2 border-2 border-dashed rounded-lg",
                   "bg-neutrals-100 hover:bg-neutrals-200 transition-colors cursor-pointer",
-                  hasFile ? "border-green-500" : "border-neutrals-300", // Green border when file exists
+                  hasFile ? "border-green-500" : "border-neutrals-300",
                   error && "border-state-error",
                   disabled && "opacity-50 cursor-not-allowed"
                 )}

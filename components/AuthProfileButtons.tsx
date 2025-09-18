@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "@/lib/auth-client";
-import React, { useState, useTransition, useEffect } from "react";
+import React, { useState, useTransition, useEffect, useCallback } from "react";
 import { logoutAction } from "@/actions/logout";
 import { LogOut, User, Settings, Star } from "lucide-react";
 import SignInButton from "./SignInButton";
@@ -13,10 +13,12 @@ import {
 } from "@/components/ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { UserType } from "@prisma/client";
-import { getOrganizationLogo, getUserImage } from "@/actions/profile";
+import { getUserImage } from "@/actions/user-profile";
 import { getPublicStorageUrl } from "@/actions/supabaseHelpers";
+import Image from "next/image";
+import { getOrganizationLogo } from "@/actions/organization-profile";
 
 export function AuthProfileButtons({
   isMobile,
@@ -30,25 +32,27 @@ export function AuthProfileButtons({
   const [image, setImage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  const pathname = usePathname();
+  const [hasLoadedImage, setHasLoadedImage] = useState(false);
 
-  useEffect(() => {
-    refetch?.();
-  }, [refetch]);
+  const fetchUserImage = useCallback(async () => {
+    const imagePath = await getUserImage();
+    if (imagePath) {
+      const imageUrl = await getPublicStorageUrl("avatars", imagePath);
+      setImage(imageUrl);
+    } else {
+      setImage(null);
+    }
+  }, []);
 
-  // useEffect(() => {
-  //   refetch?.();
-  // }, [pathname, refetch]);
-
-  // Refresh session when window regains focus
-  useEffect(() => {
-    const handleFocus = () => {
-      refetch?.();
-    };
-
-    window.addEventListener("focus", handleFocus);
-    return () => window.removeEventListener("focus", handleFocus);
-  }, [refetch]);
+  const fetchOrganizationLogo = useCallback(async () => {
+    const logoPath = await getOrganizationLogo();
+    if (logoPath) {
+      const logoUrl = await getPublicStorageUrl("avatars", logoPath);
+      setImage(logoUrl);
+    } else {
+      setImage(null);
+    }
+  }, []);
 
   const handleLogout = () => {
     startTransition(async () => {
@@ -73,36 +77,16 @@ export function AuthProfileButtons({
   };
 
   useEffect(() => {
-    if (!session?.user) return;
-
-    async function fetchOrganizationLogo() {
-      const logoPath = await getOrganizationLogo();
-      if (!logoPath) {
-        setImage(null);
-        return;
-      }
-      const logo = await getPublicStorageUrl("avatars", logoPath);
-
-      setImage(logo);
-    }
-
-    async function fetchUserImage() {
-      const imagePath = await getUserImage();
-      const image = await getPublicStorageUrl("avatars", imagePath || "");
-      if (!image) {
-        setImage(null);
-        return;
-      }
-
-      setImage(image);
-    }
+    if (!session?.user || hasLoadedImage) return;
 
     if (session.user.userType !== UserType.organization) {
       fetchUserImage();
     } else {
       fetchOrganizationLogo();
     }
-  }, [session, session?.user]);
+
+    setHasLoadedImage(true);
+  }, [session?.user?.id, hasLoadedImage]);
 
   const handleProfileClick = () => {
     setIsPopoverOpen(false);
@@ -128,11 +112,15 @@ export function AuthProfileButtons({
                   className="focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-full"
                   disabled={isPending}
                 >
-                  <Avatar className="h-10 w-10 cursor-pointer hover:ring-2 hover:ring-primary-400 ring-offset-1 transition-all">
-                    <AvatarImage
-                      src={image || ""}
-                      alt={session.user.name || "المستخدم"}
-                    />
+                  <Avatar className="size-10 cursor-pointer hover:ring-2 hover:ring-primary-400 ring-offset-1 transition-all aspect-square">
+                    {image && (
+                      <Image
+                        src={image}
+                        alt={session.user.name || "المستخدم"}
+                        fill
+                        objectFit="cover"
+                      />
+                    )}
                     <AvatarFallback className="border-2 border-primary-500 text-primary-500 font-semibold">
                       <User className="h-5 w-5" />
                     </AvatarFallback>

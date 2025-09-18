@@ -8,6 +8,290 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model User {
+  id                   String                  @id @default(cuid())
+  name                 String
+  image                String?
+  email                String                  @unique
+  emailVerified        Boolean
+  firstName            String                  @map("first_name") @db.VarChar(100)
+  lastName             String                  @map("last_name") @db.VarChar(100)
+  phone                String?                 @db.VarChar(20)
+  dateOfBirth          DateTime?               @map("date_of_birth") @db.Date
+  sex                  Sex                     @default(male)
+  bio                  String?
+  userType             UserType                @map("user_type")
+  latitude             Decimal?                @db.Decimal(10, 8)
+  longitude            Decimal?                @db.Decimal(11, 8)
+  city                 String?                 @db.VarChar(100)
+  state                String?                 @db.VarChar(100)
+  country              String?                 @default("Algeria") @db.VarChar(100)
+  isActive             Boolean                 @default(true) @map("is_active")
+  createdAt            DateTime                @default(now()) @map("created_at")
+  updatedAt            DateTime                @default(now()) @updatedAt @map("updated_at")
+  profileCompleted     Boolean                 @default(false) @map("profile_completed")
+  accounts             Account[]
+  participations       InitiativeParticipant[]
+  posts                InitiativePost[]
+  organizedInitiatives Initiative[]            @relation("UserOrganizedInitiatives")
+  organization         Organization?
+  platformRatings      PlatformRating[]
+  sessions             Session[]
+  ratings              UserInitiativeRating[]
+  qualifications       UserQualification[]     @relation("UserQualifications")
+
+  @@index([email])
+  @@index([createdAt])
+  @@map("users")
+}
+
+model Organization {
+  id                  String             @id @default(cuid())
+  userId              String             @unique @map("user_id") @db.VarChar(255)
+  name                String             @db.VarChar(200)
+  description         String?
+  logo                String?            @map("logo") @db.VarChar(500)
+  contactEmail        String             @map("contact_email") @db.VarChar(255)
+  contactPhone        String?            @map("contact_phone") @db.VarChar(20)
+  website             String?            @db.VarChar(255)
+  city                String?            @db.VarChar(100)
+  state               String             @db.VarChar(100)
+  country             String             @default("Algeria") @db.VarChar(100)
+  createdAt           DateTime           @default(now()) @map("created_at")
+  updatedAt           DateTime           @default(now()) @updatedAt @map("updated_at")
+  foundingDate        DateTime?          @map("founding_date") @db.Date
+  headquarters        String?            @map("headquarters") @db.VarChar(255)
+  identificationCard  String?            @map("identification_card") @db.VarChar(500)
+  membersCount        Int?               @map("members_count")
+  officialLicense     String?            @map("official_license") @db.VarChar(500)
+  organizationType    String             @map("organization_type") @db.VarChar(50)
+  previousInitiatives String?            @map("previous_initiatives")
+  shortName           String             @map("short_name") @db.VarChar(100)
+  socialLinks         Json?              @map("social_links")
+  userRole            String             @map("user_role") @db.VarChar(100)
+  workAreas           String[]           @map("work_areas")
+  isVerified          OrganizationStatus @default(pending) @map("is_verified")
+  initiatives         Initiative[]       @relation("OrganizationInitiatives")
+  owner               User               @relation(fields: [userId], references: [id])
+  supportRequests     SupportRequest[]
+
+  @@unique([name, contactEmail], name: "unique_org_name_contactEmail")
+  @@map("organizations")
+}
+
+model UserQualification {
+  id               String   @id @default(cuid())
+  userId           String   @map("user_id")
+  specification    String   @map("specification") @db.VarChar(100)
+  educationalLevel String   @map("educational_level") @db.VarChar(100)
+  currentJob       String   @map("current_job") @db.VarChar(100)
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @default(now()) @updatedAt @map("updated_at")
+  user             User     @relation("UserQualifications", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_qualifications")
+}
+
+model InitiativeCategory {
+  id            String       @id @default(cuid())
+  nameAr        String       @map("name_ar") @db.VarChar(100)
+  nameEn        String?      @map("name_en") @db.VarChar(100)
+  descriptionAr String?      @map("description_ar")
+  descriptionEn String?      @map("description_en")
+  icon          String?      @db.VarChar(100)
+  bgColor       String?      @db.VarChar(7)
+  textColor     String?      @db.VarChar(7)
+  isActive      Boolean      @default(true) @map("is_active")
+  createdAt     DateTime     @default(now()) @map("created_at")
+  initiatives   Initiative[]
+
+  @@map("initiative_categories")
+}
+
+model Initiative {
+  id                     String                  @id @default(cuid())
+  organizerType          OrganizerType           @map("organizer_type")
+  organizerUserId        String?                 @map("organizer_user_id")
+  organizerOrgId         String?                 @map("organizer_org_id") @db.VarChar(255)
+  categoryId             String                  @map("category_id") @db.VarChar(255)
+  titleAr                String                  @map("title_ar") @db.VarChar(200)
+  titleEn                String?                 @map("title_en") @db.VarChar(200)
+  descriptionAr          String                  @map("description_ar")
+  descriptionEn          String?                 @map("description_en")
+  shortDescriptionAr     String?                 @map("short_description_ar") @db.VarChar(500)
+  shortDescriptionEn     String?                 @map("short_description_en") @db.VarChar(500)
+  location               String                  @db.VarChar(255)
+  city                   String                  @db.VarChar(100)
+  state                  String?                 @db.VarChar(100)
+  country                String?                 @default("Algeria") @db.VarChar(100)
+  startDate              DateTime                @map("start_date")
+  endDate                DateTime                @map("end_date")
+  registrationDeadline   DateTime?               @map("registration_deadline")
+  maxParticipants        Int?                    @map("max_participants")
+  currentParticipants    Int                     @default(0) @map("current_participants")
+  isOpenParticipation    Boolean                 @default(true) @map("is_open_participation")
+  targetAudience         TargetAudience          @default(both) @map("target_audience")
+  requiredQualifications Json?                   @map("required_qualifications")
+  requiresOrgMembership  Boolean                 @default(false) @map("requires_org_membership")
+  membershipFormFields   Json?                   @map("membership_form_fields")
+  status                 InitiativeStatus        @default(draft)
+  coverImage             String?                 @map("cover_image") @db.VarChar(500)
+  createdAt              DateTime                @default(now()) @map("created_at")
+  updatedAt              DateTime                @default(now()) @updatedAt @map("updated_at")
+  participants           InitiativeParticipant[]
+  posts                  InitiativePost[]
+  category               InitiativeCategory      @relation(fields: [categoryId], references: [id])
+  organizerOrg           Organization?           @relation("OrganizationInitiatives", fields: [organizerOrgId], references: [id], onDelete: Cascade)
+  organizerUser          User?                   @relation("UserOrganizedInitiatives", fields: [organizerUserId], references: [id], onDelete: Cascade)
+  ratings                UserInitiativeRating[]
+
+  @@index([status])
+  @@index([startDate])
+  @@index([categoryId])
+  @@map("initiatives")
+}
+
+model InitiativeParticipant {
+  id                BigInt              @id @default(autoincrement())
+  initiativeId      String              @map("initiative_id") @db.VarChar(255)
+  userId            String              @map("user_id")
+  participantRole   ParticipantRole     @map("participant_role")
+  participationForm Json?               @map("participation_form")
+  status            ParticipationStatus @default(registered)
+  checkInTime       DateTime?           @map("check_in_time")
+  isCheckedIn       Boolean             @default(false) @map("is_checked_in")
+  createdAt         DateTime            @default(now()) @map("created_at")
+  updatedAt         DateTime            @default(now()) @updatedAt @map("updated_at")
+  initiative        Initiative          @relation(fields: [initiativeId], references: [id], onDelete: Cascade)
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([initiativeId, userId], name: "unique_participation")
+  @@map("initiative_participants")
+}
+
+model InitiativePost {
+  id           String           @id @default(cuid())
+  initiativeId String           @map("initiative_id") @db.VarChar(255)
+  authorId     String           @map("author_id")
+  title        String?          @db.VarChar(200)
+  content      String
+  postType     PostType         @default(announcement) @map("post_type")
+  isPinned     Boolean          @default(false) @map("is_pinned")
+  status       PostStatus       @default(published)
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @default(now()) @updatedAt @map("updated_at")
+  author       User             @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  initiative   Initiative       @relation(fields: [initiativeId], references: [id], onDelete: Cascade)
+  attachments  PostAttachment[]
+
+  @@map("initiative_posts")
+}
+
+model PostAttachment {
+  id               String         @id @default(cuid())
+  initiativePostId String         @map("initiative_post_id") @db.VarChar(255)
+  imageUrl         String         @map("image_url") @db.VarChar(255)
+  post             InitiativePost @relation(fields: [initiativePostId], references: [id])
+
+  @@map("post_attachments")
+}
+
+model SupportRequest {
+  id             String         @id @default(cuid())
+  organizationId String         @map("organization_id") @db.VarChar(255)
+  supportType    SupportType    @map("support_type")
+  title          String         @db.VarChar(200)
+  description    String
+  urgency        SupportUrgency @default(medium)
+  status         SupportStatus  @default(active)
+  requestedAt    DateTime       @default(now()) @map("requested_at")
+  updatedAt      DateTime       @default(now()) @updatedAt @map("updated_at")
+  organization   Organization   @relation(fields: [organizationId], references: [id])
+
+  @@map("support_requests")
+}
+
+model UserInitiativeRating {
+  id           Int        @id @default(autoincrement())
+  userId       String     @map("user_id")
+  initiativeId String     @map("initiative_id") @db.VarChar(255)
+  rating       Decimal?   @db.Decimal(3, 1)
+  comment      String?
+  initiative   Initiative @relation(fields: [initiativeId], references: [id])
+  user         User       @relation(fields: [userId], references: [id])
+
+  @@map("user_initiative_ratings")
+}
+
+model PlatformRating {
+  id                      String   @id @default(cuid())
+  userId                  String   @map("user_id")
+  easeOfUse               String   @map("ease_of_use")
+  informationClarity      String   @map("information_clarity")
+  contentDiversity        String   @map("content_diversity")
+  performanceSpeed        String   @map("performance_speed")
+  generalSatisfaction     String   @map("general_satisfaction")
+  usefulSections          String[] @map("useful_sections")
+  encounteredDifficulties String   @map("encountered_difficulties")
+  difficultiesDetails     String?  @map("difficulties_details")
+  improvementSuggestions  String?  @map("improvement_suggestions")
+  wouldRecommend          String   @map("would_recommend")
+  appRating               String   @map("app_rating")
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
+  user                    User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([wouldRecommend])
+  @@index([appRating])
+  @@map("platform_ratings")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
+
 enum UserType {
   helper
   participant
@@ -57,6 +341,12 @@ enum ParticipationStatus {
   cancelled
 }
 
+enum OrganizationStatus {
+  pending
+  approved
+  rejected
+}
+
 enum ParticipantRole {
   manager
   helper
@@ -88,318 +378,4 @@ enum SupportUrgency {
 enum SupportStatus {
   active
   closed
-}
-
-model User {
-  id            String  @id @default(cuid())
-  name          String
-  image         String?
-  email         String  @unique
-  emailVerified Boolean
-
-  firstName   String    @map("first_name") @db.VarChar(100)
-  lastName    String    @map("last_name") @db.VarChar(100)
-  phone       String?   @db.VarChar(20)
-  dateOfBirth DateTime? @map("date_of_birth") @db.Date
-  sex         Sex       @default(male)
-  bio         String?   @db.Text
-  userType    UserType  @map("user_type")
-  latitude    Decimal?  @db.Decimal(10, 8)
-  longitude   Decimal?  @db.Decimal(11, 8)
-  city        String?   @db.VarChar(100)
-  state       String?   @db.VarChar(100)
-  country     String?   @default("Algeria") @db.VarChar(100)
-  isActive    Boolean   @default(true) @map("is_active")
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at")
-
-  // Relations
-  qualifications       UserQualification[]     @relation("UserQualifications")
-  organizedInitiatives Initiative[]            @relation("UserOrganizedInitiatives")
-  participations       InitiativeParticipant[]
-  posts                InitiativePost[]
-  ratings              UserInitiativeRating[]
-  platformRatings      PlatformRating[]
-  sessions             Session[]
-  accounts             Account[]
-
-  organization         Organization?
-
-  profileCompleted Boolean @default(false) @map("profile_completed")
-
-  @@index([email])
-  @@index([createdAt])
-  @@map("users")
-}
-
-model Organization {
-  id              String   @id @default(cuid())
-  userId          String   @unique @map("user_id") @db.VarChar(255)
-  shortName       String   @map("short_name") @db.VarChar(100)
-  name            String   @db.VarChar(200)
-  description     String?  @db.Text
-  previousInitiatives String?  @map("previous_initiatives") @db.Text
-  organizationType   String   @map("organization_type") @db.VarChar(50)
-  workAreas          String[] @map("work_areas")
-  officialLicense    String?  @map("official_license") @db.VarChar(500)
-  logo               String?  @map("logo") @db.VarChar(500)
-  identificationCard String?  @map("identification_card") @db.VarChar(500)
-  contactEmail    String   @map("contact_email") @db.VarChar(255)
-  contactPhone    String?  @map("contact_phone") @db.VarChar(20)
-  foundingDate    DateTime? @map("founding_date") @db.Date
-  membersCount    Int?     @map("members_count")
-  website         String?  @db.VarChar(255)
-  socialLinks     Json?    @map("social_links")
-  headquarters    String?  @map("headquarters") @db.VarChar(255)
-  city            String?  @db.VarChar(100)
-  state           String   @db.VarChar(100)
-  country         String   @default("Algeria") @db.VarChar(100)
-  isVerified      Boolean  @default(false) @map("is_verified")
-
-  // I should not set it like this, but i am , for simplicity (it must be intermediate table - many to many)
-  // also, I am not planning to provide a way to create multiple organizations for a user for now
-  userRole        String   @map("user_role") @db.VarChar(100)
-
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @default(now()) @updatedAt @map("updated_at")
-
-  // Relations
-  owner           User             @relation(fields: [userId], references: [id])
-  initiatives     Initiative[]     @relation("OrganizationInitiatives")
-  supportRequests SupportRequest[]
-
-  @@map("organizations")
-}
-
-model UserQualification {
-  id               String   @id @default(cuid())
-  userId           String   @map("user_id")
-  specification    String   @map("specification") @db.VarChar(100)
-  educationalLevel String   @map("educational_level") @db.VarChar(100)
-  currentJob       String   @map("current_job") @db.VarChar(100)
-  createdAt        DateTime @default(now()) @map("created_at")
-  updatedAt        DateTime @default(now()) @updatedAt @map("updated_at")
-
-  // Relations
-  user User @relation("UserQualifications", fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("user_qualifications")
-}
-
-model InitiativeCategory {
-  id            String   @id @default(cuid())
-  nameAr        String   @map("name_ar") @db.VarChar(100)
-  nameEn        String?  @map("name_en") @db.VarChar(100)
-  descriptionAr String?  @map("description_ar") @db.Text
-  descriptionEn String?  @map("description_en") @db.Text
-  icon          String?  @db.VarChar(100)
-  bgColor       String?  @db.VarChar(7)
-  textColor     String?  @db.VarChar(7)
-  isActive      Boolean  @default(true) @map("is_active")
-  createdAt     DateTime @default(now()) @map("created_at")
-
-  // Relations
-  initiatives Initiative[]
-
-  @@map("initiative_categories")
-}
-
-model Initiative {
-  id                       String           @id @default(cuid())
-  organizerType            OrganizerType    @map("organizer_type")
-  organizerUserId          String?          @map("organizer_user_id")
-  organizerOrgId           String?          @map("organizer_org_id") @db.VarChar(255)
-  categoryId               String           @map("category_id") @db.VarChar(255)
-  titleAr                  String           @map("title_ar") @db.VarChar(200)
-  titleEn                  String?          @map("title_en") @db.VarChar(200)
-  descriptionAr            String           @map("description_ar") @db.Text
-  descriptionEn            String?          @map("description_en") @db.Text
-  shortDescriptionAr       String?          @map("short_description_ar") @db.VarChar(500)
-  shortDescriptionEn       String?          @map("short_description_en") @db.VarChar(500)
-  location                 String           @db.VarChar(255)
-  city                     String           @db.VarChar(100)
-  state                    String?          @db.VarChar(100)
-  country                  String?          @default("Algeria") @db.VarChar(100)
-  startDate                DateTime         @map("start_date")
-  endDate                  DateTime         @map("end_date")
-  registrationDeadline     DateTime?        @map("registration_deadline")
-  maxParticipants          Int?             @map("max_participants")
-  currentParticipants      Int              @default(0) @map("current_participants")
-  isOpenParticipation      Boolean          @default(true) @map("is_open_participation")
-  targetAudience           TargetAudience   @default(both) @map("target_audience")
-  requiredQualifications   Json?            @map("required_qualifications")
-  requiresOrgMembership    Boolean          @default(false) @map("requires_org_membership")
-  allowTemporaryMembership Boolean          @default(false) @map("allow_temporary_membership")
-  membershipFormFields     Json?            @map("membership_form_fields")
-  status                   InitiativeStatus @default(draft)
-  coverImage               String?          @map("cover_image") @db.VarChar(500)
-  createdAt                DateTime         @default(now()) @map("created_at")
-  updatedAt                DateTime         @default(now()) @updatedAt @map("updated_at")
-
-  // Relations
-  organizerUser   User?                   @relation("UserOrganizedInitiatives", fields: [organizerUserId], references: [id], onDelete: Cascade)
-  organizerOrg    Organization?           @relation("OrganizationInitiatives", fields: [organizerOrgId], references: [id], onDelete: Cascade)
-  category        InitiativeCategory      @relation(fields: [categoryId], references: [id])
-  participants    InitiativeParticipant[]
-  posts           InitiativePost[]
-  ratings         UserInitiativeRating[]
-
-  @@index([status])
-  @@index([startDate])
-  @@index([categoryId])
-  @@map("initiatives")
-}
-
-model InitiativeParticipant {
-  id                 BigInt              @id @default(autoincrement())
-  initiativeId       String              @map("initiative_id") @db.VarChar(255)
-  userId             String              @map("user_id")
-  participantRole    ParticipantRole     @map("participant_role")
-  participationForm  Json?               @map("participation_form")
-  status             ParticipationStatus @default(registered)
-  checkInTime        DateTime?           @map("check_in_time")
-  isCheckedIn        Boolean             @default(false) @map("is_checked_in")
-  createdAt          DateTime            @default(now()) @map("created_at")
-  updatedAt          DateTime            @default(now()) @updatedAt @map("updated_at")
-
-  // Relations
-  initiative Initiative @relation(fields: [initiativeId], references: [id], onDelete: Cascade)
-  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([initiativeId, userId], name: "unique_participation")
-  @@map("initiative_participants")
-}
-
-model InitiativePost {
-  id           String     @id @default(cuid())
-  initiativeId String     @map("initiative_id") @db.VarChar(255)
-  authorId     String     @map("author_id")
-  title        String?    @db.VarChar(200)
-  content      String     @db.Text
-  postType     PostType   @default(announcement) @map("post_type")
-  isPinned     Boolean    @default(false) @map("is_pinned")
-  status       PostStatus @default(published)
-  createdAt    DateTime   @default(now()) @map("created_at")
-  updatedAt    DateTime   @default(now()) @updatedAt @map("updated_at")
-
-  // Relations
-  initiative  Initiative       @relation(fields: [initiativeId], references: [id], onDelete: Cascade)
-  author      User             @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  attachments PostAttachment[]
-
-  @@map("initiative_posts")
-}
-
-model PostAttachment {
-  id                String         @id @default(cuid())
-  initiativePostId  String         @map("initiative_post_id") @db.VarChar(255)
-  imageUrl          String         @map("image_url") @db.VarChar(255)
-  
-  // Relations
-  post InitiativePost @relation(fields: [initiativePostId], references: [id])
-  
-  @@map("post_attachments")
-}
-
-model SupportRequest {
-  id             String        @id @default(cuid())
-  organizationId String        @map("organization_id") @db.VarChar(255)
-  supportType    SupportType   @map("support_type")
-  title          String        @db.VarChar(200)
-  description    String        @db.Text
-  urgency        SupportUrgency @default(medium)
-  status         SupportStatus @default(active)
-  requestedAt    DateTime      @default(now()) @map("requested_at")
-  updatedAt      DateTime      @default(now()) @updatedAt @map("updated_at")
-
-  // Relations
-  organization Organization @relation(fields: [organizationId], references: [id])
-
-  @@map("support_requests")
-}
-
-model UserInitiativeRating {
-  id           Int     @id @default(autoincrement())
-  userId       String  @map("user_id")
-  initiativeId String  @map("initiative_id") @db.VarChar(255)
-  rating       Int?
-  comment      String? @db.Text
-
-  // Relations
-  user       User       @relation(fields: [userId], references: [id])
-  initiative Initiative @relation(fields: [initiativeId], references: [id])
-
-  @@map("user_initiative_ratings")
-}
-
-model PlatformRating {
-  id                      String   @id @default(cuid())
-  userId                  String   @map("user_id")
-  easeOfUse               String   @map("ease_of_use")
-  informationClarity      String   @map("information_clarity")
-  contentDiversity        String   @map("content_diversity")
-  performanceSpeed        String   @map("performance_speed")
-  generalSatisfaction     String   @map("general_satisfaction")
-  usefulSections          String[] @map("useful_sections")
-  encounteredDifficulties String   @map("encountered_difficulties")
-  difficultiesDetails     String?  @map("difficulties_details") @db.Text
-  improvementSuggestions  String?  @map("improvement_suggestions") @db.Text
-  wouldRecommend          String   @map("would_recommend")
-  appRating               String   @map("app_rating")
-  createdAt               DateTime @default(now()) @map("created_at")
-  updatedAt               DateTime @updatedAt @map("updated_at")
-
-  // Relations
-  user User @relation(fields: [userId], references: [id])
-
-  @@index([userId])
-  @@index([createdAt])
-  @@index([wouldRecommend])
-  @@index([appRating])
-  @@map("platform_ratings")
-}
-
-model Session {
-  id        String   @id
-  expiresAt DateTime
-  token     String
-  createdAt DateTime
-  updatedAt DateTime
-  ipAddress String?
-  userAgent String?
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([token])
-  @@map("session")
-}
-
-model Account {
-  id                    String    @id
-  accountId             String
-  providerId            String
-  userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  accessToken           String?
-  refreshToken          String?
-  idToken               String?
-  accessTokenExpiresAt  DateTime?
-  refreshTokenExpiresAt DateTime?
-  scope                 String?
-  password              String?
-  createdAt             DateTime
-  updatedAt             DateTime
-
-  @@map("account")
-}
-
-model Verification {
-  id         String    @id
-  identifier String
-  value      String
-  expiresAt  DateTime
-  createdAt  DateTime?
-  updatedAt  DateTime?
-
-  @@map("verification")
 }

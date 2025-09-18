@@ -1,4 +1,4 @@
-import { User, UserQualification } from "@prisma/client";
+import { Organization, User, UserQualification } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import {
@@ -12,6 +12,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+/**
+ * Get the file extension from a MIME type.
+ * @param mimeType - e.g: "image/png"
+ * @returns The corresponding file extension, or an empty string if not found.
+ */
 export const mimeTypeToExtension = (mimeType: string): string => {
   if (mimeType.startsWith("image/")) {
     return `.${mimeType.replace("image/", "")} `.toUpperCase();
@@ -21,8 +26,14 @@ export const mimeTypeToExtension = (mimeType: string): string => {
   return `.${mimeType.split("/").pop()} `.toUpperCase();
 };
 
+/**
+ * Convert a User object and its qualifications to a plain object.
+ * @param user - The user object to convert.
+ * @param qualifications - The user's qualifications.
+ * @returns A plain normalized object representation of the user and his qualifications.
+ */
 export function toPlainUser(user: User, qualifications?: UserQualification) {
-  const qualification = qualifications ?? {};
+  const qualification: UserQualification | null = qualifications ?? null;
 
   return {
     ...user,
@@ -33,6 +44,35 @@ export function toPlainUser(user: User, qualifications?: UserQualification) {
     phone: user.phone ? user.phone.split(" ")[1] : "",
     latitude: user.latitude ? Number(user.latitude) : undefined,
     longitude: user.longitude ? Number(user.longitude) : undefined,
+  };
+}
+
+/**
+ * Convert an organization object to a plain object.
+ * @param organization - The organization object to convert.
+ * @returns A plain normalized object representation of the organization.
+ */
+export function toPlainOrganization(
+  organization: Organization
+): Partial<Organization> & {
+  contactPhoneCountryCode: string;
+} {
+  if (!organization) return { contactPhoneCountryCode: "DZ" };
+
+  return {
+    ...organization,
+    contactPhone: organization.contactPhone
+      ? organization.contactPhone.split(" ")[1] || ""
+      : "",
+    contactPhoneCountryCode: organization.contactPhone
+      ? getCountryFromCallingCode(
+          organization.contactPhone.split(" ")[0].replace("+", "")
+        ) || "DZ"
+      : "DZ",
+    membersCount: organization.membersCount || 0,
+    workAreas: Array.isArray(organization.workAreas)
+      ? organization.workAreas
+      : [],
   };
 }
 

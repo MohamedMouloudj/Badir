@@ -1,7 +1,7 @@
 import { getPublicStorageUrl } from "@/actions/supabaseHelpers";
 import { prisma } from "@/lib/db";
 import { PaginatedResponse, PaginationParams } from "@/types/Pagination";
-import { Prisma } from "@prisma/client";
+import { Organization, OrganizationStatus, Prisma } from "@prisma/client";
 
 export interface OrganizationCard {
   id: string;
@@ -14,6 +14,7 @@ export interface OrganizationCard {
   country?: string | null;
   foundingDate?: Date | string | null;
   membersCount?: number | null;
+  isApproved?: OrganizationStatus | null;
 }
 
 export interface OrganizationFilters {
@@ -37,9 +38,9 @@ export class OrganizationService {
   }
 
   static async getOrganizationLogo(id: string) {
-    return await prisma.organization.findFirst({
+    return await prisma.organization.findUnique({
       where: {
-        owner: { id },
+        userId: id,
       },
       select: { logo: true },
     });
@@ -97,6 +98,7 @@ export class OrganizationService {
         country: org.country,
         foundingDate: org.foundingDate,
         membersCount: org.membersCount,
+        isApproved: org.isVerified,
       }))
     );
 
@@ -113,5 +115,15 @@ export class OrganizationService {
         hasPrev: page > 1,
       },
     };
+  }
+
+  static async getOrganizationByUserId(
+    userId: string
+  ): Promise<Organization | null> {
+    return await prisma.organization.findFirst({
+      where: {
+        owner: { id: userId },
+      },
+    });
   }
 }

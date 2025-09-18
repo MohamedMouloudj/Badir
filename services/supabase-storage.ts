@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { BUCKETS } from "@/types/Statics";
 
 export class StorageHelpers {
   private supabase: ReturnType<typeof createClient>;
@@ -7,7 +8,7 @@ export class StorageHelpers {
     this.supabase = createClient();
   }
 
-  async uploadFile(bucket: string, path: string, file: Buffer, type?: string) {
+  async uploadFile(bucket: BUCKETS, path: string, file: Buffer, type?: string) {
     const supabase = await this.supabase;
     const { data, error } = await supabase.storage
       .from(bucket)
@@ -16,20 +17,20 @@ export class StorageHelpers {
     return data;
   }
 
-  async getPublicUrl(bucket: string, path: string) {
+  async getPublicUrl(bucket: BUCKETS, path: string) {
     const supabase = await this.supabase;
     const { data } = supabase.storage.from(bucket).getPublicUrl(path);
     return data.publicUrl;
   }
 
-  async deleteFile(bucket: string, path: string) {
+  async deleteFile(bucket: BUCKETS, path: string) {
     const { error } = await (await this.supabase).storage
       .from(bucket)
       .remove([path]);
     if (error) throw error;
   }
 
-  async downloadFile(bucket: string, path: string) {
+  async downloadFile(bucket: BUCKETS, path: string) {
     const { data, error } = await (await this.supabase).storage
       .from(bucket)
       .download(path);
@@ -37,7 +38,7 @@ export class StorageHelpers {
     return data;
   }
 
-  async listFiles(bucket: string, folder: string = "") {
+  async listFiles(bucket: BUCKETS, folder: string = "") {
     const { data, error } = await (await this.supabase).storage
       .from(bucket)
       .list(folder);

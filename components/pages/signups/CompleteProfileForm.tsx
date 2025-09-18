@@ -12,7 +12,7 @@ import {
 import AppButton from "@/components/AppButton";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { completeProfileAction } from "@/actions/profile";
+import { completeProfileAction } from "@/actions/user-profile";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -75,7 +75,7 @@ export default function CompleteProfileForm() {
   };
 
   const handleNext = async (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
 
     const isStepValid = await validateCurrentStep();
 
@@ -91,7 +91,7 @@ export default function CompleteProfileForm() {
   };
 
   const handlePrevious = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
@@ -99,7 +99,6 @@ export default function CompleteProfileForm() {
     try {
       setIsSubmitting(true);
 
-      // Final validation
       const finalValidation = registrationSchema.safeParse(data);
       if (!finalValidation.success) {
         toast.error("يرجى التحقق من جميع البيانات");
@@ -111,7 +110,7 @@ export default function CompleteProfileForm() {
 
       if (result.success) {
         toast.success("تم إكمال الملف الشخصي بنجاح!");
-        router.push(AUTHORIZED_REDIRECTION);
+        router.replace(AUTHORIZED_REDIRECTION);
       } else {
         toast.error(result.error || "حدث خطأ أثناء حفظ البيانات");
       }

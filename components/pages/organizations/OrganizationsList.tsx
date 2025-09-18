@@ -9,6 +9,7 @@ import PaginationControls from "@/components/PaginationControls";
 import SearchInput from "@/components/SearchInput";
 import api from "@/services/api";
 import { PaginatedResponse } from "@/types/Pagination";
+import { Loader2 } from "lucide-react";
 
 export default function OrganizationsList({
   initialData,
@@ -53,15 +54,23 @@ export default function OrganizationsList({
             تعرف على المنظمات التي تقود التغيير الإيجابي في مجتمعنا
           </p>
         </div>
-        <div className="mb-6 max-w-lg mx-auto">
+        <div className="mb-4 max-w-lg mx-auto">
           <SearchInput
             value={search}
             onChange={handleSearch}
             placeholder="ابحث عن منظمة..."
             className="w-full"
           />
+          <div className="h-6 relative">
+            {loading && (
+              <div className="absolute inset-0 flex items-center gap-2 text-neutrals-500">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>جاري التحميل...</span>
+              </div>
+            )}
+          </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 mx-auto max-w-full md:max-w-2/3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 mx-auto max-w-full sm:max-w-3/4 gap-6 mb-8">
           {organizations.data.map((org) => (
             <OrganizationCard key={org.id} org={org} />
           ))}

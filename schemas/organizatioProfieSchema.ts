@@ -1,15 +1,16 @@
 import z from "zod";
 
 const OrganizationProfileSchema = z.object({
-  logo: z.string().optional().nullable(),
-
-  shortName: z.string().max(100, "الاسم المختصر طويل جدًا").trim().optional(),
-
   name: z
     .string()
     .min(2, "اسم المنظمة يجب أن يحتوي على ثلاثة أحرف على الأقل")
     .max(300, "الاسم الرسمي طويل جدًا")
     .trim(),
+  shortName: z.string().max(100, "الاسم المختصر طويل جدًا").trim().optional(),
+  description: z
+    .string()
+    .max(1000, "الوصف يجب أن يكون أقل من 1000 حرف")
+    .optional(),
 
   contactEmail: z.email("الرجاء إدخال بريد إلكتروني صحيح").trim().toLowerCase(),
 
@@ -48,11 +49,11 @@ const OrganizationProfileSchema = z.object({
     .max(100, "اسم الدولة طويل جدًا")
     .default("Algeria"),
 
-  contactPhoneOrg: z
+  contactPhone: z
     .string()
     .regex(/^\d{6,14}$/, "الرجاء إدخال رقم هاتف صحيح (أرقام فقط)"),
 
-  contactPhoneOrgCountryCode: z.string().default("DZ"),
+  contactPhoneCountryCode: z.string().default("DZ"),
 
   organizationType: z.enum(
     [
@@ -109,6 +110,11 @@ const OrganizationProfileSchema = z.object({
     .or(z.literal("")),
 
   other: z.url("يرجى إدخال رابط صحيح").optional().or(z.literal("")),
+
+  userRole: z.string().optional(),
+
+  logo: z.string().optional().nullable(),
+  // identificationCard: z.string().optional().nullable(),
 });
 
 export type OrganizationProfile = z.infer<typeof OrganizationProfileSchema>;

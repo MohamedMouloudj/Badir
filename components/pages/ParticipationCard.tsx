@@ -15,12 +15,13 @@ import {
 
 export default function ParticipationCard({
   participation,
-  showrating = true,
+  isInspecting = false,
 }: {
   participation: UserParticipation;
-  showrating?: boolean;
+  isInspecting?: boolean;
 }) {
-  const { participantRole, status, initiative, rating } = participation;
+  const { participantRole, status, initiative, rating, avgRating } =
+    participation;
   const {
     category,
     organizerOrg,
@@ -136,27 +137,36 @@ export default function ParticipationCard({
             </div>
             <span>{city}</span>
           </div>
-          {showrating && (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="cursor-pointer">
-                    <Ratings
-                      value={rating?.rating ? Number(rating.rating) : 0}
-                      readOnly
-                      allowHalf
-                      size="sm"
-                    />
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  {rating?.rating
-                    ? `تقييمك: ${rating.rating} من 5`
-                    : "لم تقم بتقييم هذه المبادرة بعد"}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          )}
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="cursor-pointer">
+                  <Ratings
+                    value={rating?.rating ? Number(rating.rating) : 0}
+                    readOnly
+                    allowHalf
+                    size="sm"
+                  />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                {!isInspecting ? (
+                  <>
+                    {rating?.rating
+                      ? `تقييمك: ${rating.rating} من 5`
+                      : "لم تقم بتقييم هذه المبادرة بعد"}
+                  </>
+                ) : (
+                  <>
+                    {avgRating
+                      ? `تقييم: ${avgRating} من 5`
+                      : "لم يقم أحد بتقييم هذه المبادرة بعد"}
+                  </>
+                )}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </CardContent>
     </Card>

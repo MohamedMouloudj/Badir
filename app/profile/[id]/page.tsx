@@ -165,7 +165,7 @@ export default async function UserProfilePage({
                 <ParticipationCard
                   key={participation.initiative.id}
                   participation={participation}
-                  showrating={false}
+                  isInspecting={true}
                 />
               ))}
             </div>

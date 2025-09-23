@@ -66,7 +66,7 @@ const OrganizationProfileSchema = z.object({
       "other",
     ],
     {
-      message: "الرجاء اختيار نوع المنظمة",
+      error: "الرجاء اختيار نوع المنظمة",
     }
   ),
 

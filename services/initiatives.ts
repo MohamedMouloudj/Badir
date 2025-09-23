@@ -7,7 +7,6 @@ import {
   TargetAudience,
 } from "@prisma/client";
 
-// Simplified types to match Prisma output
 export interface InitiativeCard {
   id: string;
   titleAr: string;
@@ -21,6 +20,7 @@ export interface InitiativeCard {
   currentParticipants: number;
   targetAudience: TargetAudience;
   status: InitiativeStatus;
+  registrationDeadline: Date | null;
   category: {
     nameAr: string;
     nameEn?: string | null;
@@ -29,6 +29,7 @@ export interface InitiativeCard {
     textColor?: string | null;
   };
   organizer: {
+    id: string;
     type: OrganizerType;
     name: string;
     image?: string | null;
@@ -39,7 +40,7 @@ export interface InitiativeFilters {
   search?: string;
   categoryId?: string;
   city?: string;
-  status?: InitiativeStatus;
+  status?: InitiativeStatus | "ongoing" | "completed";
   targetAudience?: TargetAudience;
   organizerType?: OrganizerType;
   hasAvailableSpots?: boolean;
@@ -82,10 +83,21 @@ export class InitiativeService {
       const { page, limit } = pagination;
       const skip = (page - 1) * limit;
 
+      const now = new Date();
+
       // Build where clause based on filters
-      const where: Prisma.InitiativeWhereInput = {
-        status: filters.status || "published",
-      };
+      const where: Prisma.InitiativeWhereInput = {};
+
+      if (filters.status === "ongoing") {
+        where.startDate = { lte: now };
+        where.endDate = { gte: now };
+      } else if (filters.status === "completed") {
+        where.endDate = { lt: now };
+      } else if (filters.status) {
+        where.status = { equals: filters.status as InitiativeStatus };
+      } else {
+        where.status = { not: InitiativeStatus.draft };
+      }
 
       // Search filter
       if (filters.search) {
@@ -210,6 +222,7 @@ export class InitiativeService {
         currentParticipants: initiative.currentParticipants,
         targetAudience: initiative.targetAudience,
         status: initiative.status,
+        registrationDeadline: initiative.registrationDeadline,
         category: {
           nameAr: initiative.category.nameAr,
           nameEn: initiative.category.nameEn,
@@ -218,6 +231,11 @@ export class InitiativeService {
           textColor: initiative.category.textColor,
         },
         organizer: {
+          id: initiative.organizerUserId
+            ? initiative.organizerUserId
+            : initiative.organizerOrgId
+            ? initiative.organizerOrgId
+            : "unknown",
           type: initiative.organizerType,
           name:
             initiative.organizerUser?.name ||
@@ -248,7 +266,7 @@ export class InitiativeService {
   }
 
   // Get single initiative by ID
-  static async getById(id: string) {
+  static async getById(id: string, userId?: string) {
     try {
       const initiative = await prisma.initiative.findUnique({
         where: { id: id },
@@ -268,6 +286,18 @@ export class InitiativeService {
               logo: true,
             },
           },
+          participants: userId
+            ? {
+                select: {
+                  id: true,
+                  status: true,
+                  participantRole: true,
+                },
+                where: {
+                  userId: userId,
+                },
+              }
+            : false,
           _count: {
             select: {
               participants: true,

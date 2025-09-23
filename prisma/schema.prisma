@@ -132,12 +132,11 @@ model Initiative {
   isOpenParticipation    Boolean                 @default(true) @map("is_open_participation")
   targetAudience         TargetAudience          @default(both) @map("target_audience")
   requiredQualifications Json?                   @map("required_qualifications")
-  requiresOrgMembership  Boolean                 @default(false) @map("requires_org_membership")
-  membershipFormFields   Json?                   @map("membership_form_fields")
   status                 InitiativeStatus        @default(draft)
   coverImage             String?                 @map("cover_image") @db.VarChar(500)
   createdAt              DateTime                @default(now()) @map("created_at")
   updatedAt              DateTime                @default(now()) @updatedAt @map("updated_at")
+  participationQstForm   Json?                   @map("participation_qst_form")
   participants           InitiativeParticipant[]
   posts                  InitiativePost[]
   category               InitiativeCategory      @relation(fields: [categoryId], references: [id])
@@ -152,7 +151,7 @@ model Initiative {
 }
 
 model InitiativeParticipant {
-  id                BigInt              @id @default(autoincrement())
+  id                String              @id @default(cuid())
   initiativeId      String              @map("initiative_id") @db.VarChar(255)
   userId            String              @map("user_id")
   participantRole   ParticipantRole     @map("participant_role")
@@ -315,10 +314,8 @@ enum OrganizerType {
 }
 
 enum InitiativeStatus {
-  draft
   published
-  ongoing
-  completed
+  draft
   cancelled
 }
 

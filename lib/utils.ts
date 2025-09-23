@@ -7,6 +7,7 @@ import {
   CountryCode,
   CountryCallingCode,
 } from "libphonenumber-js";
+import { toast } from "sonner";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -103,4 +104,40 @@ export function getCountryFromCallingCode(
     }
   }
   return undefined;
+}
+
+/**
+ * Handle file upload, convert to base64 and validate size.
+ * @param file - The file to upload.
+ * @param fileSize - The maximum file size allowed.
+ * @param onChange - Callback function to handle the uploaded file data.
+ */
+export const handleFileUpload = async (
+  file: File | null,
+  fileSize: number,
+  onChange: (value: { base64: string; name: string; type: string }) => void
+) => {
+  if (!file) return;
+
+  if (file.size > fileSize) {
+    toast.error(
+      `حجم الملف كبير جدًا (الحد الأقصى ${fileSize / 1024 / 1024} ميجابايت)`
+    );
+    return;
+  }
+  const arrayBuffer = await file.arrayBuffer();
+  const base64 = Buffer.from(arrayBuffer).toString("base64");
+  onChange({ base64, name: file.name, type: file.type });
+};
+
+/**
+ * Format a date to a localized string
+ */
+export function formatDate(date: Date | string): string {
+  const d = new Date(date);
+  return d.toLocaleDateString("ar-DZ", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 }

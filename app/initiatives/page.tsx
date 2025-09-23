@@ -2,9 +2,17 @@ import getSessionWithCheckProfile from "@/hooks/getSessionWithCheckProfile";
 import { InitiativeService } from "@/services/initiatives";
 import { CategoryService } from "@/services/categories";
 import InitiativesList from "@/components/pages/initiatives/InitiativesList";
+import { OrganizationStatus, UserType } from "@prisma/client";
+import { OrganizationService } from "@/services/organizations";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "المبادرات - بادر",
+  description: "استعرض المبادرات المختلفة على منصة بادر",
+};
 
 export default async function Page() {
-  await getSessionWithCheckProfile();
+  const session = await getSessionWithCheckProfile();
 
   try {
     const [initialInitiatives, categories] = await Promise.all([
@@ -12,10 +20,17 @@ export default async function Page() {
       CategoryService.getAll(),
     ]);
 
+    let org = null;
+    if (session?.user.userType === UserType.organization) {
+      org = await OrganizationService.getOrganizationByUserId(session.user.id);
+    }
+
     return (
       <InitiativesList
         initialData={initialInitiatives}
         categories={categories}
+        isOrg={!!org}
+        isOrgVerified={org?.isVerified === OrganizationStatus.approved}
       />
     );
   } catch (error) {

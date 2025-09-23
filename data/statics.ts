@@ -9,6 +9,7 @@ import {
   InitiativeCategory,
   InitiativeStatus,
   OrganizerType,
+  ParticipantRole,
   Sex,
   TargetAudience,
   User,
@@ -302,6 +303,31 @@ const partners: Partner[] = [
   },
 ];
 
+const targetAudienceOptions = [
+  { value: "helpers", label: "متطوعون" },
+  { value: "participants", label: "مستفيدون" },
+  { value: "both", label: "كلاهما" },
+];
+
+const participationRoleOptions = [
+  { value: ParticipantRole.manager, label: "منظم" },
+  { value: ParticipantRole.helper, label: "مساعد" },
+  { value: ParticipantRole.participant, label: "مشارك" },
+];
+
+const statusOptions = [
+  { value: "all", label: "جميع الحالات" },
+  { value: "published", label: "منشورة" },
+  { value: "ongoing", label: "جارية" },
+  { value: "completed", label: "مكتملة" },
+];
+
+const organizerTypeOptions = [
+  { value: "all", label: "جميع المنظمين" },
+  { value: "user", label: "أفراد" },
+  { value: "organization", label: "منظمات" },
+];
+
 export {
   heroCarouselItems,
   educationCategory,
@@ -313,4 +339,8 @@ export {
   partners,
   aboutInfo,
   BADIR_EMAIL,
+  targetAudienceOptions,
+  statusOptions,
+  organizerTypeOptions,
+  participationRoleOptions,
 };

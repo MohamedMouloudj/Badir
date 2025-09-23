@@ -44,14 +44,14 @@ export default function FilterSelect({
   return (
     <div className="flex-center-column items-start gap-2 w-full">
       <span className="text-label text-neutrals-600">{placeholder}</span>
-      <Select value={value} onValueChange={onChange} dir={dir}>
+      <Select value={value || ""} onValueChange={onChange} dir={dir}>
         <SelectTrigger
           className={cn(
             "w-full border border-neutrals-300 rounded-lg bg-white text-neutrals-700 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors h-12",
             className
           )}
         >
-          <SelectValue placeholder={placeholder} />
+          <SelectValue placeholder={placeholder || "اختر"} />
         </SelectTrigger>
         <SelectContent>
           {options.map((option) => (

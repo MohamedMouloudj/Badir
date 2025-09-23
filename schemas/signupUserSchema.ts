@@ -11,7 +11,7 @@ export const step1Schema = z.object({
       return age >= 13;
     }, "يجب أن تكون 13 سنة على الأقل"),
   sex: z.enum(["male", "female"], {
-    message: "الجنس مطلوب",
+    error: "الجنس مطلوب",
   }),
   phone: z
     .string()
@@ -63,13 +63,13 @@ export const step2Schema = z.object({
       "النبذة الشخصية يجب أن تكون أقل من 1000 حرف"
     ),
   userType: z.enum(["helper", "participant", "both"], {
-    message: "نوع المستخدم مطلوب",
+    error: "نوع المستخدم مطلوب",
   }),
 });
 
 export const step3Schema = z.object({
   acceptConditions: z.boolean().refine((val) => val === true, {
-    message: "يجب قبول الشروط والأحكام",
+    error: "يجب قبول الشروط والأحكام",
   }),
 });
 

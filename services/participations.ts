@@ -131,4 +131,31 @@ export class ParticipationService {
       },
     });
   }
+
+  /**
+   *  Create a new initiative participation record
+   * @param {string} initiativeId
+   * @param {string} userId
+   * @param {ParticipantRole} role
+   * @param {ParticipationStatus} status
+   * @param {Record<string, string | string[]> | undefined} sanitizedFormResponses
+   * @returns {Promise<InitiativeParticipant>}
+   */
+  static async createParticipant(
+    initiativeId: string,
+    userId: string,
+    role: ParticipantRole,
+    status: ParticipationStatus,
+    sanitizedFormResponses?: Record<string, string | string[]>
+  ): Promise<InitiativeParticipant> {
+    return await prisma.initiativeParticipant.create({
+      data: {
+        initiativeId: initiativeId,
+        userId: userId,
+        participantRole: role,
+        participationForm: sanitizedFormResponses,
+        status: status,
+      },
+    });
+  }
 }

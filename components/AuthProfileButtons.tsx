@@ -118,7 +118,7 @@ export function AuthProfileButtons({
                         src={image}
                         alt={session.user.name || "المستخدم"}
                         fill
-                        objectFit="cover"
+                        className="object-cover rounded-full"
                       />
                     )}
                     <AvatarFallback className="border-2 border-primary-500 text-primary-500 font-semibold">

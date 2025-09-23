@@ -1,9 +1,3 @@
-import {
-  InitiativeStatus,
-  OrganizerType,
-  TargetAudience,
-} from "@prisma/client";
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type CarouselImage = {
   id: number;
@@ -52,18 +46,6 @@ export interface FormField {
 }
 
 // ===== SEARCH & FILTER TYPES =====
-export interface InitiativeFilters {
-  search?: string;
-  categoryId?: number;
-  city?: string;
-  targetAudience?: TargetAudience;
-  status?: InitiativeStatus;
-  startDate?: string;
-  endDate?: string;
-  organizerType?: OrganizerType;
-  maxDistance?: number; // in km
-  hasAvailableSpots?: boolean;
-}
 
 export interface ProximitySearch {
   latitude: number;
@@ -102,4 +84,14 @@ export const BUCKET_SIZE_LIMITS = {
   avatars: 10 * 1024 * 1024, // 10MB
   documents: 15 * 1024 * 1024, // 15MB
   "post-images": 30 * 1024 * 1024, // 30MB
+};
+
+// ======== ACTION RESPONSE ========
+
+export type ActionResponse<T, R> = {
+  success?: boolean;
+  message?: string;
+  error?: string;
+  errors?: Partial<Record<keyof T, string[]>>;
+  data?: R;
 };

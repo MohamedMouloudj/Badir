@@ -26,6 +26,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Check, CheckIcon, ChevronsUpDown, Upload } from "lucide-react";
 import { Button } from "./ui/button";
 import { getCountries, getCountryCallingCode } from "libphonenumber-js";
+import parse from "html-react-parser";
+import DOMPurify from "isomorphic-dompurify";
 
 const priorityCountries = [
   "DZ",
@@ -121,6 +123,8 @@ export interface FormInputProps {
   rows?: number; // For textarea
   rtl?: boolean; // Right-to-left support
   multiple?: boolean; // For multi-select combobox
+  min?: number; // For number input
+  max?: number; // For number input
   fileAccept?: string[] | string;
   fileMaxSize?: number;
   onFileChange?: (file: File | null, onChange: (value: string) => void) => void;
@@ -261,14 +265,15 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
     const baseInputClasses = cn(
       "w-full border border-neutrals-300 rounded-full px-4 py-2",
       "placeholder:text-neutrals-300 text-neutrals-700",
-      "focus:border-secondary-600 focus:ring-1 focus:ring-secondary-600 focus:outline-none",
+      "focus:border-secondary-600 focus:ring-1 focus:outline-none",
       "disabled:opacity-50 disabled:cursor-not-allowed",
-      error &&
-        "border-state-error focus:border-state-error focus:ring-state-error"
+      error
+        ? "border-state-error focus:border-state-error focus:ring-state-error"
+        : "focus:ring-secondary-600"
     );
 
     const renderLabel = () => (
-      <div className="flex-center gap-2 mb-2 text-label">
+      <div className="flex-center gap-2 mb-2 text-label" dir="rtl">
         <label htmlFor={name} className="text-neutrals-600 font-medium">
           {label}
           {!isOptional && <span className="text-state-error ml-1">*</span>}
@@ -299,9 +304,18 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
               type={type}
               id={name}
               name={name}
-              placeholder={placeholder}
-              value={(value as string) || ""}
-              onChange={(e) => onChange?.(e.target.value)}
+              placeholder={
+                placeholder
+                  ? String(parse(DOMPurify.sanitize(placeholder)))
+                  : undefined
+              }
+              value={
+                value ? String(parse(DOMPurify.sanitize(String(value)))) : ""
+              }
+              onChange={(e) => {
+                const sanitized = DOMPurify.sanitize(e.target.value);
+                onChange?.(sanitized);
+              }}
               onBlur={onBlur}
               disabled={disabled}
               className={baseInputClasses}
@@ -380,9 +394,18 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
             <Textarea
               id={name}
               name={name}
-              placeholder={placeholder}
-              value={(value as string) || ""}
-              onChange={(e) => onChange?.(e.target.value)}
+              placeholder={
+                placeholder
+                  ? String(parse(DOMPurify.sanitize(placeholder)))
+                  : undefined
+              }
+              value={
+                value ? String(parse(DOMPurify.sanitize(String(value)))) : ""
+              }
+              onChange={(e) => {
+                const sanitized = DOMPurify.sanitize(e.target.value);
+                onChange?.(sanitized);
+              }}
               onBlur={onBlur}
               disabled={disabled}
               rows={rows}
@@ -522,9 +545,10 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
             >
               <SelectTrigger
                 className={cn(
-                  "w-full border border-neutrals-300 rounded-full px-3 py-2 placeholder:text-neutrals-300 text-neutrals-700 focus:border-secondary-600 focus:ring-1 focus:ring-secondary-600 focus:outline-none bg-neutrals-100",
-                  error &&
-                    "border-state-error focus:border-state-error focus:ring-state-error",
+                  "w-full border border-neutrals-300 rounded-full px-3 py-2 placeholder:text-neutrals-300 text-neutrals-700 focus:ring-1 focus:ring-secondary-600 focus:outline-none bg-neutrals-100",
+                  error
+                    ? "border-state-error focus:border-state-error focus:ring-state-error"
+                    : "focus:border-secondary-600",
                   disabled && "bg-neutrals-200 cursor-not-allowed",
                   className
                 )}

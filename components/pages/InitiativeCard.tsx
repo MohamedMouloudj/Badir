@@ -1,10 +1,19 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowUpLeft, MapPin } from "lucide-react";
+import { ArrowUpLeft, Clock, MapPin } from "lucide-react";
 import { InitiativeCard as InitiativeCardType } from "@/services/initiatives";
 import AppButton from "../AppButton";
 import AvailabilityBadge from "./AvailabilityBadge";
 import Image from "next/image";
 import CategoryBadge from "./CategoryBadge";
+import Link from "next/link";
+import { OrganizerType } from "@prisma/client";
+import {
+  Tooltip,
+  TooltipProvider,
+  TooltipTrigger,
+  TooltipContent,
+} from "../ui/tooltip";
+import { formatDate } from "@/lib/utils";
 
 export default function InitiativeCard({
   initiative,
@@ -12,6 +21,7 @@ export default function InitiativeCard({
   initiative: InitiativeCardType;
 }) {
   const {
+    id,
     category,
     titleAr,
     shortDescriptionAr,
@@ -21,34 +31,47 @@ export default function InitiativeCard({
     currentParticipants,
     maxParticipants,
     organizer,
+    registrationDeadline,
   } = initiative;
 
-  const formatDate = (date: Date | string) => {
-    const dateObj = typeof date === "string" ? new Date(date) : date;
-    return dateObj.toLocaleDateString("ar-DZ", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-  };
+  const isAvailable = !maxParticipants || currentParticipants < maxParticipants;
+  const isOngoing =
+    initiative.status === "published" &&
+    new Date() >= new Date(startDate) &&
+    new Date() <= new Date(endDate);
+  const isCompleted = new Date() > new Date(endDate);
 
   return (
     <Card
-      className="w-full max-w-2xl h-full mx-auto bg-neutrals-100 border-2 border-secondary-700 rounded-xl p-4 md:p-6 shadow-md"
+      className="relative w-full max-w-2xl h-full mx-auto bg-neutrals-100 border-2 border-secondary-700 rounded-xl p-4 md:p-6 shadow-md"
       dir="rtl"
     >
-      <CardContent className="p-0 flex-center-column justify-between h-full gap-2">
+      <CardContent className="p-0.5 flex-center-column justify-between h-full gap-2">
+        {registrationDeadline && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipContent>
+                <p>الموعد النهائي للتسجيل</p>
+                <p dir="rtl">{formatDate(registrationDeadline)}</p>
+              </TooltipContent>
+              <TooltipTrigger className="absolute top-1 right-1">
+                <Clock className="w-6 h-6 text-neutrals-400" />
+              </TooltipTrigger>
+            </Tooltip>
+          </TooltipProvider>
+        )}
         {/* Header with badges */}
-        <div className="flex justify-between items-start">
+        <div className="flex justify-between items-start mt-1">
           <CategoryBadge
             nameAr={category.nameAr}
             bgColor={category.bgColor ?? "transparent"}
             textColor={category.textColor ?? "inherit"}
           />
           <AvailabilityBadge
-            isAvailable={
-              !maxParticipants || currentParticipants < maxParticipants
-            }
+            initiativeStatus={initiative.status}
+            isAvailable={isAvailable}
+            isOngoing={isOngoing}
+            isCompleted={isCompleted}
           />
         </div>
 
@@ -90,8 +113,10 @@ export default function InitiativeCard({
               width={24}
               height={24}
             />
-            <span>
-              {currentParticipants} \ {maxParticipants} متطوع
+            <span className="whitespace-nowrap truncate">
+              {maxParticipants
+                ? `${currentParticipants} / ${maxParticipants} متطوع`
+                : `${currentParticipants}`}
             </span>
           </div>
         </div>
@@ -99,8 +124,18 @@ export default function InitiativeCard({
         {/* Organizer */}
         <div className="text-neutrals-500 text-sm md:text-base">
           نُظِّمت بواسطة:{" "}
-          <span className="font-medium text-neutrals-600">
-            {organizer.name}
+          <span className="font-medium text-neutrals-600 hover:text-primary-500 hover:underline">
+            <Link
+              href={
+                organizer.id !== "unknown"
+                  ? organizer.type === OrganizerType.organization
+                    ? `/organizations/${organizer.id}`
+                    : `/profile/${organizer.id}`
+                  : ``
+              }
+            >
+              {organizer.name}
+            </Link>
           </span>
         </div>
 
@@ -112,6 +147,10 @@ export default function InitiativeCard({
             size="md"
             icon={<ArrowUpLeft />}
             className="w-full sm:w-auto"
+            url={`/initiatives/${id}`}
+            disabled={
+              !isAvailable || isCompleted || initiative.status !== "published"
+            }
           >
             انضم للمبادرة
           </AppButton>

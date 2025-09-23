@@ -126,4 +126,39 @@ export class OrganizationService {
       },
     });
   }
+
+  /**
+   * Get organizations for a specific user
+   * @param userId User ID
+   * @returns List of organizations
+   */
+  static async getUserOrganizations(
+    userId: string
+  ): Promise<OrganizationCard[]> {
+    try {
+      const organizations = await prisma.organization.findMany({
+        where: {
+          userId: userId,
+          isVerified: "approved",
+        },
+        select: {
+          id: true,
+          name: true,
+          shortName: true,
+          logo: true,
+          description: true,
+          headquarters: true,
+          city: true,
+          country: true,
+          foundingDate: true,
+          membersCount: true,
+        },
+      });
+
+      return organizations;
+    } catch (error) {
+      console.error("Error fetching user organizations:", error);
+      throw new Error("Failed to fetch user organizations");
+    }
+  }
 }

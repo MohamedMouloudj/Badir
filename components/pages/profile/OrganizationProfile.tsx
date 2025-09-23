@@ -5,7 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import FormInput from "@/components/FormInput";
 import country from "country-list-js";
 import { OrganizationProfile } from "@/schemas/organizatioProfieSchema";
-import { mimeTypeToExtension } from "@/lib/utils";
+import { handleFileUpload, mimeTypeToExtension } from "@/lib/utils";
 import { BUCKET_MIME_TYPES, BUCKET_SIZE_LIMITS } from "@/types/Statics";
 import { toast } from "sonner";
 import {
@@ -94,25 +94,6 @@ export default function OrganizationProfileForm({
       console.error("Error submitting form:", error);
       toast.error("حدث خطأ أثناء حفظ البيانات");
     }
-  };
-
-  const handleFileUpload = async (
-    file: File | null,
-    fileSize: number,
-    onChange: (value: { base64: string; name: string; type: string }) => void
-  ) => {
-    if (!file) return;
-
-    if (file.size > fileSize) {
-      toast.error(
-        `حجم الملف كبير جدًا (الحد الأقصى ${fileSize / 1024 / 1024} ميجابايت)`
-      );
-      return;
-    }
-
-    const arrayBuffer = await file.arrayBuffer();
-    const base64 = Buffer.from(arrayBuffer).toString("base64");
-    onChange({ base64, name: file.name, type: file.type });
   };
 
   const COUNTRIES = useMemo(() => {

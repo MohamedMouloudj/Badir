@@ -12,39 +12,29 @@ import SearchInput from "@/components/SearchInput";
 import FilterSelect from "@/components/FilterSelect";
 import PaginationControls from "@/components/PaginationControls";
 import { Card, CardContent } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import api from "@/services/api";
 import { Checkbox } from "@/components/ui/checkbox";
 import { PaginatedResponse } from "@/types/Pagination";
+import AppButton from "@/components/AppButton";
+import {
+  organizerTypeOptions,
+  statusOptions,
+  targetAudienceOptions,
+} from "@/data/statics";
 
 interface InitiativesListProps {
   initialData: PaginatedResponse<InitiativeCardType>;
   categories: CategoryCard[];
+  isOrg?: boolean;
+  isOrgVerified?: boolean;
 }
-
-const targetAudienceOptions = [
-  { value: "all", label: "جميع الفئات" },
-  { value: "helpers", label: "متطوعون" },
-  { value: "participants", label: "مستفيدون" },
-  { value: "both", label: "كلاهما" },
-];
-
-const statusOptions = [
-  { value: "all", label: "جميع الحالات" },
-  { value: "published", label: "منشورة" },
-  { value: "ongoing", label: "جارية" },
-  { value: "completed", label: "مكتملة" },
-];
-
-const organizerTypeOptions = [
-  { value: "all", label: "جميع المنظمين" },
-  { value: "user", label: "أفراد" },
-  { value: "organization", label: "منظمات" },
-];
 
 export default function InitiativesList({
   initialData,
   categories,
+  isOrg = false,
+  isOrgVerified = false,
 }: InitiativesListProps) {
   const [initiatives, setInitiatives] =
     useState<PaginatedResponse<InitiativeCardType>>(initialData);
@@ -61,7 +51,6 @@ export default function InitiativesList({
     ];
   }, [categories]);
 
-  // Fetch initiatives with filters
   const fetchInitiatives = async (
     newFilters: InitiativeFilters,
     page: number = 1
@@ -70,7 +59,6 @@ export default function InitiativesList({
       setLoading(true);
       const params = new URLSearchParams();
 
-      // Add filters to params
       if (newFilters.search) params.append("search", newFilters.search);
       if (newFilters.categoryId)
         params.append("categoryId", newFilters.categoryId.toString());
@@ -151,13 +139,23 @@ export default function InitiativesList({
         <Card className="mb-8 bg-transparent shadow-none border-none">
           <CardContent className="p-4">
             {/* Search */}
-            <div className="max-w-full md:max-w-1/2 mb-4">
+            <div className="max-w-full mb-4 flex-center sm:justify-center gap-4 max-sm:flex-wrap">
               <SearchInput
                 value={filters.search || ""}
                 onChange={handleSearch}
                 placeholder="ابحث في المبادرات..."
                 className="w-full"
               />
+              {(!isOrg || (isOrg && isOrgVerified)) && (
+                <AppButton
+                  type="primary"
+                  url="/initiatives/new"
+                  icon={<Plus className="w-4 h-4" />}
+                  size="sm"
+                >
+                  مبادرة جديدة
+                </AppButton>
+              )}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Category Filter */}
@@ -170,7 +168,7 @@ export default function InitiativesList({
 
               {/* Target Audience Filter */}
               <FilterSelect
-                value={filters.targetAudience || "all"}
+                value={filters.targetAudience || "both"}
                 onChange={(value) =>
                   handleFilterChange("targetAudience", value)
                 }

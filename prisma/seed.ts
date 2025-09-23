@@ -110,7 +110,7 @@ async function main() {
         organizationType: "charity",
         workAreas: ["education", "health", "humanitarian"],
         userRole: "manager",
-        isVerified: true,
+        isVerified: "approved",
       },
     }),
     prisma.organization.create({
@@ -126,7 +126,7 @@ async function main() {
         organizationType: "youth",
         workAreas: ["education", "culture"],
         userRole: "manager",
-        isVerified: true,
+        isVerified: "approved",
       },
     }),
     prisma.organization.create({
@@ -142,7 +142,7 @@ async function main() {
         organizationType: "health",
         workAreas: ["health", "education", "humanRights"],
         userRole: "manager",
-        isVerified: true,
+        isVerified: "approved",
       },
     }),
   ]);
@@ -345,7 +345,7 @@ async function main() {
         country: "Algeria",
         startDate: new Date("2025-09-25T00:00:00.000Z"),
         endDate: new Date("2025-09-25T00:00:00.000Z"),
-        status: "ongoing",
+        status: "published",
       },
     }),
     // Sports Initiative

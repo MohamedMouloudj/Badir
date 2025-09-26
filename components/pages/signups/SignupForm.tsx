@@ -16,6 +16,7 @@ export function SignupForm() {
     SignupState | null,
     FormData
   >(signupAction, null);
+  const [isRegisterSuccessful, setIsRegisterSuccessful] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -26,11 +27,12 @@ export function SignupForm() {
     userType: isUserSigningUp ? "both" : "organization",
   });
 
-  // Effect to show toast based on the server action's result
   useEffect(() => {
     if (state?.error) {
+      setIsRegisterSuccessful(false);
       toast.error(state.error);
     } else if (state?.success && state?.message) {
+      setIsRegisterSuccessful(true);
       toast.success(state.message);
     }
   }, [state]);
@@ -114,7 +116,7 @@ export function SignupForm() {
               <AppButton
                 type="submit"
                 border="rounded"
-                disabled={isPending}
+                disabled={isPending || isRegisterSuccessful}
                 icon={
                   isPending ? (
                     <Loader2 className="w-4 h-4 animate-spin" />

@@ -67,7 +67,7 @@ export default function PostEditor({
     () => extractImageSrcsFromHtmlBrowser(initialData?.content || ""),
     [initialData?.content]
   );
-  const { isReady, editor, editorRef } = useEditorState();
+  const { editorRef } = useEditorState();
 
   const handleImageUpload = useCallback(
     async (file: File): Promise<string> => {
@@ -198,11 +198,14 @@ export default function PostEditor({
   const handleDraft = () => handleSave("draft");
   const handlePublish = () => handleSave("published");
 
-  const postTypeLabels: Record<PostType, string> = {
-    announcement: "إعلان",
-    update: "تحديث",
-    instruction: "تعليمات",
-  };
+  const postTypeLabels: Record<PostType, string> = useMemo(
+    () => ({
+      announcement: "إعلان",
+      update: "تحديث",
+      instruction: "تعليمات",
+    }),
+    []
+  );
 
   return (
     <Card className="w-full">
@@ -257,6 +260,7 @@ export default function PostEditor({
               onChangeContent={setContent}
               extensions={extensions}
               ref={editorRef}
+              dark={false}
               bubbleMenu={{
                 render(
                   { extensionsNames, editor, disabled },
@@ -281,7 +285,7 @@ export default function PostEditor({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-between items-center pt-4" dir="ltr">
+        <div className="flex justify-between items-center pt-4 gap-1" dir="ltr">
           <div className="flex gap-2">
             <AppButton
               type="outline"

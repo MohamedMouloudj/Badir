@@ -57,6 +57,7 @@ const stepConfig = [
 export default function CompleteOrganizationForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isProfileComplete, setIsProfileComplete] = useState(false);
   const router = useRouter();
 
   const methods = useForm<OrgRegistrationFormData>({
@@ -120,9 +121,11 @@ export default function CompleteOrganizationForm() {
       const result = await completeOrgProfileAction(data);
 
       if (result.success) {
+        setIsProfileComplete(true);
         toast.success("تم إكمال الملف الشخصي بنجاح!");
         router.replace(AUTHORIZED_REDIRECTION);
       } else {
+        setIsProfileComplete(false);
         toast.error(result.error || "حدث خطأ أثناء حفظ البيانات");
       }
     } catch (error) {
@@ -196,7 +199,7 @@ export default function CompleteOrganizationForm() {
                       <AppButton
                         type="submit"
                         size="md"
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || isProfileComplete}
                         className="flex items-center gap-2"
                         border="rounded"
                         icon={

@@ -61,8 +61,8 @@ export default function PostsPanel({
 
   function handleSetPosts(posts: Post[]) {
     setPosts(posts.filter((p) => p.status === "published" || canWrite));
-    // setPosts(posts);
   }
+
   async function load() {
     setLoading(true);
     const res = await listPostsAction(
@@ -343,8 +343,8 @@ export default function PostsPanel({
                         className={cn(
                           "rounded-full text-sm font-medium",
                           isAuthorManager
-                            ? "bg-secondary-200/90 text-secondary-600"
-                            : "bg-blue-200/90 text-blue-600"
+                            ? "bg-state-success text-secondary-700"
+                            : "bg-state-success/80 text-secondary-700/80"
                         )}
                       >
                         {isAuthorManager

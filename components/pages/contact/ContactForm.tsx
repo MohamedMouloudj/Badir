@@ -188,7 +188,7 @@ export default function ContactForm() {
               disabled={isSubmitting}
               onClick={handleSubmit(onSubmit)}
               className="w-full"
-              corner="rounded"
+              border="rounded"
               icon={
                 isSubmitting ? (
                   <Loader2 className="w-4 h-4 md:w-5 md:h-5 animate-spin" />

@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
-    domains: ["*.supabase.co"],
+    // domains: ["*.supabase.co"],
     remotePatterns: [
       {
         protocol: "https",

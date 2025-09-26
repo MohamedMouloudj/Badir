@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
   NewInitiativeFormData,
@@ -11,22 +11,20 @@ import FormInput from "@/components/FormInput";
 import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import FormFieldCreator from "../FormFieldCreator";
-import { createInitiativeAction } from "@/actions/initiatives";
-import { toast } from "sonner";
 import {
-  InitiativeStatus,
-  ParticipantRole,
-  TargetAudience,
-} from "@prisma/client";
+  createInitiativeAction,
+  updateInitiativeAction,
+} from "@/actions/initiatives";
+import { toast } from "sonner";
+import { InitiativeStatus, TargetAudience } from "@prisma/client";
 import { Loader2, Save, Info, Check } from "lucide-react";
 import AppButton from "@/components/AppButton";
-import {
-  participationRoleOptions,
-  targetAudienceOptions,
-} from "@/data/statics";
+import { targetAudienceOptions } from "@/data/statics";
+import country from "country-list-js";
 import { BUCKET_MIME_TYPES, BUCKET_SIZE_LIMITS } from "@/types/Statics";
 import { handleFileUpload, mimeTypeToExtension } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { InitiativeService } from "@/services/initiatives";
 
 type CategoryOption = {
   value: string;
@@ -35,15 +33,62 @@ type CategoryOption = {
 
 interface InitiativeFormProps {
   categories: CategoryOption[];
+  initialData?: Awaited<ReturnType<typeof InitiativeService.getById>>;
+  isOrganization?: boolean;
 }
 
-export default function InitiativeForm({ categories }: InitiativeFormProps) {
+function parseParticipationQstForm(input: unknown): FormFieldType[] {
+  if (!input) return [];
+  let arr: unknown = input;
+  if (typeof input === "string") {
+    try {
+      arr = JSON.parse(input);
+    } catch {
+      return [];
+    }
+  }
+  // If it's a single object, wrap in array
+  if (arr && typeof arr === "object" && !Array.isArray(arr)) {
+    arr = [arr];
+  }
+  if (!Array.isArray(arr)) return [];
+  return arr
+    .map((item) => {
+      if (
+        item &&
+        typeof item === "object" &&
+        "id" in item &&
+        "question" in item &&
+        "type" in item
+      ) {
+        return {
+          id: String(item.id),
+          question: String(item.question),
+          type: item.type,
+          required: Boolean(item.required),
+          options: Array.isArray(item.options) ? item.options.map(String) : [],
+        } as FormFieldType;
+      }
+      return undefined;
+    })
+    .filter(Boolean) as FormFieldType[];
+}
+
+export default function InitiativeForm({
+  categories,
+  initialData,
+  isOrganization,
+}: InitiativeFormProps) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("basic-info");
   const [isPending, startTransition] = useTransition();
   const [participationFields, setParticipationFields] = useState<
     FormFieldType[]
-  >([]);
+  >(
+    initialData?.participationQstForm
+      ? parseParticipationQstForm(initialData?.participationQstForm)
+      : []
+  );
 
   const {
     control,
@@ -55,27 +100,29 @@ export default function InitiativeForm({ categories }: InitiativeFormProps) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(NewInitiativeSchema) as any,
     defaultValues: {
-      titleAr: "",
-      titleEn: "",
-      shortDescriptionAr: "",
-      shortDescriptionEn: "",
-      descriptionAr: "",
-      descriptionEn: "",
-      categoryId: categories.length > 0 ? categories[0].value : "",
-      location: "",
-      city: "",
-      state: "",
+      titleAr: initialData?.titleAr || "",
+      titleEn: initialData?.titleEn || "",
+      shortDescriptionAr: initialData?.shortDescriptionAr || "",
+      shortDescriptionEn: initialData?.shortDescriptionEn || "",
+      descriptionAr: initialData?.descriptionAr || "",
+      descriptionEn: initialData?.descriptionEn || "",
+      categoryId:
+        initialData?.categoryId ||
+        (categories.length > 0 ? categories[0].value : ""),
+      location: initialData?.location || "",
+      city: initialData?.city || "",
+      state: initialData?.state || "",
       coverImage: null,
-      endDate: new Date(),
-      startDate: new Date(),
-      registrationDeadline: undefined,
-      maxParticipants: undefined,
+      endDate: initialData?.endDate || new Date(),
+      startDate: initialData?.startDate || new Date(),
+      registrationDeadline: initialData?.registrationDeadline || undefined,
+      maxParticipants: initialData?.maxParticipants || undefined,
       participationQstForm: [],
-      targetAudience: TargetAudience.both,
+      targetAudience: initialData?.targetAudience || TargetAudience.both,
       requiresForm: true,
       // allowedRoles: [ParticipantRole.participant],
-      status: InitiativeStatus.draft,
-      country: "Algeria",
+      status: isOrganization ? initialData?.status : InitiativeStatus.draft,
+      country: initialData?.country || "Algeria",
     },
     mode: "onBlur",
   });
@@ -98,16 +145,16 @@ export default function InitiativeForm({ categories }: InitiativeFormProps) {
   const onSubmit = async (data: NewInitiativeFormData) => {
     try {
       startTransition(async () => {
-        const result = await createInitiativeAction(data);
+        let result;
+        if (initialData) {
+          result = await updateInitiativeAction(initialData.id, data);
+        } else {
+          result = await createInitiativeAction(data);
+        }
 
         if (result.success) {
           toast.success(result.message || "تم إنشاء المبادرة بنجاح");
-
-          if (data.status === InitiativeStatus.published) {
-            router.push(`/initiatives/${result.data?.initiativeId}`);
-          } else {
-            router.push("/initiatives/my");
-          }
+          router.push(`/initiatives/${result.data?.initiativeId}`);
         } else {
           toast.error(result.error || "حدث خطأ أثناء إنشاء المبادرة");
         }
@@ -128,6 +175,13 @@ export default function InitiativeForm({ categories }: InitiativeFormProps) {
       setActiveTab("basic-info");
     }
   });
+  const COUNTRIES = useMemo(() => {
+    const countries = country.names();
+    return countries.sort().map((countryName) => ({
+      value: countryName,
+      label: countryName,
+    }));
+  }, []);
 
   return (
     <div className="w-full max-w-4xl mx-auto">
@@ -368,17 +422,17 @@ export default function InitiativeForm({ categories }: InitiativeFormProps) {
                 <Controller
                   name="country"
                   control={control}
-                  render={({ field }) => (
+                  render={({ field: { onChange, value, onBlur } }) => (
                     <FormInput
-                      type="text"
-                      label="البلد"
+                      type="select"
+                      options={COUNTRIES}
                       name="country"
-                      placeholder="أدخل البلد"
-                      value={field.value || ""}
-                      onChange={field.onChange}
-                      onBlur={field.onBlur}
+                      label="البلد"
+                      placeholder="الجزائر"
+                      value={value || "Algeria"}
+                      onChange={onChange}
+                      onBlur={onBlur}
                       error={errors.country?.message}
-                      rtl={true}
                     />
                   )}
                 />
@@ -506,7 +560,7 @@ export default function InitiativeForm({ categories }: InitiativeFormProps) {
             <div className="flex justify-end">
               <AppButton
                 type="primary"
-                corner="default"
+                border="default"
                 onClick={() => setActiveTab("participation")}
                 size="sm"
               >
@@ -587,7 +641,6 @@ export default function InitiativeForm({ categories }: InitiativeFormProps) {
               </div>
               <div>
                 {/* Target Audience Information */}
-                Update your imports to include Info and Check:
                 <div className="md:col-span-2 mt-3">
                   {watch("targetAudience") === TargetAudience.helpers && (
                     <p className="text-sm text-amber-600 bg-amber-50 p-2 rounded-md flex items-center">
@@ -643,7 +696,7 @@ export default function InitiativeForm({ categories }: InitiativeFormProps) {
                 type="outline"
                 onClick={() => setActiveTab("basic-info")}
                 size="sm"
-                corner="default"
+                border="default"
               >
                 السابق
               </AppButton>
@@ -654,7 +707,7 @@ export default function InitiativeForm({ categories }: InitiativeFormProps) {
                     type="primary"
                     onClick={() => setActiveTab("form-settings")}
                     size="sm"
-                    corner="default"
+                    border="default"
                   >
                     إعداد نموذج التسجيل
                   </AppButton>
@@ -674,7 +727,7 @@ export default function InitiativeForm({ categories }: InitiativeFormProps) {
                         )
                       }
                       size="sm"
-                      corner="default"
+                      border="default"
                     >
                       حفظ كمسودة
                     </AppButton>
@@ -689,7 +742,7 @@ export default function InitiativeForm({ categories }: InitiativeFormProps) {
                         )
                       }
                       size="sm"
-                      corner="default"
+                      border="default"
                     >
                       نشر المبادرة
                     </AppButton>
@@ -717,7 +770,7 @@ export default function InitiativeForm({ categories }: InitiativeFormProps) {
                 type="outline"
                 onClick={() => setActiveTab("participation")}
                 size="sm"
-                corner="default"
+                border="default"
               >
                 السابق
               </AppButton>
@@ -727,7 +780,7 @@ export default function InitiativeForm({ categories }: InitiativeFormProps) {
                   type="outline-submit"
                   onClick={saveAsDraft}
                   disabled={isPending}
-                  corner="default"
+                  border="default"
                   icon={
                     isPending ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -744,7 +797,7 @@ export default function InitiativeForm({ categories }: InitiativeFormProps) {
                   type="submit"
                   onClick={saveAndPublish}
                   disabled={isPending}
-                  corner="default"
+                  border="default"
                   size="sm"
                   icon={
                     isPending && <Loader2 className="h-4 w-4 animate-spin" />

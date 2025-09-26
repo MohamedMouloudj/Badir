@@ -17,8 +17,10 @@ import { formatDate } from "@/lib/utils";
 
 export default function InitiativeCard({
   initiative,
+  userId,
 }: {
   initiative: InitiativeCardType;
+  userId?: string;
 }) {
   const {
     id,
@@ -34,12 +36,11 @@ export default function InitiativeCard({
     registrationDeadline,
   } = initiative;
 
+  const now = new Date();
+  const isDeadlinePassed = registrationDeadline && registrationDeadline < now;
   const isAvailable = !maxParticipants || currentParticipants < maxParticipants;
-  const isOngoing =
-    initiative.status === "published" &&
-    new Date() >= new Date(startDate) &&
-    new Date() <= new Date(endDate);
-  const isCompleted = new Date() > new Date(endDate);
+  const isOngoing = now >= new Date(startDate) && now <= new Date(endDate);
+  const isCompleted = now > new Date(endDate);
 
   return (
     <Card
@@ -61,7 +62,7 @@ export default function InitiativeCard({
           </TooltipProvider>
         )}
         {/* Header with badges */}
-        <div className="flex justify-between items-start mt-1">
+        <div className="flex justify-between items-start mt-2 sm:mt-1">
           <CategoryBadge
             nameAr={category.nameAr}
             bgColor={category.bgColor ?? "transparent"}
@@ -69,9 +70,10 @@ export default function InitiativeCard({
           />
           <AvailabilityBadge
             initiativeStatus={initiative.status}
-            isAvailable={isAvailable}
+            isAvailable={isAvailable && !isDeadlinePassed}
             isOngoing={isOngoing}
             isCompleted={isCompleted}
+            isCancelled={initiative.status === "cancelled"}
           />
         </div>
 
@@ -143,13 +145,19 @@ export default function InitiativeCard({
         <div className="flex justify-center pt-4 justify-self-end">
           <AppButton
             type="outline"
-            corner="rounded"
+            border="rounded"
             size="md"
             icon={<ArrowUpLeft />}
             className="w-full sm:w-auto"
             url={`/initiatives/${id}`}
             disabled={
-              !isAvailable || isCompleted || initiative.status !== "published"
+              !isAvailable ||
+              isCompleted ||
+              !(
+                (userId === organizer.id &&
+                  initiative.status !== "cancelled") ||
+                initiative.status === "published"
+              )
             }
           >
             انضم للمبادرة

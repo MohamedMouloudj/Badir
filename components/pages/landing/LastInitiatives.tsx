@@ -16,7 +16,7 @@ export default function LastInitiatives() {
       <AppButton
         type="primary"
         icon={<ArrowUpLeft className="w-4 h-4 sm:w-6 sm:h-6" />}
-        corner="rounded"
+        border="rounded"
         url=""
       >
         عرض جميع المبادرات

@@ -72,7 +72,7 @@ model Organization {
   workAreas           String[]           @map("work_areas")
   isVerified          OrganizationStatus @default(pending) @map("is_verified")
   initiatives         Initiative[]       @relation("OrganizationInitiatives")
-  owner               User               @relation(fields: [userId], references: [id])
+  owner               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   supportRequests     SupportRequest[]
 
   @@unique([name, contactEmail], name: "unique_org_name_contactEmail")
@@ -189,8 +189,10 @@ model InitiativePost {
 model PostAttachment {
   id               String         @id @default(cuid())
   initiativePostId String         @map("initiative_post_id") @db.VarChar(255)
-  imageUrl         String         @map("image_url") @db.VarChar(255)
-  post             InitiativePost @relation(fields: [initiativePostId], references: [id])
+  imageUrl         String         @unique @map("image_url") @db.VarChar(255)
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @default(now()) @updatedAt @map("updated_at")
+  post             InitiativePost @relation(fields: [initiativePostId], references: [id], onDelete: Cascade)
 
   @@map("post_attachments")
 }
@@ -204,8 +206,9 @@ model SupportRequest {
   urgency        SupportUrgency @default(medium)
   status         SupportStatus  @default(active)
   requestedAt    DateTime       @default(now()) @map("requested_at")
+  createdAt      DateTime       @default(now()) @map("created_at")
   updatedAt      DateTime       @default(now()) @updatedAt @map("updated_at")
-  organization   Organization   @relation(fields: [organizationId], references: [id])
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@map("support_requests")
 }

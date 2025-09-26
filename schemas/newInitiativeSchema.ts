@@ -88,12 +88,12 @@ export const NewInitiativeSchema = z
   .refine(
     (data) => {
       if (data.registrationDeadline) {
-        return data.registrationDeadline <= data.startDate;
+        return data.registrationDeadline <= data.endDate;
       }
       return true;
     },
     {
-      message: "الموعد النهائي للتسجيل يجب أن يكون قبل تاريخ البدء",
+      message: "الموعد النهائي للتسجيل يجب أن يكون قبل تاريخ الانتهاء",
       path: ["registrationDeadline"],
     }
   )

@@ -37,6 +37,11 @@ export default function FormFieldCreator({
       return;
     }
 
+    if (newField.options?.includes(newOption.trim())) {
+      toast.error("هذا الخيار موجود بالفعل");
+      return;
+    }
+
     // Sanitize the option text
     const sanitizedOption = parse(newOption) as string;
 

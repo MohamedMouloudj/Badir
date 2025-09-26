@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { use, useMemo, useState } from "react";
 import {
   InitiativeCard as InitiativeCardType,
   InitiativeFilters,
@@ -28,6 +28,7 @@ interface InitiativesListProps {
   categories: CategoryCard[];
   isOrg?: boolean;
   isOrgVerified?: boolean;
+  userId: string;
 }
 
 export default function InitiativesList({
@@ -35,6 +36,7 @@ export default function InitiativesList({
   categories,
   isOrg = false,
   isOrgVerified = false,
+  userId,
 }: InitiativesListProps) {
   const [initiatives, setInitiatives] =
     useState<PaginatedResponse<InitiativeCardType>>(initialData);
@@ -238,7 +240,7 @@ export default function InitiativesList({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {initiatives.data.map((initiative) => (
             <div key={initiative.id} className="h-full">
-              <InitiativeCard initiative={initiative} />
+              <InitiativeCard initiative={initiative} userId={userId} />
             </div>
           ))}
         </div>

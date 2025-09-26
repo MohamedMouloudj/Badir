@@ -9,7 +9,7 @@ type ButtonProps = {
   className?: string;
   url?: string;
   size?: "sm" | "md" | "lg";
-  corner?: "default" | "rounded";
+  border?: "default" | "rounded";
   icon?: ReactNode;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
@@ -38,7 +38,7 @@ function AppButton({
   className = "",
   size = "md",
   type = "primary",
-  corner = "rounded",
+  border = "rounded",
   url = "",
   icon,
   onClick,
@@ -60,8 +60,8 @@ function AppButton({
           "bg-primary-500 text-white hover:bg-primary-400",
         (type === "outline" || type === "outline-submit") &&
           "border border-primary-500 text-primary-500 bg-transparent hover:bg-primary-100 hover:text-primary-400",
-        corner === "rounded" && "rounded-full",
-        corner === "default" && "rounded-md",
+        border === "rounded" && "rounded-full",
+        border === "default" && "rounded-md",
         className
       )}
       onClick={onClick}

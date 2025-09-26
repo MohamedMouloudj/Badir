@@ -165,7 +165,7 @@ export default function Footer() {
               <div className="flex-shrink-0 p-1">
                 <AppButton
                   type="primary"
-                  corner="rounded"
+                  border="rounded"
                   size="sm"
                   className="whitespace-nowrap px-3 sm:px-4 h-8 sm:h-10"
                 >

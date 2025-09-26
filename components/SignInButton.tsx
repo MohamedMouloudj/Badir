@@ -4,7 +4,11 @@ import AppButton from "@/components/AppButton";
 import { authRoutes } from "@/data/routes";
 import { useMediaQuery } from "react-responsive";
 
-export default function SignInButton() {
+export default function SignInButton({
+  onMenuAction,
+}: {
+  onMenuAction?: () => void;
+}) {
   const [isClient, setIsClient] = useState(false);
   const isTablet = useMediaQuery({ maxWidth: 1024, minWidth: 768 });
 
@@ -19,8 +23,9 @@ export default function SignInButton() {
     <AppButton
       type="primary"
       url={authRoutes.login.url}
-      corner="rounded"
+      border="rounded"
       size={buttonSize}
+      onClick={onMenuAction ? onMenuAction : undefined}
     >
       {authRoutes.login.label}
     </AppButton>

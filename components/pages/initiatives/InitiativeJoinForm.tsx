@@ -94,7 +94,6 @@ export default function InitiativeJoinForm({
   };
 
   const onError = (errors: any) => {
-    console.error(errors);
     toast.error("يرجى التحقق من جميع الحقول المطلوبة");
   };
 
@@ -169,7 +168,7 @@ export default function InitiativeJoinForm({
         type="submit"
         disabled={isPending}
         className="w-full"
-        corner="default"
+        border="default"
       >
         {isPending ? (
           <>

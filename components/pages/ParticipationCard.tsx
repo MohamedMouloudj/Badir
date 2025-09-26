@@ -12,6 +12,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import Link from "next/link";
 
 export default function ParticipationCard({
   participation,
@@ -106,9 +107,11 @@ export default function ParticipationCard({
         {/* Title and Date - Responsive Layout */}
         <div className="flex flex-col lg:flex-row lg:items-start gap-4">
           {/* Title */}
-          <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-neutrals-700 leading-tight flex-1">
-            {titleAr}
-          </h3>
+          <Link href={`/initiatives/${initiative.id}`} className="flex-1">
+            <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-neutrals-700 leading-tight flex-1 hover:underline">
+              {titleAr}
+            </h3>
+          </Link>
 
           {/* Date */}
           <div className="text-neutrals-700 text-sm md:text-base flex-wrap lg:border-r-2 lg:border-secondary-700 lg:pr-4">

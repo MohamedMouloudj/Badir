@@ -52,7 +52,7 @@ export default function Hero() {
           <div className="flex-center max-xl:justify-center max-sm:items-end gap-4 flex-1 py-6">
             <AppButton
               type="outline"
-              corner="rounded"
+              border="rounded"
               size="lg"
               url="/initiatives"
             >
@@ -61,7 +61,7 @@ export default function Hero() {
             <AppButton
               type="primary"
               icon={<ArrowUpLeft className="w-4 h-4 sm:w-6 sm:h-6" />}
-              corner="rounded"
+              border="rounded"
               size="lg"
               url="/signup/organization"
             >

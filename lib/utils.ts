@@ -1,13 +1,14 @@
 import { Organization, User, UserQualification } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { toast } from "sonner";
 import {
   getCountryCallingCode,
   getCountries,
   CountryCode,
   CountryCallingCode,
 } from "libphonenumber-js";
-import { toast } from "sonner";
+import * as cheerio from "cheerio";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -140,4 +141,54 @@ export function formatDate(date: Date | string): string {
     month: "long",
     day: "numeric",
   });
+}
+
+/**
+ * Extract all image src attributes from HTML (server-safe, uses cheerio).
+ * Returns only non-empty src strings.
+ */
+export function extractImageSrcsFromHtml(html: string): string[] {
+  if (!html) return [];
+  const $ = cheerio.load(html);
+  const srcs: string[] = [];
+  $("img").each((_, el) => {
+    const src = $(el).attr("src");
+    if (src) srcs.push(src);
+  });
+  return srcs;
+}
+
+/**
+ * Extract all image src attributes from HTML (server-safe, uses cheerio).
+ * Browser version (use in client components).
+ * Returns only non-empty src strings.
+ */
+export function extractImageSrcsFromHtmlBrowser(html: string): string[] {
+  if (!html) return [];
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    return Array.from(doc.querySelectorAll("img"))
+      .map((img) => img.getAttribute("src") || "")
+      .filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Optional: normalize/validate src (allow only http(s) or data URIs).
+ * Returns null for invalid src.
+ */
+export function validateImageSrc(src: string): string | null {
+  if (!src) return null;
+  try {
+    // data: images allowed
+    if (src.startsWith("data:image/")) return src;
+    const u = new URL(src);
+    if (u.protocol === "http:" || u.protocol === "https:") return u.toString();
+    return null;
+  } catch {
+    return null;
+  }
 }

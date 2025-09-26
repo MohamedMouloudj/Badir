@@ -9,6 +9,7 @@ import { ActionResponse } from "@/types/Statics";
 import DOMPurify from "isomorphic-dompurify";
 import { FormResponseType, JoinInitiativeParams } from "@/schemas";
 import { ParticipationService } from "@/services/participations";
+import { InitiativeService } from "@/services/initiatives";
 
 export async function joinInitiativeAction(
   params: JoinInitiativeParams
@@ -60,12 +61,10 @@ export async function joinInitiativeAction(
     }
 
     // Check if user is already participating
-    const existingParticipation = await prisma.initiativeParticipant.findFirst({
-      where: {
-        initiativeId: params.initiativeId,
-        userId: session.user.id,
-      },
-    });
+    const existingParticipation = await ParticipationService.getByIds(
+      params.initiativeId,
+      session.user.id
+    );
 
     if (existingParticipation) {
       return {
@@ -100,13 +99,10 @@ export async function joinInitiativeAction(
     );
 
     if (initiative.isOpenParticipation) {
-      await prisma.initiative.update({
-        where: { id: params.initiativeId },
-        data: {
-          currentParticipants: {
-            increment: 1,
-          },
-        },
+      await InitiativeService.updateById(initiative.id, {
+        currentParticipants: initiative.isOpenParticipation
+          ? (initiative.currentParticipants || 0) + 1
+          : initiative.currentParticipants,
       });
     }
 
@@ -126,4 +122,113 @@ export async function joinInitiativeAction(
       error: "حدث خطأ أثناء الانضمام إلى المبادرة",
     };
   }
+}
+
+/**
+ * Helpers for manager-only member management
+ * @param initiativeId Initiative ID
+ * @returns User ID
+ */
+async function assertManager(initiativeId: string) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session?.user) throw new Error("unauthorized");
+  const initiative = await InitiativeService.getById(
+    initiativeId,
+    session.user.id
+  );
+  const isManager =
+    initiative?.organizerUserId === session?.user.id ||
+    initiative?.organizerOrg?.userId === session?.user.id;
+  if (!isManager) throw new Error("forbidden");
+  return { userId: session.user.id };
+}
+
+export async function listApprovedMembersAction(initiativeId: string) {
+  await assertManager(initiativeId);
+  const members = await prisma.initiativeParticipant.findMany({
+    where: { initiativeId, status: ParticipationStatus.approved },
+    include: { user: { select: { id: true, name: true } } },
+    orderBy: [{ createdAt: "desc" }],
+  });
+  return {
+    success: true,
+    members: members.map((m) => ({
+      id: m.id,
+      user: m.user,
+      participantRole: m.participantRole,
+      status: m.status,
+    })),
+  };
+}
+
+export async function listPendingRequestsAction(initiativeId: string) {
+  await assertManager(initiativeId);
+  const requests = await prisma.initiativeParticipant.findMany({
+    where: { initiativeId, status: ParticipationStatus.registered },
+    include: { user: { select: { id: true, name: true } } },
+    orderBy: [{ createdAt: "asc" }],
+  });
+  return {
+    success: true,
+    requests: requests.map((r) => ({
+      id: r.id,
+      user: r.user,
+      participantRole: r.participantRole,
+      status: r.status,
+    })),
+  };
+}
+
+export async function approveParticipationAction(
+  id: string,
+  initiativeId: string
+) {
+  await assertManager(initiativeId);
+  const participant = await prisma.initiativeParticipant.findUnique({
+    where: { id },
+    select: { status: true, initiativeId: true },
+  });
+
+  if (participant && participant.status === ParticipationStatus.approved) {
+    return { success: true };
+  }
+  await prisma.initiativeParticipant.update({
+    where: { id },
+    data: { status: ParticipationStatus.approved },
+  });
+
+  await prisma.initiative.update({
+    where: { id: initiativeId },
+    data: { currentParticipants: { increment: 1 } },
+  });
+  revalidatePath(`/initiatives/${initiativeId}`);
+  return { success: true };
+}
+
+export async function rejectParticipationAction(
+  id: string,
+  initiativeId: string
+) {
+  await assertManager(initiativeId);
+  await prisma.initiativeParticipant.update({
+    where: { id },
+    data: { status: ParticipationStatus.rejected },
+  });
+  revalidatePath(`/initiatives/${initiativeId}`);
+  return { success: true };
+}
+
+export async function kickMemberAction(id: string, initiativeId: string) {
+  await assertManager(initiativeId);
+  const participant = await prisma.initiativeParticipant.update({
+    where: { id },
+    data: { status: ParticipationStatus.cancelled },
+  });
+  // decrement if previously counted
+  await prisma.initiative.update({
+    where: { id: initiativeId },
+    data: { currentParticipants: { decrement: 1 } },
+  });
+  revalidatePath(`/initiatives/${initiativeId}`);
+  return { success: true };
 }

@@ -38,6 +38,7 @@ export function AuthProfileButtons({
     const imagePath = await getUserImage();
     if (imagePath) {
       const imageUrl = await getPublicStorageUrl("avatars", imagePath);
+
       setImage(imageUrl);
     } else {
       setImage(null);
@@ -90,7 +91,6 @@ export function AuthProfileButtons({
 
   const handleProfileClick = () => {
     setIsPopoverOpen(false);
-    onMenuAction?.();
   };
 
   if (isSessionPending || isPending) {
@@ -249,13 +249,13 @@ export function AuthProfileButtons({
     <>
       {isMobile ? (
         <div className="flex flex-col flex-1/3 gap-3">
-          <SignUpButton />
-          <SignInButton />
+          <SignUpButton onMenuAction={onMenuAction} />
+          <SignInButton onMenuAction={onMenuAction} />
         </div>
       ) : (
         <div className="flex items-center gap-4">
-          <SignUpButton />
-          <SignInButton />
+          <SignUpButton onMenuAction={onMenuAction} />
+          <SignInButton onMenuAction={onMenuAction} />
         </div>
       )}
     </>

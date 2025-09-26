@@ -86,6 +86,8 @@ export const BUCKET_SIZE_LIMITS = {
   "post-images": 30 * 1024 * 1024, // 30MB
 };
 
+export const ALLOWED_INITIATIVE_IMAGES = 15;
+
 // ======== ACTION RESPONSE ========
 
 export type ActionResponse<T, R> = {

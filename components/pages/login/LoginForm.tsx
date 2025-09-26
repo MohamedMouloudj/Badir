@@ -120,7 +120,7 @@ export default function LoginForm() {
           <AppButton
             type="submit"
             disabled={isPending}
-            corner="rounded"
+            border="rounded"
             className="justify-center"
             icon={
               isPending ? (
@@ -130,7 +130,7 @@ export default function LoginForm() {
               )
             }
           >
-            {isPending ? <>جاري تسجيل الدخول...</> : <>تسجيل الدخول</>}
+            {isPending ? <>جاري تسجيل الدخول</> : <>تسجيل الدخول</>}
           </AppButton>
         </div>
       </form>

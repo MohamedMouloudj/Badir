@@ -16,7 +16,6 @@ import Link from "next/link";
 import parse from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { formatDate } from "@/lib/utils";
-import { Initiative } from "@prisma/client";
 import { InitiativeService } from "@/services/initiatives";
 import { getUserImage } from "@/actions/user-profile";
 import { getPublicStorageUrl } from "@/actions/supabaseHelpers";

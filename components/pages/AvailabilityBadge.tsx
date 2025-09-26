@@ -8,13 +8,21 @@ export default function AvailabilityBadge({
   isAvailable = true,
   isCompleted = false,
   isOngoing = false,
+  isCancelled = false,
 }: {
   initiativeStatus: InitiativeStatus;
   isAvailable?: boolean;
   isCompleted?: boolean;
   isOngoing?: boolean;
+  isCancelled?: boolean;
 }) {
   const getStatusInfo = () => {
+    if (isCancelled) {
+      return {
+        label: "ملغي",
+        className: "bg-state-error text-neutrals-700",
+      };
+    }
     if (!isAvailable) {
       return {
         label: "غير متاح",

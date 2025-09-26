@@ -7,7 +7,11 @@ import { Dialog } from "./ui/dialog";
 import AuthChoicesDialog from "./AuthChoicesDialog";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 
-export default function SignUpButton() {
+export default function SignUpButton({
+  onMenuAction,
+}: {
+  onMenuAction?: () => void;
+}) {
   const [isClient, setIsClient] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -23,7 +27,12 @@ export default function SignUpButton() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <AppButton type="outline" corner="rounded" size={buttonSize}>
+        <AppButton
+          type="outline"
+          border="rounded"
+          size={buttonSize}
+          onClick={onMenuAction ? onMenuAction : undefined}
+        >
           {authRoutes.signup.label}
         </AppButton>
       </DialogTrigger>

@@ -91,10 +91,12 @@ export class InitiativeService {
       if (filters.status === "ongoing") {
         where.startDate = { lte: now };
         where.endDate = { gte: now };
+        where.status = InitiativeStatus.published;
       } else if (filters.status === "completed") {
         where.endDate = { lt: now };
-      } else if (filters.status) {
-        where.status = { equals: filters.status as InitiativeStatus };
+        where.status = InitiativeStatus.published;
+      } else if (filters.status === InitiativeStatus.published) {
+        where.status = { equals: filters.status };
       } else {
         where.status = { not: InitiativeStatus.draft };
       }
@@ -131,7 +133,10 @@ export class InitiativeService {
 
       // Target audience filter
       if (filters.targetAudience) {
-        where.targetAudience = filters.targetAudience;
+        where.targetAudience =
+          filters.targetAudience !== TargetAudience.both
+            ? { in: [filters.targetAudience, TargetAudience.both] }
+            : undefined;
       }
 
       // Organizer type filter
@@ -265,7 +270,12 @@ export class InitiativeService {
     }
   }
 
-  // Get single initiative by ID
+  /**
+   * Get single initiative by ID
+   * @param id Initiative ID
+   * @param userId User ID
+   * @returns Initiative
+   */
   static async getById(id: string, userId?: string) {
     try {
       const initiative = await prisma.initiative.findUnique({
@@ -284,6 +294,7 @@ export class InitiativeService {
               id: true,
               name: true,
               logo: true,
+              userId: true,
             },
           },
           participants: userId
@@ -341,6 +352,7 @@ export class InitiativeService {
             },
           },
         },
+        orderBy: [{ createdAt: "desc" }],
       });
 
       const initiativeIds = initiatives.map((i) => i.id);
@@ -371,5 +383,50 @@ export class InitiativeService {
       console.error("Error fetching organization initiatives:", error);
       throw new Error("Failed to fetch organization initiatives");
     }
+  }
+
+  /**
+   * Update an initiative by ID
+   * @param id Initiative ID
+   * @param data Partial initiative fields to update
+   * @returns The updated initiative object
+   */
+  static async updateById(
+    id: string,
+    data: Partial<Prisma.InitiativeUpdateInput>
+  ) {
+    try {
+      const updated = await prisma.initiative.update({
+        where: { id },
+        data,
+        include: {
+          category: true,
+          organizerUser: {
+            select: { id: true, name: true, image: true },
+          },
+          organizerOrg: {
+            select: { id: true, name: true, logo: true },
+          },
+          _count: { select: { participants: true } },
+        },
+      });
+      return updated;
+    } catch (error) {
+      console.error("Error updating initiative:", error);
+      throw new Error("Failed to update initiative");
+    }
+  }
+
+  /**
+   * Get cover image path for an initiative
+   * @param id Initiative ID
+   * @returns Cover image path or null
+   */
+  static async getCoverImagePath(id: string) {
+    const initiative = await prisma.initiative.findUnique({
+      where: { id },
+      select: { coverImage: true },
+    });
+    return initiative?.coverImage || null;
   }
 }

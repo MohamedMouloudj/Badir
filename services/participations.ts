@@ -132,6 +132,18 @@ export class ParticipationService {
     });
   }
 
+  static async getByIds(
+    userId: string,
+    initiativeId: string
+  ): Promise<InitiativeParticipant | null> {
+    return await prisma.initiativeParticipant.findFirst({
+      where: {
+        initiativeId: initiativeId,
+        userId: userId,
+      },
+    });
+  }
+
   /**
    *  Create a new initiative participation record
    * @param {string} initiativeId

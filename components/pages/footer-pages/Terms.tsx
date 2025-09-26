@@ -107,7 +107,7 @@ export default function Terms() {
           </Link>
         </p>
 
-        <AppButton type="primary" size="sm" corner="rounded" url="/">
+        <AppButton type="primary" size="sm" border="rounded" url="/">
           إلى الصفحة الرئيسية
         </AppButton>
       </div>

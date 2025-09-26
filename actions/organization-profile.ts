@@ -13,11 +13,10 @@ import {
 import { AUTHORIZED_REDIRECTION } from "@/data/routes";
 import { OrganizationStatus, UserType } from "@prisma/client";
 import { StorageHelpers } from "@/services/supabase-storage";
-import { BUCKETS } from "@/types/Statics";
+import { ActionResponse, BUCKETS } from "@/types/Statics";
 import { OrganizationService } from "@/services/organizations";
 import { getCallingCodeFromCountry, mimeTypeToExtension } from "@/lib/utils";
 import path from "path";
-import { OrganizationProfileState, ProfileState } from "@/types/Profile";
 import { OrganizationProfile, validateOrganizationProfile } from "@/schemas";
 
 /**
@@ -26,7 +25,7 @@ import { OrganizationProfile, validateOrganizationProfile } from "@/schemas";
  */
 export async function completeOrgProfileAction(
   data: OrgRegistrationFormData
-): Promise<ProfileState> {
+): Promise<ActionResponse<OrganizationProfile, {}>> {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -232,7 +231,7 @@ export async function completeOrgProfileAction(
  */
 export async function updateOrganizationProfileAction(
   data: OrganizationProfile
-): Promise<OrganizationProfileState> {
+): Promise<ActionResponse<OrganizationProfile, {}>> {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -290,6 +289,9 @@ export async function updateOrganizationProfileAction(
       ) {
         try {
           const { base64, name, type } = JSON.parse(fileValue);
+
+          const orgLogo = userWithOrg.organization.logo;
+
           const fileBuffer = Buffer.from(base64, "base64");
 
           let ext = path.extname(name);
@@ -311,6 +313,14 @@ export async function updateOrganizationProfileAction(
             fileBuffer,
             type
           );
+
+          if (result.path && orgLogo && orgLogo) {
+            try {
+              await storage.deleteFile("avatars", orgLogo);
+            } catch (deleteError) {
+              console.error("Failed to delete old profile image:", deleteError);
+            }
+          }
 
           uploadResults[field] = result.path;
         } catch (error) {
@@ -420,17 +430,21 @@ export async function getOrganizationData() {
 }
 
 /**
- * Fetch the organization logo for the currently logged-in user.
+ * Fetch the organization logo for the currently logged-in user, or a specific organization by ID.
  * @returns the logo path or null
  */
-export async function getOrganizationLogo(): Promise<string | null> {
+export async function getOrganizationLogo(id?: string): Promise<string | null> {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
-    if (!session?.user) return null;
+    let orgId = id;
+    if (!orgId) {
+      const session = await auth.api.getSession({
+        headers: await headers(),
+      });
+      if (!session?.user) return null;
+      orgId = session.user.id;
+    }
 
-    const data = await OrganizationService.getOrganizationLogo(session.user.id);
+    const data = await OrganizationService.getOrganizationLogo(orgId);
 
     return data?.logo || null;
   } catch (error) {

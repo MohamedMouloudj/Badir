@@ -1,19 +1,3 @@
-import { OrganizationProfile, RegistrationFormData } from "@/schemas";
-
-export type ProfileState = {
-  success?: boolean;
-  message?: string;
-  error?: string;
-  errors?: Partial<Record<keyof RegistrationFormData, string[]>>;
-};
-
-export type OrganizationProfileState = {
-  success?: boolean;
-  message?: string;
-  error?: string;
-  errors?: Partial<Record<keyof OrganizationProfile, string[]>>;
-};
-
 export const organizationTypeOptions = [
   { value: "charity", label: "جمعية خيرية" },
   { value: "youth", label: "منظمة شبابية" },

@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
-    domains: ["*.supabase.co"],
+    // domains: ["*.supabase.co"],
     remotePatterns: [
       {
         protocol: "https",
@@ -15,6 +15,7 @@ const nextConfig: NextConfig = {
         pathname: "/storage/v1/object/**",
       },
     ],
+    qualities: [60, 80, 100],
   },
   eslint: {
     ignoreDuringBuilds: true,

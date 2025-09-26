@@ -26,7 +26,7 @@ export default function SearchInput({
     }
   };
   return (
-    <form onSubmit={handleSubmit} className="w-full mb-2">
+    <form onSubmit={handleSubmit} className="w-full">
       <div className={cn("relative", className)} dir={dir}>
         <button
           type="submit"

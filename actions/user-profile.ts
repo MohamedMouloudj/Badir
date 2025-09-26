@@ -16,11 +16,11 @@ import { getCallingCodeFromCountry, mimeTypeToExtension } from "@/lib/utils";
 import path from "path";
 import { UserProfile, validateUserProfile } from "@/schemas";
 import { UserService } from "@/services/user";
-import { ProfileState } from "@/types/Profile";
+import { ActionResponse } from "@/types/Statics";
 
 export async function updateUserProfileAction(
   data: UserProfile
-): Promise<ProfileState> {
+): Promise<ActionResponse<UserProfile, {}>> {
   try {
     // Just in case
     const session = await auth.api.getSession({
@@ -175,7 +175,7 @@ export async function updateUserProfileAction(
 
 export async function completeProfileAction(
   data: RegistrationFormData
-): Promise<ProfileState> {
+): Promise<ActionResponse<RegistrationFormData, {}>> {
   try {
     // Get current session
     const session = await auth.api.getSession({
@@ -244,7 +244,6 @@ export async function completeProfileAction(
       });
     }
 
-    // Success response - no redirect here, let the component handle it
     return {
       success: true,
       message: "تم إكمال الملف الشخصي بنجاح",
@@ -286,17 +285,21 @@ export async function completeProfileAction(
   }
 }
 
-/** Fetch the user image for the currently logged-in user.
+/** Fetch the user image for the currently logged-in user, or a specific user by ID.
  * @returns the image path or null
  */
-export async function getUserImage(): Promise<string | null> {
+export async function getUserImage(id?: string): Promise<string | null> {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
-    if (!session?.user) return null;
+    let userId = id;
+    if (!userId) {
+      const session = await auth.api.getSession({
+        headers: await headers(),
+      });
+      if (!session?.user) return null;
+      userId = session.user.id;
+    }
 
-    const data = await UserService.getUserImage(session.user.id);
+    const data = await UserService.getUserImage(userId);
     return data?.image || null;
   } catch (error) {
     console.error("Failed to fetch user image:", error);

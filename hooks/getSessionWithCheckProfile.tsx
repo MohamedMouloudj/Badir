@@ -1,8 +1,12 @@
 import { auth } from "@/lib/auth";
 import { UserType } from "@prisma/client";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
 
+/**
+ * Get the session on server side and check if the user profile is complete
+ * @returns the session if exists, otherwise redirects to complete profile page if profile is incomplete
+ */
 const getSessionWithCheckProfile = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -10,9 +14,9 @@ const getSessionWithCheckProfile = async () => {
 
   if (session && !session.user.profileCompleted) {
     if (session.user.userType === UserType.organization) {
-      redirect("/complete-profile/organization");
+      redirect("/complete-profile/organization", RedirectType.replace);
     } else {
-      redirect("/complete-profile/user");
+      redirect("/complete-profile/user", RedirectType.replace);
     }
   }
   return session;

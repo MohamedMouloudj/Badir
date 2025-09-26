@@ -157,7 +157,7 @@ export default function CompleteProfileForm() {
                       onClick={handlePrevious}
                       disabled={currentStep === 1}
                       className="flex items-center gap-2"
-                      corner="rounded"
+                      border="rounded"
                       icon={<ChevronRight className="w-4 h-4 md:w-6 md:h-6" />}
                       dir="rtl"
                     >
@@ -176,7 +176,7 @@ export default function CompleteProfileForm() {
                         size="md"
                         onClick={handleNext}
                         className="flex items-center gap-2"
-                        corner="rounded"
+                        border="rounded"
                         icon={<ChevronLeft className="w-4 h-4 md:w-6 md:h-6" />}
                       >
                         التالي
@@ -187,7 +187,7 @@ export default function CompleteProfileForm() {
                         size="md"
                         disabled={isSubmitting}
                         className="flex items-center gap-2"
-                        corner="rounded"
+                        border="rounded"
                         icon={
                           isSubmitting ? (
                             <Loader2 className="w-4 h-4 md:w-6 md:h-6" />

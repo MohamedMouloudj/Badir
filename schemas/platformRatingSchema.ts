@@ -13,31 +13,31 @@ export const recommendationOptions = ["نعم، بالتأكيد", "ربما", "
 export const platformRatingSchema = z
   .object({
     easeOfUse: z.enum(ratingOptions, {
-      message: "يرجى تقييم سهولة الاستخدام",
+      error: "يرجى تقييم سهولة الاستخدام",
     }),
     informationClarity: z.enum(ratingOptions, {
-      message: "يرجى تقييم وضوح المعلومات",
+      error: "يرجى تقييم وضوح المعلومات",
     }),
     contentDiversity: z.enum(ratingOptions, {
-      message: "يرجى تقييم تنوع المحتوى",
+      error: "يرجى تقييم تنوع المحتوى",
     }),
     performanceSpeed: z.enum(ratingOptions, {
-      message: "يرجى تقييم سرعة التصفح والأداء",
+      error: "يرجى تقييم سرعة التصفح والأداء",
     }),
     generalSatisfaction: z.enum(ratingOptions, {
-      message: "يرجى تقييم رضاك العام عن المنصة",
+      error: "يرجى تقييم رضاك العام عن المنصة",
     }),
     usefulSections: z.array(z.enum(platformSections)),
     encounteredDifficulties: z.enum(["نعم", "لا"], {
-      message: "يرجى الإجابة على هذا السؤال",
+      error: "يرجى الإجابة على هذا السؤال",
     }),
     difficultiesDetails: z.string().optional(),
     improvementSuggestions: z.string().optional(),
     wouldRecommend: z.enum(recommendationOptions, {
-      message: "يرجى الإجابة على هذا السؤال",
+      error: "يرجى الإجابة على هذا السؤال",
     }),
     appRating: z.enum(["1", "2", "3", "4", "5"], {
-      message: "يرجى تقييم المبادرة",
+      error: "يرجى تقييم المبادرة",
     }),
   })
   .refine(
@@ -51,7 +51,7 @@ export const platformRatingSchema = z
       return true;
     },
     {
-      message: "يرجى تقديم تفاصيل حول الصعوبات التي واجهتها",
+      error: "يرجى تقديم تفاصيل حول الصعوبات التي واجهتها",
       path: ["difficultiesDetails"],
     }
   );

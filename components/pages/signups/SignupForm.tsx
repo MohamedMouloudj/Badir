@@ -113,7 +113,7 @@ export function SignupForm() {
             <div className="flex-center justify-center mt-8">
               <AppButton
                 type="submit"
-                corner="rounded"
+                border="rounded"
                 disabled={isPending}
                 icon={
                   isPending ? (

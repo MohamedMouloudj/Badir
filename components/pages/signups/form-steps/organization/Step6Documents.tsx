@@ -2,30 +2,11 @@
 import { Controller, useFormContext } from "react-hook-form";
 import FormInput from "@/components/FormInput";
 import { OrgRegistrationFormData } from "@/schemas/signupOrgSchema";
-import { toast } from "sonner";
 import { BUCKET_MIME_TYPES, BUCKET_SIZE_LIMITS } from "@/types/Statics";
-import { mimeTypeToExtension } from "@/lib/utils";
+import { handleFileUpload, mimeTypeToExtension } from "@/lib/utils";
 
 export default function Step6Documents() {
   const { control } = useFormContext<OrgRegistrationFormData>();
-
-  const handleFileUpload = async (
-    file: File | null,
-    fileSize: number,
-    onChange: (value: { base64: string; name: string; type: string }) => void
-  ) => {
-    if (!file) return;
-
-    if (file.size > fileSize) {
-      toast.error(
-        `حجم الملف كبير جدًا (الحد الأقصى ${fileSize / 1024 / 1024} ميجابايت)`
-      );
-      return;
-    }
-    const arrayBuffer = await file.arrayBuffer();
-    const base64 = Buffer.from(arrayBuffer).toString("base64");
-    onChange({ base64, name: file.name, type: file.type });
-  };
 
   return (
     <div className="space-y-6">

@@ -326,6 +326,77 @@
   .scrollbar-rtl::-webkit-scrollbar-track {
     background: transparent;
   }
+  /* Rich Text Editor overrides */
+  .ProseMirror {
+    font-family: "IBM Plex Sans Arabic", sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--background);
+  }
+
+  .ProseMirror h1,
+  .ProseMirror h2,
+  .ProseMirror h3,
+  .ProseMirror h4,
+  .ProseMirror h5,
+  .ProseMirror h6 {
+    margin: 1.5rem 0 1rem;
+    font-weight: bold;
+  }
+
+  .ProseMirror p {
+    margin: 0 0 1rem;
+  }
+
+  .ProseMirror blockquote {
+    border-left: 4px solid var(--primary);
+    padding-left: 1rem;
+    color: var(--muted);
+  }
+
+  .ProseMirror ul,
+  .ProseMirror ol {
+    margin: 0 0 1rem 2rem;
+  }
+
+  .ProseMirror li {
+    margin: 0.5rem 0;
+  }
+
+  .ProseMirror img {
+    max-width: 100%;
+    border-radius: var(--radius);
+  }
+
+  .ProseMirror a {
+    color: var(--primary);
+    text-decoration: underline;
+  }
+
+  .ProseMirror a:hover {
+    text-decoration: none;
+  }
+  /* escape the brackets */
+  .richtext-gap-\[10px\] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .prose p:has(.image) {
+    @apply flex;
+  }
+
+  .prose .image {
+    /* display: inline; */
+    @apply max-w-fit mx-1;
+    img {
+      @apply rounded-lg;
+    }
+  }
 }
 
 :root {

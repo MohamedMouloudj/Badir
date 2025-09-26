@@ -68,7 +68,7 @@ export const signupOrgStep2Schema = z.object({
       "other",
     ],
     {
-      message: "الرجاء اختيار نوع المنظمة",
+      error: "الرجاء اختيار نوع المنظمة",
     }
   ),
 
@@ -115,7 +115,7 @@ export const signupOrgStep5Schema = z.object({
 // Step 6 Schema - Terms & Conditions
 export const signupOrgStep6Schema = z.object({
   acceptConditions: z.boolean().refine((val) => val === true, {
-    message: "يجب قبول الشروط والأحكام",
+    error: "يجب قبول الشروط والأحكام",
   }),
 });
 

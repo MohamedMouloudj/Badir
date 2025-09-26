@@ -13,7 +13,6 @@ import {
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { getPublicStorageUrl } from "@/actions/supabaseHelpers";
-import { toPlainOrganization } from "@/lib/utils";
 import OrgInitiative from "@/components/pages/OrgInitiative";
 import { workAreaOptions } from "@/types/Profile";
 

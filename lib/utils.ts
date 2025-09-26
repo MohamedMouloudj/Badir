@@ -1,12 +1,14 @@
 import { Organization, User, UserQualification } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { toast } from "sonner";
 import {
   getCountryCallingCode,
   getCountries,
   CountryCode,
   CountryCallingCode,
 } from "libphonenumber-js";
+import * as cheerio from "cheerio";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -103,4 +105,90 @@ export function getCountryFromCallingCode(
     }
   }
   return undefined;
+}
+
+/**
+ * Handle file upload, convert to base64 and validate size.
+ * @param file - The file to upload.
+ * @param fileSize - The maximum file size allowed.
+ * @param onChange - Callback function to handle the uploaded file data.
+ */
+export const handleFileUpload = async (
+  file: File | null,
+  fileSize: number,
+  onChange: (value: { base64: string; name: string; type: string }) => void
+) => {
+  if (!file) return;
+
+  if (file.size > fileSize) {
+    toast.error(
+      `حجم الملف كبير جدًا (الحد الأقصى ${fileSize / 1024 / 1024} ميجابايت)`
+    );
+    return;
+  }
+  const arrayBuffer = await file.arrayBuffer();
+  const base64 = Buffer.from(arrayBuffer).toString("base64");
+  onChange({ base64, name: file.name, type: file.type });
+};
+
+/**
+ * Format a date to a localized string
+ */
+export function formatDate(date: Date | string): string {
+  const d = new Date(date);
+  return d.toLocaleDateString("ar-DZ", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+/**
+ * Extract all image src attributes from HTML (server-safe, uses cheerio).
+ * Returns only non-empty src strings.
+ */
+export function extractImageSrcsFromHtml(html: string): string[] {
+  if (!html) return [];
+  const $ = cheerio.load(html);
+  const srcs: string[] = [];
+  $("img").each((_, el) => {
+    const src = $(el).attr("src");
+    if (src) srcs.push(src);
+  });
+  return srcs;
+}
+
+/**
+ * Extract all image src attributes from HTML (server-safe, uses cheerio).
+ * Browser version (use in client components).
+ * Returns only non-empty src strings.
+ */
+export function extractImageSrcsFromHtmlBrowser(html: string): string[] {
+  if (!html) return [];
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    return Array.from(doc.querySelectorAll("img"))
+      .map((img) => img.getAttribute("src") || "")
+      .filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Optional: normalize/validate src (allow only http(s) or data URIs).
+ * Returns null for invalid src.
+ */
+export function validateImageSrc(src: string): string | null {
+  if (!src) return null;
+  try {
+    // data: images allowed
+    if (src.startsWith("data:image/")) return src;
+    const u = new URL(src);
+    if (u.protocol === "http:" || u.protocol === "https:") return u.toString();
+    return null;
+  } catch {
+    return null;
+  }
 }

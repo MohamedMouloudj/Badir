@@ -10,7 +10,9 @@ export default function ParticipationStatusBadge({
   status: ParticipationStatus;
   className?: string;
 }) {
-  // Determine status info based on the participation status
+  /**
+   *  Determine status info based on the participation status
+   */
   const getStatusInfo = () => {
     switch (status) {
       case ParticipationStatus.approved:
@@ -21,12 +23,12 @@ export default function ParticipationStatusBadge({
       case ParticipationStatus.rejected:
         return {
           label: "مرفوض",
-          className: "bg-state-error text-neutrals-700",
-        };
-      case ParticipationStatus.cancelled:
-        return {
-          label: "ملغي",
           className: "bg-neutrals-300 text-neutrals-600",
+        };
+      case ParticipationStatus.kicked:
+        return {
+          label: "مطرود",
+          className: "bg-state-error text-neutrals-700",
         };
       case ParticipationStatus.registered:
       default:

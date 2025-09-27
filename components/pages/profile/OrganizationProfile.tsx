@@ -20,7 +20,6 @@ import {
 } from "lucide-react";
 import AppButton from "@/components/AppButton";
 import { getOrganizationLogo } from "@/actions/organization-profile";
-import { getPublicStorageUrl } from "@/actions/supabaseHelpers";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { updateOrganizationProfileAction } from "@/actions/organization-profile";
 import { organizationTypeOptions, workAreaOptions } from "@/types/Profile";
@@ -76,6 +75,7 @@ export default function OrganizationProfileForm({
         if (result.success) {
           toast.success(result.message || "تم حفظ التغييرات بنجاح");
           setIsUpdating(false);
+          setValue("logo", null);
         } else {
           if (result.errors) {
             // Handle field errors
@@ -113,14 +113,13 @@ export default function OrganizationProfileForm({
 
   useEffect(() => {
     async function fetchOrgLogo() {
-      const logoPath = await getOrganizationLogo();
-      if (!logoPath) {
+      const logo = await getOrganizationLogo();
+      if (!logo) {
         setOrgLogo(null);
         return;
       }
 
-      const logoUrl = await getPublicStorageUrl("avatars", logoPath);
-      setOrgLogo(logoUrl);
+      setOrgLogo(logo);
     }
 
     fetchOrgLogo();
@@ -141,7 +140,11 @@ export default function OrganizationProfileForm({
     <>
       <div className="flex-center gap-4 mb-4">
         <Avatar className="h-24 w-24">
-          <AvatarImage src={orgLogo || ""} alt={defaultValues.name} />
+          <AvatarImage
+            className="object-cover"
+            src={orgLogo || ""}
+            alt={defaultValues.name}
+          />
           <AvatarFallback className="border-2 border-primary-500 text-primary-500 font-semibold">
             <Building className="h-5 w-5" />
           </AvatarFallback>

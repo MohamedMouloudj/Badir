@@ -329,7 +329,6 @@
   /* Rich Text Editor overrides */
   .ProseMirror {
     font-family: "IBM Plex Sans Arabic", sans-serif;
-    font-size: 1rem;
     line-height: 1.5;
     padding: 1rem;
     border: 1px solid var(--border);
@@ -345,6 +344,26 @@
   .ProseMirror h6 {
     margin: 1.5rem 0 1rem;
     font-weight: bold;
+  }
+
+  /* Give editor headings higher priority by using explicit properties with !important */
+  .ProseMirror h1 {
+    font-size: var(--text-primary-lg) !important;
+    font-weight: 700 !important; /* equivalent to font-bold */
+    margin: 0.5rem 0 !important; /* equivalent to my-2 */
+    line-height: 1.1 !important;
+  }
+  .ProseMirror h2 {
+    font-size: var(--text-primary-md) !important;
+    font-weight: 700 !important;
+    margin: 0.5rem 0 !important;
+    line-height: 1.15 !important;
+  }
+  .ProseMirror h3 {
+    font-size: var(--text-primary-sm) !important;
+    font-weight: 700 !important;
+    margin: 0.5rem 0 !important;
+    line-height: 1.2 !important;
   }
 
   .ProseMirror p {
@@ -379,7 +398,17 @@
   .ProseMirror a:hover {
     text-decoration: none;
   }
-  /* escape the brackets */
+
+  .prose h1 {
+    @apply text-primary-lg font-bold my-2;
+  }
+  .prose h2 {
+    @apply text-primary-sm font-semibold my-2;
+  }
+  .prose h3 {
+    @apply text-secondary-md font-semibold my-2;
+  }
+
   .richtext-gap-\[10px\] {
     display: flex;
     flex-direction: column;

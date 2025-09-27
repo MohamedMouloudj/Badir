@@ -22,7 +22,6 @@ import MembersPanel from "@/components/pages/initiatives/MembersPanel";
 import RequestsPanel from "@/components/pages/initiatives/RequestsPanel";
 import InitiativeHeader from "@/components/pages/InitiativeHeader";
 import AppButton from "@/components/AppButton";
-import { getPublicStorageUrl } from "@/actions/supabaseHelpers";
 
 export async function generateMetadata({
   params,
@@ -112,9 +111,6 @@ export default async function InitiativeDetailsPage({
         options: q.options?.map(DOMPurify.sanitize) || [],
       }))
     : [];
-  const coverImageURL = initiative.coverImage
-    ? await getPublicStorageUrl("post-images", initiative.coverImage)
-    : null;
 
   if (canViewPosts) {
     if (
@@ -222,10 +218,10 @@ export default async function InitiativeDetailsPage({
       <div className="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-sm border-2 border-neutrals-300">
         {/* Initiative Header */}
         <div className="relative mb-6">
-          {coverImageURL && (
+          {initiative.coverImage && (
             <div className="w-full h-64 relative rounded-lg overflow-hidden mb-4">
               <Image
-                src={coverImageURL || ""}
+                src={initiative.coverImage || ""}
                 alt={initiative.titleAr}
                 fill
                 className="object-cover"

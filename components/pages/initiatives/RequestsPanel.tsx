@@ -9,6 +9,7 @@ import {
 } from "@/actions/participation";
 import { ParticipantRole, ParticipationStatus } from "@prisma/client";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 
 type Request = {
   id: string;
@@ -62,7 +63,9 @@ export default function RequestsPanel({
           className="flex items-center justify-between p-3 border border-neutrals-300 rounded-lg bg-white"
         >
           <div>
-            <p className="font-medium">{r.user.name}</p>
+            <Link href={`/profile/${r.user.id}`} className="hover:underline">
+              <p className="font-medium">{r.user.name}</p>
+            </Link>
             <p className="text-sm text-neutrals-500">{r.participantRole}</p>
           </div>
           <div className="flex gap-2">

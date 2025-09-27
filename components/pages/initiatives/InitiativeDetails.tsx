@@ -17,9 +17,6 @@ import parse from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { formatDate } from "@/lib/utils";
 import { InitiativeService } from "@/services/initiatives";
-import { getUserImage } from "@/actions/user-profile";
-import { getPublicStorageUrl } from "@/actions/supabaseHelpers";
-import { getOrganizationLogo } from "@/actions/organization-profile";
 
 interface InitiativeDetailsProps {
   initiative: NonNullable<
@@ -40,20 +37,14 @@ export default function InitiativeDetails({
 
   useEffect(() => {
     async function fetchUserImage() {
-      let imagePath: string | null = null;
-      if (initiative.organizerType === "user") {
-        imagePath = await getUserImage(initiative.organizerUser?.id || "");
+      if (initiative.organizerType === "user" && initiative.organizerUser) {
+        setOrganizerImage(initiative.organizerUser.image || null);
       } else {
-        imagePath = await getOrganizationLogo(
-          initiative.organizerOrg?.id || ""
-        );
-      }
-
-      if (imagePath) {
-        const imageUrl = await getPublicStorageUrl("avatars", imagePath);
-        setOrganizerImage(imageUrl || null);
-      } else {
-        setOrganizerImage(null);
+        if (initiative.organizerOrg) {
+          setOrganizerImage(initiative.organizerOrg.logo || null);
+        } else {
+          setOrganizerImage(null);
+        }
       }
     }
 

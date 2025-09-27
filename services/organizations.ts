@@ -1,4 +1,3 @@
-import { getPublicStorageUrl } from "@/actions/supabaseHelpers";
 import { prisma } from "@/lib/db";
 import { PaginatedResponse, PaginationParams } from "@/types/Pagination";
 import { Organization, OrganizationStatus, Prisma } from "@prisma/client";
@@ -91,7 +90,7 @@ export class OrganizationService {
         id: org.id,
         shortName: org.shortName,
         name: org.name,
-        logo: await getPublicStorageUrl("avatars", org.logo),
+        logo: org.logo,
         description: org.description,
         headquarters: org.headquarters,
         city: org.city,

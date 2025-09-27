@@ -77,16 +77,16 @@ export default function ParticipationCard({
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-          ) : status === ParticipationStatus.cancelled ? (
+          ) : status === ParticipationStatus.kicked ? (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Badge className="rounded-full py-1 px-2 text-neutrals-300 bg-neutrals-700 size-7">
                     <XCircle className="w-6 h-6" />
-                    <span className="sr-only">تم الإلغاء</span>
+                    <span className="sr-only">تم طردك</span>
                   </Badge>
                 </TooltipTrigger>
-                <TooltipContent>تم الإلغاء</TooltipContent>
+                <TooltipContent>تم طردك</TooltipContent>
               </Tooltip>
             </TooltipProvider>
           ) : (

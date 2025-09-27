@@ -20,7 +20,6 @@ import {
 } from "lucide-react";
 import AppButton from "@/components/AppButton";
 import { getUserImage, updateUserProfileAction } from "@/actions/user-profile";
-import { getPublicStorageUrl } from "@/actions/supabaseHelpers";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { isEqual } from "lodash";
 
@@ -112,8 +111,7 @@ export default function UserProfileForm({
 
   useEffect(() => {
     async function fetchUserImage() {
-      const imagePath = await getUserImage();
-      const image = await getPublicStorageUrl("avatars", imagePath || "");
+      const image = await getUserImage();
       if (!image) {
         setUserImage(null);
         return;

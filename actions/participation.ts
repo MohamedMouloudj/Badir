@@ -220,9 +220,9 @@ export async function rejectParticipationAction(
 
 export async function kickMemberAction(id: string, initiativeId: string) {
   await assertManager(initiativeId);
-  const participant = await prisma.initiativeParticipant.update({
+  await prisma.initiativeParticipant.update({
     where: { id },
-    data: { status: ParticipationStatus.cancelled },
+    data: { status: ParticipationStatus.kicked },
   });
   // decrement if previously counted
   await prisma.initiative.update({

@@ -156,11 +156,11 @@ model InitiativeParticipant {
   userId            String              @map("user_id")
   participantRole   ParticipantRole     @map("participant_role")
   participationForm Json?               @map("participation_form")
-  status            ParticipationStatus @default(registered)
   checkInTime       DateTime?           @map("check_in_time")
   isCheckedIn       Boolean             @default(false) @map("is_checked_in")
   createdAt         DateTime            @default(now()) @map("created_at")
   updatedAt         DateTime            @default(now()) @updatedAt @map("updated_at")
+  status            ParticipationStatus @default(registered)
   initiative        Initiative          @relation(fields: [initiativeId], references: [id], onDelete: Cascade)
   user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -206,8 +206,8 @@ model SupportRequest {
   urgency        SupportUrgency @default(medium)
   status         SupportStatus  @default(active)
   requestedAt    DateTime       @default(now()) @map("requested_at")
-  createdAt      DateTime       @default(now()) @map("created_at")
   updatedAt      DateTime       @default(now()) @updatedAt @map("updated_at")
+  createdAt      DateTime       @default(now()) @map("created_at")
   organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@map("support_requests")
@@ -338,7 +338,7 @@ enum ParticipationStatus {
   registered
   approved
   rejected
-  cancelled
+  kicked
 }
 
 enum OrganizationStatus {

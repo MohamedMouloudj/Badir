@@ -13,6 +13,7 @@ import { InitiativeStatus, OrganizerType, UserType } from "@prisma/client";
 import { OrganizationService } from "@/services/organizations";
 import { ActionResponse } from "@/types/Statics";
 import { InitiativeService } from "@/services/initiatives";
+import { getPublicStorageUrl } from "./supabaseHelpers";
 
 export async function createInitiativeAction(
   data: NewInitiativeFormData
@@ -110,7 +111,7 @@ export async function createInitiativeAction(
           type
         );
 
-        coverImagePath = result.path;
+        coverImagePath = await getPublicStorageUrl("post-images", result.path);
       } catch (error) {
         console.error("Error uploading cover image:", error);
         return {
@@ -204,7 +205,7 @@ export async function updateInitiativeAction(
           type
         );
 
-        coverImagePath = result.path;
+        coverImagePath = await getPublicStorageUrl("post-images", result.path);
       } catch (error) {
         console.error("Error uploading cover image:", error);
         return { success: false, error: "فشل تحميل صورة الغلاف" };

@@ -1,10 +1,9 @@
 "use client";
 
-import { getInitiativeCover } from "@/actions/initiatives";
-import { getPublicStorageUrl } from "@/actions/supabaseHelpers";
 import { formatDate } from "@/lib/utils";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
+import BackButton from "../BackButton";
 
 type Props = {
   title: string;
@@ -51,11 +50,10 @@ export default function InitiativeHeader({
 
   const fetchInitiativeCover = useCallback(async () => {
     if (coverImage) {
-      const imageUrl = await getPublicStorageUrl("post-images", coverImage);
-      setImage(imageUrl);
-    } else {
-      setImage(null);
+      setImage(coverImage);
+      return;
     }
+    setImage(null);
   }, []);
 
   useEffect(() => {
@@ -88,6 +86,9 @@ export default function InitiativeHeader({
             compact ? "opacity-0 pointer-events-none" : "opacity-100"
           }`}
         >
+          <div className="mb-4 flex justify-end absolute top-4 left-4">
+            <BackButton />
+          </div>
           <div className="w-full max-w-5xl mx-auto p-6 pb-10 text-right">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white drop-shadow-lg">
               {title}

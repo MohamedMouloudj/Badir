@@ -18,6 +18,9 @@ import { OrganizationService } from "@/services/organizations";
 import { getCallingCodeFromCountry, mimeTypeToExtension } from "@/lib/utils";
 import path from "path";
 import { OrganizationProfile, validateOrganizationProfile } from "@/schemas";
+import { getPublicStorageUrl } from "./supabaseHelpers";
+
+type FileField = "officialLicense" | "logo" | "identificationCard";
 
 /**
  * Completes the organization profile setup after registration.
@@ -59,9 +62,13 @@ export async function completeOrgProfileAction(
     // validate the data on server just in case, the front validation is working
     orgRegistrationSchema.parse(data);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const uploadPromises: Promise<any>[] = [];
-    const fileFields = ["officialLicense", "logo", "identificationCard"];
+    const uploadPromises: { field: FileField; url: Promise<string | null> }[] =
+      [];
+    const fileFields: FileField[] = [
+      "officialLicense",
+      "logo",
+      "identificationCard",
+    ];
 
     for (const field of fileFields) {
       const fileValue = data[field as keyof typeof data];
@@ -78,15 +85,14 @@ export async function completeOrgProfileAction(
           .replace(/\s+/g, "-")
           .replace(ext, "")}${ext}`;
         const bucketName: BUCKETS = field === "logo" ? "avatars" : "documents";
-
         const filePath = `${userId}/${fileName}`;
 
         const storage = new StorageHelpers();
-        const uploadPromise = storage
+        const uploadPromise = await storage
           .uploadFile(bucketName, filePath, fileBuffer, type)
           .then((result) => ({
             field,
-            url: result.path,
+            url: getPublicStorageUrl(bucketName, result.path),
           }))
           .catch((error) => {
             console.error(`Error uploading ${field}:`, error);
@@ -96,9 +102,16 @@ export async function completeOrgProfileAction(
         uploadPromises.push(uploadPromise);
       }
     }
-    const uploadResults = await Promise.all(uploadPromises);
 
-    const uploadedUrls: Record<string, string> = {};
+    const uploadResults = await Promise.all(
+      uploadPromises.map((p) => p.url.then((url) => ({ field: p.field, url })))
+    );
+
+    const uploadedUrls: Record<FileField, string | null> = {
+      officialLicense: null,
+      logo: null,
+      identificationCard: null,
+    };
     uploadResults.forEach(({ field, url }) => {
       uploadedUrls[field] = url;
     });
@@ -274,9 +287,9 @@ export async function updateOrganizationProfileAction(
     }
 
     const organizationId = userWithOrg.organization.id;
-    const uploadResults: Record<string, string> = {};
+    const uploadResults: Record<string, string | null> = {};
 
-    // Handle file uploads (logo, ID card)
+    // Handle file uploads (logo, ID card). Do I need to add ID card here?
     // const fileFields = ["logo", "identificationCard"];
     const fileFields = ["logo"];
 
@@ -322,7 +335,10 @@ export async function updateOrganizationProfileAction(
             }
           }
 
-          uploadResults[field] = result.path;
+          uploadResults[field] = await getPublicStorageUrl(
+            bucketName,
+            result.path
+          );
         } catch (error) {
           console.error(`Error uploading ${field}:`, error);
           return {
@@ -361,7 +377,7 @@ export async function updateOrganizationProfileAction(
         workAreas: data.workAreas,
         previousInitiatives: data.previousInitiatives || null,
         userRole: data.userRole || "رئيس المنظمة",
-        logo: uploadResults.logo || userWithOrg.organization.logo,
+        logo: uploadResults.logo || userWithOrg.organization.logo || undefined,
         // officialLicense:
         //   uploadResults.officialLicense ||
         //   userWithOrg.organization.officialLicense,

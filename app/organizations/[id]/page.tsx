@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import { getPublicStorageUrl } from "@/actions/supabaseHelpers";
 import OrgInitiative from "@/components/pages/OrgInitiative";
 import { workAreaOptions } from "@/types/Profile";
 
@@ -52,18 +51,12 @@ export default async function OrganizationProfilePage({
     id
   );
 
-  const logoPath = orgData.logo;
-  let logoUrl = null;
-  if (logoPath) {
-    logoUrl = await getPublicStorageUrl("avatars", logoPath);
-  }
-
   return (
     <div className="min-h-screen bg-neutrals-100 p-6" dir="rtl">
       <div className="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-sm border-2 border-neutrals-300">
         <div className="flex-center gap-4 mb-8">
           <Avatar className="h-24 w-24">
-            <AvatarImage src={logoUrl || ""} alt={orgData.name} />
+            <AvatarImage src={orgData.logo || ""} alt={orgData.name} />
             <AvatarFallback className="border-2 border-primary-500 text-primary-500 font-semibold">
               <Building className="h-8 w-8" />
             </AvatarFallback>

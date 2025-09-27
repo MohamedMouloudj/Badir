@@ -8,6 +8,7 @@ import {
 } from "@/actions/participation";
 import { ParticipantRole, ParticipationStatus } from "@prisma/client";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 
 type Member = {
   id: string;
@@ -57,7 +58,9 @@ export default function MembersPanel({
           className="flex items-center justify-between p-3 border border-neutrals-300 rounded-lg bg-white"
         >
           <div>
-            <p className="font-medium">{m.user.name}</p>
+            <Link href={`/profile/${m.user.id}`} className="hover:underline">
+              <p className="font-medium">{m.user.name}</p>
+            </Link>
             <p className="text-sm text-neutrals-500">{m.participantRole}</p>
           </div>
           {m.participantRole !== "manager" && (

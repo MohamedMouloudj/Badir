@@ -13,7 +13,6 @@ import { ParticipationService } from "@/services/participations";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import ParticipationCard from "@/components/pages/ParticipationCard";
-import { getPublicStorageUrl } from "@/actions/supabaseHelpers";
 
 export async function generateMetadata({
   params,
@@ -54,18 +53,12 @@ export default async function UserProfilePage({
     await ParticipationService.getUserParticipations(id)
   ).filter((p) => p.status === "approved");
 
-  const imagePath = user.image;
-  let imageUrl = null;
-  if (imagePath) {
-    imageUrl = await getPublicStorageUrl("avatars", imagePath);
-  }
-
   return (
     <div className="min-h-screen bg-neutrals-100 p-6" dir="rtl">
       <div className="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-sm border-2 border-neutrals-300">
         <div className="flex-center gap-4 mb-8">
           <Avatar className="h-24 w-24">
-            <AvatarImage src={imageUrl || ""} alt={userData.firstName} />
+            <AvatarImage src={userData.image || ""} alt={userData.firstName} />
             <AvatarFallback className="border-2 border-primary-500 text-primary-500 font-semibold">
               <User className="h-8 w-8" />
             </AvatarFallback>

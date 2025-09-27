@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "@/components/FormInput";
@@ -13,6 +13,7 @@ import { toast } from "sonner";
 
 export default function LoginForm() {
   const [isPending, startTransition] = useTransition();
+  const [isLoginSuccessful, setIsLoginSuccessful] = useState(false);
 
   const {
     control,
@@ -34,11 +35,13 @@ export default function LoginForm() {
       const result = await loginAction(data);
 
       if (result.success && result.redirectTo) {
+        setIsLoginSuccessful(true);
         if (result.message) {
           toast.success(result.message);
         }
         window.location.href = result.redirectTo;
       } else {
+        setIsLoginSuccessful(false);
         if (result.errors) {
           // Set field-specific errors from server
           Object.entries(result.errors).forEach(([field, messages]) => {
@@ -119,7 +122,7 @@ export default function LoginForm() {
         <div className="flex-center justify-center">
           <AppButton
             type="submit"
-            disabled={isPending}
+            disabled={isPending || isLoginSuccessful}
             border="rounded"
             className="justify-center"
             icon={

@@ -16,7 +16,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { UserType } from "@prisma/client";
 import { getUserImage } from "@/actions/user-profile";
-import { getPublicStorageUrl } from "@/actions/supabaseHelpers";
 import Image from "next/image";
 import { getOrganizationLogo } from "@/actions/organization-profile";
 
@@ -37,9 +36,7 @@ export function AuthProfileButtons({
   const fetchUserImage = useCallback(async () => {
     const imagePath = await getUserImage();
     if (imagePath) {
-      const imageUrl = await getPublicStorageUrl("avatars", imagePath);
-
-      setImage(imageUrl);
+      setImage(imagePath);
     } else {
       setImage(null);
     }
@@ -48,8 +45,7 @@ export function AuthProfileButtons({
   const fetchOrganizationLogo = useCallback(async () => {
     const logoPath = await getOrganizationLogo();
     if (logoPath) {
-      const logoUrl = await getPublicStorageUrl("avatars", logoPath);
-      setImage(logoUrl);
+      setImage(logoPath);
     } else {
       setImage(null);
     }
@@ -181,9 +177,11 @@ export function AuthProfileButtons({
                 <button
                   className="focus:outline-none focus:ring-2 focus:ring-secondary-600 rounded-full"
                   disabled={isPending}
+                  aria-label="Open user menu"
                 >
                   <Avatar className="h-10 w-10 md:h-12 md:w-12 cursor-pointer hover:ring-2 hover:ring-primary-400 ring-offset-1 transition-all">
                     <AvatarImage
+                      className="object-cover"
                       src={image || ""}
                       alt={session.user.name || "المستخدم"}
                     />

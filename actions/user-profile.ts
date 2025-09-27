@@ -17,6 +17,7 @@ import path from "path";
 import { UserProfile, validateUserProfile } from "@/schemas";
 import { UserService } from "@/services/user";
 import { ActionResponse } from "@/types/Statics";
+import { getPublicStorageUrl } from "./supabaseHelpers";
 
 export async function updateUserProfileAction(
   data: UserProfile
@@ -36,7 +37,7 @@ export async function updateUserProfileAction(
     validateUserProfile(data);
 
     const userId = session.user.id;
-    let imageUrl: string | undefined;
+    let imageUrl: string | null = null;
 
     // Handle image upload if provided
     if (data.image && typeof data.image === "string" && data.image.length > 0) {
@@ -73,7 +74,9 @@ export async function updateUserProfileAction(
           }
         }
 
-        imageUrl = result.path;
+        // I added this here because I think setting users image to url directly is way more efficient
+        // than fetching it every time from storage bucket
+        imageUrl = await getPublicStorageUrl("avatars", result.path);
       } catch (error) {
         console.error("Error uploading profile image:", error);
         return {
@@ -100,7 +103,7 @@ export async function updateUserProfileAction(
         state: data.state,
         country: data.country,
         bio: data.bio || null,
-        image: imageUrl || undefined, // Only update if new image was uploaded
+        image: imageUrl || undefined,
         latitude: data.latitude ? new Decimal(data.latitude) : null,
         longitude: data.longitude ? new Decimal(data.longitude) : null,
         updatedAt: new Date(),

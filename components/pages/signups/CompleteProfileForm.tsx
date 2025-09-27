@@ -41,13 +41,13 @@ const stepConfig = [
 export default function CompleteProfileForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isProfileComplete, setIsProfileComplete] = useState(false);
   const router = useRouter();
 
   const methods = useForm<RegistrationFormData>({
     mode: "onChange",
     defaultValues: profileDefaultValues,
   });
-
   const { handleSubmit, getValues, setError, clearErrors } = methods;
 
   const validateCurrentStep = async () => {
@@ -105,13 +105,14 @@ export default function CompleteProfileForm() {
         return;
       }
 
-      // Submit to server action
       const result = await completeProfileAction(data);
 
       if (result.success) {
+        setIsProfileComplete(true);
         toast.success("تم إكمال الملف الشخصي بنجاح!");
         router.replace(AUTHORIZED_REDIRECTION);
       } else {
+        setIsProfileComplete(false);
         toast.error(result.error || "حدث خطأ أثناء حفظ البيانات");
       }
     } catch (error) {
@@ -185,7 +186,7 @@ export default function CompleteProfileForm() {
                       <AppButton
                         type="submit"
                         size="md"
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || isProfileComplete}
                         className="flex items-center gap-2"
                         border="rounded"
                         icon={

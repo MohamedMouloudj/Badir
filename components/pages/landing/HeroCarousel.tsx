@@ -52,6 +52,7 @@ export default function HeroCarousel() {
               fill
               sizes="(max-width: 768px) 200px, 600px"
               className="object-cover"
+              quality={80}
               priority={index === 0}
             />
 

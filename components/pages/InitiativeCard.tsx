@@ -55,7 +55,10 @@ export default function InitiativeCard({
                 <p>الموعد النهائي للتسجيل</p>
                 <p dir="rtl">{formatDate(registrationDeadline)}</p>
               </TooltipContent>
-              <TooltipTrigger className="absolute top-1 right-1">
+              <TooltipTrigger
+                className="absolute top-1 right-1"
+                aria-label="Show registration deadline"
+              >
                 <Clock className="w-6 h-6 text-neutrals-400" />
               </TooltipTrigger>
             </Tooltip>

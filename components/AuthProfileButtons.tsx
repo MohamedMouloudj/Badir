@@ -177,6 +177,7 @@ export function AuthProfileButtons({
                 <button
                   className="focus:outline-none focus:ring-2 focus:ring-secondary-600 rounded-full"
                   disabled={isPending}
+                  aria-label="Open user menu"
                 >
                   <Avatar className="h-10 w-10 md:h-12 md:w-12 cursor-pointer hover:ring-2 hover:ring-primary-400 ring-offset-1 transition-all">
                     <AvatarImage

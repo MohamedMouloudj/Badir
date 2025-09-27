@@ -50,6 +50,7 @@ export default function FilterSelect({
             "w-full border border-neutrals-300 rounded-lg bg-white text-neutrals-700 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors h-12",
             className
           )}
+          aria-label="Select option"
         >
           <SelectValue placeholder={placeholder || "اختر"} />
         </SelectTrigger>

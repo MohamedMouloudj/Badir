@@ -27,13 +27,14 @@ export class ParticipationService {
   static API_PATH = "/participations";
 
   static async getUserParticipations(
-    userId: string
+    userId: string,
+    isOwner: boolean = false
   ): Promise<UserParticipation[]> {
     // Participations as participant
     const participations = await prisma.initiativeParticipant.findMany({
       where: {
         userId,
-        status: { not: "cancelled" },
+        status: isOwner ? undefined : { not: ParticipationStatus.rejected },
       },
       include: {
         initiative: {

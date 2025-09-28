@@ -30,10 +30,12 @@ export default async function middleware(request: NextRequest) {
     if (sessionCookie) {
       // if (!session?.user.profileCompleted && pathname !== "/complete-profile") {
       //   return NextResponse.redirect(new URL("/complete-profile", request.url));
-      // } ---> Move it to component level validation
-      return NextResponse.redirect(
+      // } ---> Moved it to component level validation
+      const response = NextResponse.redirect(
         new URL(AUTHORIZED_REDIRECTION, request.url)
       );
+      response.headers.set("x-pathname", pathname);
+      return response;
     }
     return null;
   }
@@ -42,7 +44,9 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  return NextResponse.next();
+  const response = NextResponse.next();
+  response.headers.set("x-pathname", pathname);
+  return response;
 }
 
 export const config = {

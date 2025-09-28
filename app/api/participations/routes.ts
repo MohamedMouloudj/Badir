@@ -3,8 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    console.log("GET /api/participations called");
-    console.log(request.nextUrl.searchParams);
     const userId = request.nextUrl.searchParams.get("userId");
     if (!userId) {
       const allParticipations = await ParticipationService.getAll();

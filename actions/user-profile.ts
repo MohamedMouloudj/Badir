@@ -17,7 +17,8 @@ import path from "path";
 import { UserProfile, validateUserProfile } from "@/schemas";
 import { UserService } from "@/services/user";
 import { ActionResponse } from "@/types/Statics";
-import { getPublicStorageUrl } from "./supabaseHelpers";
+import { getPublicStorageUrl } from "./helpers";
+import { AUTHORIZED_REDIRECTION } from "@/data/routes";
 
 export async function updateUserProfileAction(
   data: UserProfile
@@ -178,7 +179,14 @@ export async function updateUserProfileAction(
 
 export async function completeProfileAction(
   data: RegistrationFormData
-): Promise<ActionResponse<RegistrationFormData, {}>> {
+): Promise<
+  ActionResponse<
+    RegistrationFormData,
+    {
+      redirectTo: string;
+    }
+  >
+> {
   try {
     // Get current session
     const session = await auth.api.getSession({
@@ -250,6 +258,7 @@ export async function completeProfileAction(
     return {
       success: true,
       message: "تم إكمال الملف الشخصي بنجاح",
+      data: { redirectTo: AUTHORIZED_REDIRECTION },
     };
   } catch (error) {
     if (error instanceof z.ZodError) {

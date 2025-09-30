@@ -9,6 +9,8 @@
 
 Our project has two problematic migrations that will fail on fresh setups due to Supabase/PostgreSQL constraints:
 
+> Update: There is another similar issue with Migration 20250927011553_updated_participation_status. follow same steps as Issue 2 below to fix it.
+
 ### Issue 2: Organization Verification Migration
 
 **Migration:** `20250918220621_org_status`

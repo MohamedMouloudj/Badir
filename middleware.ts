@@ -30,7 +30,7 @@ export default async function middleware(request: NextRequest) {
     if (sessionCookie) {
       // if (!session?.user.profileCompleted && pathname !== "/complete-profile") {
       //   return NextResponse.redirect(new URL("/complete-profile", request.url));
-      // } ---> Move it to component level validation
+      // } ---> Moved it to component level validation
       return NextResponse.redirect(
         new URL(AUTHORIZED_REDIRECTION, request.url)
       );

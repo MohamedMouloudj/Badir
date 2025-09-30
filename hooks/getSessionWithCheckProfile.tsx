@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+import { auth, Session } from "@/lib/auth";
 import { UserType } from "@prisma/client";
 import { headers } from "next/headers";
 import { redirect, RedirectType } from "next/navigation";
@@ -7,7 +7,7 @@ import { redirect, RedirectType } from "next/navigation";
  * Get the session on server side and check if the user profile is complete
  * @returns the session if exists, otherwise redirects to complete profile page if profile is incomplete
  */
-const getSessionWithCheckProfile = async () => {
+const getSessionWithCheckProfile: () => Promise<Session | null> = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });

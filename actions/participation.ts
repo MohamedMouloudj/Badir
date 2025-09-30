@@ -10,6 +10,7 @@ import DOMPurify from "isomorphic-dompurify";
 import { FormResponseType, JoinInitiativeParams } from "@/schemas";
 import { ParticipationService } from "@/services/participations";
 import { InitiativeService } from "@/services/initiatives";
+import { assertManager } from "./helpers";
 
 export async function joinInitiativeAction(
   params: JoinInitiativeParams
@@ -122,25 +123,6 @@ export async function joinInitiativeAction(
       error: "حدث خطأ أثناء الانضمام إلى المبادرة",
     };
   }
-}
-
-/**
- * Helpers for manager-only member management
- * @param initiativeId Initiative ID
- * @returns User ID
- */
-async function assertManager(initiativeId: string) {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session?.user) throw new Error("unauthorized");
-  const initiative = await InitiativeService.getById(
-    initiativeId,
-    session.user.id
-  );
-  const isManager =
-    initiative?.organizerUserId === session?.user.id ||
-    initiative?.organizerOrg?.userId === session?.user.id;
-  if (!isManager) throw new Error("forbidden");
-  return { userId: session.user.id };
 }
 
 export async function listApprovedMembersAction(initiativeId: string) {

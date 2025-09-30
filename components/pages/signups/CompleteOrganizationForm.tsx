@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { completeOrgProfileAction } from "@/actions/organization-profile";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import AppButton from "@/components/AppButton";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
@@ -23,8 +22,6 @@ import Step4DescriptionsForm from "./form-steps/organization/Step4Descriptions";
 import Step5PersonalContactForm from "./form-steps/organization/Step5PersonalContact";
 import Step6DocumentsForm from "./form-steps/organization/Step6Documents";
 import Step7TermsForm from "./form-steps/organization/Step7TemsAndConditions";
-
-import { AUTHORIZED_REDIRECTION } from "@/data/routes";
 
 const asideImage1 = "/images/auth-form-aside.png";
 const asideImage2 = "/images/auth-form-aside2.png";
@@ -58,7 +55,6 @@ export default function CompleteOrganizationForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isProfileComplete, setIsProfileComplete] = useState(false);
-  const router = useRouter();
 
   const methods = useForm<OrgRegistrationFormData>({
     mode: "onChange",
@@ -120,10 +116,10 @@ export default function CompleteOrganizationForm() {
 
       const result = await completeOrgProfileAction(data);
 
-      if (result.success) {
+      if (result.success && result.data) {
         setIsProfileComplete(true);
         toast.success("تم إكمال الملف الشخصي بنجاح!");
-        router.replace(AUTHORIZED_REDIRECTION);
+        window.location.href = result.data.redirectTo;
       } else {
         setIsProfileComplete(false);
         toast.error(result.error || "حدث خطأ أثناء حفظ البيانات");

@@ -1,9 +1,8 @@
 "use client";
 
 import { useSession } from "@/lib/auth-client";
-import React, { useState, useTransition, useEffect, useCallback } from "react";
-import { logoutAction } from "@/actions/logout";
-import { LogOut, User, Settings, Star } from "lucide-react";
+import { useState, useTransition, useEffect, useCallback } from "react";
+import { User, Settings, Star } from "lucide-react";
 import SignInButton from "./SignInButton";
 import SignUpButton from "./SignUpButton";
 import {
@@ -18,6 +17,7 @@ import { UserType } from "@prisma/client";
 import { getUserImage } from "@/actions/user-profile";
 import Image from "next/image";
 import { getOrganizationLogo } from "@/actions/organization-profile";
+import Logout from "./Logout";
 
 export function AuthProfileButtons({
   isMobile,
@@ -26,7 +26,7 @@ export function AuthProfileButtons({
   isMobile: boolean;
   onMenuAction?: () => void;
 }) {
-  const { data: session, isPending: isSessionPending, refetch } = useSession();
+  const { data: session, isPending: isSessionPending } = useSession();
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -50,28 +50,6 @@ export function AuthProfileButtons({
       setImage(null);
     }
   }, []);
-
-  const handleLogout = () => {
-    startTransition(async () => {
-      try {
-        setIsPopoverOpen(false);
-        onMenuAction?.();
-
-        await logoutAction();
-        refetch?.();
-
-        setTimeout(() => {
-          router.push("/");
-          router.refresh();
-        }, 100);
-      } catch (error) {
-        console.error("Logout failed:", error);
-        refetch?.();
-        router.push("/");
-        router.refresh();
-      }
-    });
-  };
 
   useEffect(() => {
     if (!session?.user || hasLoadedImage) return;
@@ -158,14 +136,11 @@ export function AuthProfileButtons({
                   </Link>
 
                   {/* Logout Button */}
-                  <button
-                    onClick={handleLogout}
-                    disabled={isPending}
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-state-error hover:bg-neutrals-200 rounded-md transition-colors w-full text-right disabled:opacity-50"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    {isPending ? "جاري تسجيل الخروج..." : "تسجيل الخروج"}
-                  </button>
+                  <Logout
+                    onMenuAction={onMenuAction}
+                    setIsPopoverOpen={setIsPopoverOpen}
+                    isMobile={isMobile}
+                  />
                 </div>
               </PopoverContent>
             </Popover>
@@ -226,14 +201,11 @@ export function AuthProfileButtons({
                   </Link>
 
                   {/* Logout Button */}
-                  <button
-                    onClick={handleLogout}
-                    disabled={isPending}
-                    className="flex items-center gap-3 px-3 py-2 text-sm text-state-error hover:bg-neutrals-200 rounded-md transition-colors w-full text-right disabled:opacity-50"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    {isPending ? "جاري تسجيل الخروج..." : "تسجيل الخروج"}
-                  </button>
+                  <Logout
+                    onMenuAction={onMenuAction}
+                    setIsPopoverOpen={setIsPopoverOpen}
+                    isMobile={isMobile}
+                  />
                 </div>
               </PopoverContent>
             </Popover>

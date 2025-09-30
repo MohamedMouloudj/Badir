@@ -1,12 +1,16 @@
-export const organizationTypeOptions = [
-  { value: "charity", label: "جمعية خيرية" },
-  { value: "youth", label: "منظمة شبابية" },
-  { value: "educational", label: "مؤسسة تعليمية" },
-  { value: "cultural", label: "مؤسسة ثقافية / إعلامية" },
-  { value: "health", label: "مؤسسة صحية" },
-  { value: "religious", label: "مؤسسة دينية" },
-  { value: "other", label: "أخرى" },
-];
+export const ORGANIZATION_TYPES = {
+  charity: "جمعية خيرية",
+  youth: "منظمة شبابية",
+  educational: "مؤسسة تعليمية",
+  cultural: "مؤسسة ثقافية / إعلامية",
+  health: "مؤسسة صحية",
+  religious: "مؤسسة دينية",
+  other: "أخرى",
+} as const;
+
+export const organizationTypeOptions = Object.entries(ORGANIZATION_TYPES).map(
+  ([value, label]) => ({ value, label })
+);
 
 export const workAreaOptions = [
   { value: "education", label: "التعليم والتدريب" },

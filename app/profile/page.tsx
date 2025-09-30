@@ -97,7 +97,8 @@ export default async function Page() {
       }
 
       const participations = await ParticipationService.getUserParticipations(
-        session.user.id
+        session.user.id,
+        true
       );
 
       return (

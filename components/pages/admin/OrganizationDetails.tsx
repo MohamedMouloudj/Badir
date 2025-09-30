@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+"use client";
+
+import { useState, useTransition } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -21,13 +23,15 @@ import {
 import { AdminService } from "@/services/admin";
 import { formatDate } from "@/lib/utils";
 import { AdminOrganizationStatusBadge } from "../AdminStatusBadge";
+import { updateOrganizationStatusAction } from "@/actions/admin";
+import { toast } from "sonner";
 
 interface OrganizationDetailsProps {
   organization: Awaited<ReturnType<typeof AdminService.getOrganizationById>>;
 }
 
 const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [rejectionReason, setRejectionReason] = useState("");
   const [showRejectionForm, setShowRejectionForm] = useState(false);
 
@@ -48,18 +52,24 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
       return;
     }
 
-    setIsUpdating(true);
     try {
       // Replace with actual server action call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log(`Updating organization ${organization.id} to ${status}`, {
-        rejectionReason,
+      startTransition(async () => {
+        const result = await updateOrganizationStatusAction(
+          organization.id,
+          status,
+          status === "rejected" ? rejectionReason : undefined
+        );
+
+        if (result.success) {
+          toast.success("تم تحديث حالة المنظمة بنجاح");
+        } else {
+          toast.error(result.error || "حدث خطأ أثناء تحديث حالة المنظمة");
+        }
       });
-      // Handle success (show notification, redirect, etc.)
     } catch (error) {
       console.error("Error updating organization status:", error);
     } finally {
-      setIsUpdating(false);
       setShowRejectionForm(false);
       setRejectionReason("");
     }
@@ -317,7 +327,7 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
                     <div className="flex gap-2">
                       <Button
                         onClick={() => handleStatusUpdate("rejected")}
-                        disabled={isUpdating || !rejectionReason.trim()}
+                        disabled={isPending || !rejectionReason.trim()}
                         variant="destructive"
                         size="sm"
                       >
@@ -339,7 +349,7 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
                   <>
                     <Button
                       onClick={() => handleStatusUpdate("approved")}
-                      disabled={isUpdating}
+                      disabled={isPending}
                       className="w-full bg-green-600 hover:bg-green-700"
                     >
                       <CheckCircle className="w-4 h-4 ml-1" />
@@ -347,7 +357,7 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
                     </Button>
                     <Button
                       onClick={() => setShowRejectionForm(true)}
-                      disabled={isUpdating}
+                      disabled={isPending}
                       variant="destructive"
                       className="w-full"
                     >
@@ -423,7 +433,7 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
         </div>
       </div>
 
-      {isUpdating && (
+      {isPending && (
         <Alert className="fixed bottom-4 right-4 w-auto">
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>جاري تحديث حالة المنظمة...</AlertDescription>

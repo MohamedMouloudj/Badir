@@ -38,6 +38,7 @@ import {
   AlertCircle,
   Loader2,
   ArrowUpLeft,
+  ArrowUpRight,
 } from "lucide-react";
 import {
   AdminOrganizationCard,
@@ -378,9 +379,11 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                       <div className="flex justify-between items-start mb-4">
                         <div className="flex-1">
                           <Link
-                            href={`/organizations/${org.id}`}
+                            href={`/admin/organizations/${org.id}`}
                             target="_blank"
+                            className="flex items-center"
                           >
+                            <ArrowUpRight className="h-4 w-4 inline-block ml-1 text-gray-500" />
                             <h3 className="text-lg font-semibold text-gray-900 hover:underline">
                               {org.name}
                             </h3>
@@ -652,9 +655,16 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                     <CardContent className="p-6">
                       <div className="flex justify-between items-start mb-4">
                         <div className="flex-1">
-                          <h3 className="text-lg font-semibold text-gray-900">
-                            {initiative.titleAr}
-                          </h3>
+                          <Link
+                            href={`/admin/initiatives/${initiative.id}`}
+                            target="_blank"
+                            className="flex items-center"
+                          >
+                            <ArrowUpRight className="h-4 w-4 inline-block ml-1 text-gray-500" />
+                            <h3 className="text-lg font-semibold text-gray-900 hover:underline">
+                              {initiative.titleAr}
+                            </h3>
+                          </Link>
                           {initiative.titleEn && (
                             <p className="text-sm text-gray-600">
                               {initiative.titleEn}

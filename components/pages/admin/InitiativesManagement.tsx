@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +22,7 @@ import {
   XCircle,
   FileText,
   AlertCircle,
+  ArrowUpRight,
 } from "lucide-react";
 import { AdminInitiativeCard, AdminService } from "@/services/admin";
 import { PaginatedResponse } from "@/types/Pagination";
@@ -30,6 +31,9 @@ import { formatDate } from "@/lib/utils";
 import { AdminInitiativeStatusBadge } from "../AdminStatusBadge";
 import SearchInput from "@/components/SearchInput";
 import FilterSelect from "@/components/FilterSelect";
+import Link from "next/link";
+import { updateInitiativeStatusAction } from "@/actions/admin";
+import { toast } from "sonner";
 
 type PaginationData = PaginatedResponse<AdminInitiativeCard[]>["pagination"];
 
@@ -51,8 +55,7 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
   });
   const [selectedInitiative, setSelectedInitiative] =
     useState<AdminInitiativeCard | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
   const [rejectionReason, setRejectionReason] = useState("");
   const [showRejectionForm, setShowRejectionForm] = useState(false);
 
@@ -65,20 +68,27 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
       return;
     }
 
-    setIsLoading(true);
     try {
-      // Mock API call - replace with actual server action
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      startTransition(async () => {
+        const result = await updateInitiativeStatusAction(id, status);
 
-      setInitiatives((prev) =>
-        prev.map((init) => (init.id === id ? { ...init, status } : init))
-      );
-
-      setError(null);
+        if (result.success) {
+          setInitiatives((prev) =>
+            prev.map((init) => (init.id === id ? { ...init, status } : init))
+          );
+          toast.success(
+            `تم ${status === "published" ? "نشر" : "إلغاء"} المبادرة بنجاح`
+          );
+          setSelectedInitiative((prev) =>
+            prev && prev.id === id ? { ...prev, status } : prev
+          );
+        } else {
+          toast.error(result.error || "حدث خطأ أثناء تحديث الحالة");
+        }
+      });
     } catch (error) {
-      setError("حدث خطأ أثناء تحديث حالة المبادرة");
+      console.error("Error updating initiative status:", error);
     } finally {
-      setIsLoading(false);
       setShowRejectionForm(false);
       setRejectionReason("");
     }
@@ -169,9 +179,16 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
                   <CardContent className="p-6">
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-gray-900">
-                          {initiative.titleAr}
-                        </h3>
+                        <Link
+                          href={`/admin/initiatives/${initiative.id}`}
+                          target="_blank"
+                          className="flex items-center"
+                        >
+                          <ArrowUpRight className="h-4 w-4 inline-block ml-1 text-gray-500" />
+                          <h3 className="text-lg font-semibold text-gray-900 hover:underline">
+                            {initiative.titleAr}
+                          </h3>
+                        </Link>
                         {initiative.titleEn && (
                           <p className="text-sm text-gray-600">
                             {initiative.titleEn}
@@ -336,7 +353,7 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
                                           )
                                         }
                                         disabled={
-                                          isLoading || !rejectionReason.trim()
+                                          isPending || !rejectionReason.trim()
                                         }
                                         variant="destructive"
                                         size="sm"
@@ -367,7 +384,7 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
                                             "published"
                                           )
                                         }
-                                        disabled={isLoading}
+                                        disabled={isPending}
                                         className="bg-green-600 hover:bg-green-700"
                                       >
                                         <CheckCircle className="h-4 w-4 ml-1" />
@@ -377,7 +394,7 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
                                         onClick={() =>
                                           setShowRejectionForm(true)
                                         }
-                                        disabled={isLoading}
+                                        disabled={isPending}
                                         variant="destructive"
                                       >
                                         <XCircle className="h-4 w-4 ml-1" />
@@ -397,7 +414,7 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
                               onClick={() =>
                                 handleStatusUpdate(initiative.id, "published")
                               }
-                              disabled={isLoading}
+                              disabled={isPending}
                               className="bg-green-600 hover:bg-green-700 text-xs px-2"
                             >
                               نشر
@@ -409,7 +426,7 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
                                 setSelectedInitiative(initiative);
                                 setShowRejectionForm(true);
                               }}
-                              disabled={isLoading}
+                              disabled={isPending}
                               className="text-xs px-2"
                             >
                               إلغاء
@@ -437,13 +454,6 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
           )}
         </CardContent>
       </Card>
-
-      {error && (
-        <Alert variant="destructive" className="mt-4">
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
     </div>
   );
 };

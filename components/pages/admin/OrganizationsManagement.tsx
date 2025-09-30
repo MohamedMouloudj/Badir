@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -23,6 +24,7 @@ import {
   CheckCircle,
   XCircle,
   Users,
+  ArrowUpRight,
 } from "lucide-react";
 import { AdminOrganizationCard, AdminService } from "@/services/admin";
 import { AdminOrganizationStatusBadge } from "../AdminStatusBadge";
@@ -31,15 +33,12 @@ import FilterSelect from "@/components/FilterSelect";
 import { organizationTypeOptions } from "@/types/Profile";
 import PaginationControls from "@/components/PaginationControls";
 import { formatDate } from "@/lib/utils";
+import { PaginatedResponse } from "@/types/Pagination";
+import Link from "next/link";
+import { updateOrganizationStatusAction } from "@/actions/admin";
+import { toast } from "sonner";
 
-interface PaginationData {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-  hasNext: boolean;
-  hasPrev: boolean;
-}
+type PaginationData = PaginatedResponse<AdminOrganizationCard[]>["pagination"];
 
 interface OrganizationsManagementProps {
   initialData: Awaited<ReturnType<typeof AdminService.getOrganizations>>;
@@ -62,42 +61,54 @@ const OrganizationsManagement = ({
   const [selectedOrg, setSelectedOrg] = useState<AdminOrganizationCard | null>(
     null
   );
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
   const [rejectionReason, setRejectionReason] = useState("");
-  const [showRejectionForm, setShowRejectionForm] = useState(false);
+  const [showDetailsDialog, setShowDetailsDialog] = useState(false);
+  const [showRejectionDialog, setShowRejectionDialog] = useState(false);
 
   const handleStatusUpdate = async (
     id: string,
     status: "approved" | "rejected"
   ) => {
     if (status === "rejected" && !rejectionReason.trim()) {
-      setShowRejectionForm(true);
+      toast.error("يرجى إدخال سبب الرفض");
       return;
     }
 
-    setIsLoading(true);
     try {
-      // Mock API call - replace with actual server action
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      startTransition(async () => {
+        const result = await updateOrganizationStatusAction(
+          id,
+          status,
+          status === "rejected" ? rejectionReason : undefined
+        );
 
-      setOrganizations((prev) =>
-        prev.map((org) =>
-          org.id === id ? { ...org, isVerified: status } : org
-        )
-      );
-
-      setError(null);
+        if (result.success) {
+          setOrganizations((prev) =>
+            prev.map((org) =>
+              org.id === id ? { ...org, isVerified: status } : org
+            )
+          );
+          toast.success("تم تحديث حالة المنظمة بنجاح");
+          setSelectedOrg((prev) =>
+            prev && prev.id === id ? { ...prev, isVerified: status } : prev
+          );
+          setShowRejectionDialog(false);
+          setShowDetailsDialog(false);
+          setRejectionReason("");
+        } else {
+          toast.error(result.error || "حدث خطأ أثناء تحديث حالة المنظمة");
+        }
+      });
     } catch (error) {
-      setError("حدث خطأ أثناء تحديث حالة المنظمة");
-    } finally {
-      setIsLoading(false);
-      setShowRejectionForm(false);
-      setRejectionReason("");
+      console.error("Error updating organization status:", error);
+      toast.error("حدث خطأ أثناء تحديث حالة المنظمة");
     }
   };
 
-  const handlePageChange = (page: number) => {};
+  const handlePageChange = (page: number) => {
+    // Implement pagination logic here
+  };
 
   return (
     <div className="p-6 max-w-7xl mx-auto" dir="rtl">
@@ -187,9 +198,16 @@ const OrganizationsManagement = ({
                   <CardContent className="p-6">
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-gray-900">
-                          {org.name}
-                        </h3>
+                        <Link
+                          href={`/admin/organizations/${org.id}`}
+                          target="_blank"
+                          className="flex items-center"
+                        >
+                          <ArrowUpRight className="h-4 w-4 inline-block ml-1 text-gray-500" />
+                          <h3 className="text-lg font-semibold text-gray-900 hover:underline">
+                            {org.name}
+                          </h3>
+                        </Link>
                         {org.shortName && (
                           <p className="text-sm text-gray-600">
                             {org.shortName}
@@ -242,7 +260,11 @@ const OrganizationsManagement = ({
                       </div>
 
                       <div className="flex gap-2">
-                        <Dialog>
+                        {/* Details Dialog */}
+                        <Dialog
+                          open={showDetailsDialog}
+                          onOpenChange={setShowDetailsDialog}
+                        >
                           <DialogTrigger asChild>
                             <Button
                               variant="outline"
@@ -253,11 +275,19 @@ const OrganizationsManagement = ({
                               عرض التفاصيل
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                          <DialogContent
+                            className="max-w-3xl max-h-[80vh] overflow-y-auto"
+                            onOpenAutoFocus={(e) => {
+                              e.preventDefault();
+                            }}
+                          >
                             <DialogHeader>
                               <DialogTitle>
                                 تفاصيل المنظمة - {selectedOrg?.name}
                               </DialogTitle>
+                              <DialogDescription>
+                                عرض كامل المعلومات والتفاصيل الخاصة بالمنظمة
+                              </DialogDescription>
                             </DialogHeader>
                             {selectedOrg && (
                               <div className="space-y-6" dir="rtl">
@@ -415,81 +445,35 @@ const OrganizationsManagement = ({
                                   </div>
                                 </div>
 
-                                {/* Rejection Form */}
-                                {showRejectionForm &&
-                                  selectedOrg.isVerified === "pending" && (
-                                    <div className="space-y-3 border-t pt-4">
-                                      <Label htmlFor="rejectionReason">
-                                        سبب رفض المنظمة
-                                      </Label>
-                                      <Textarea
-                                        id="rejectionReason"
-                                        value={rejectionReason}
-                                        onChange={(e) =>
-                                          setRejectionReason(e.target.value)
-                                        }
-                                        placeholder="اكتب سبب رفض المنظمة..."
-                                        rows={3}
-                                      />
-                                      <div className="flex gap-2">
-                                        <Button
-                                          onClick={() =>
-                                            handleStatusUpdate(
-                                              selectedOrg.id,
-                                              "rejected"
-                                            )
-                                          }
-                                          disabled={
-                                            isLoading || !rejectionReason.trim()
-                                          }
-                                          variant="destructive"
-                                          size="sm"
-                                        >
-                                          تأكيد الرفض
-                                        </Button>
-                                        <Button
-                                          onClick={() => {
-                                            setShowRejectionForm(false);
-                                            setRejectionReason("");
-                                          }}
-                                          variant="outline"
-                                          size="sm"
-                                        >
-                                          إلغاء
-                                        </Button>
-                                      </div>
-                                    </div>
-                                  )}
-
                                 {/* Action Buttons */}
-                                {selectedOrg.isVerified === "pending" &&
-                                  !showRejectionForm && (
-                                    <div className="flex justify-center gap-4 pt-4 border-t">
-                                      <Button
-                                        onClick={() =>
-                                          handleStatusUpdate(
-                                            selectedOrg.id,
-                                            "approved"
-                                          )
-                                        }
-                                        disabled={isLoading}
-                                        className="bg-green-600 hover:bg-green-700"
-                                      >
-                                        <CheckCircle className="h-4 w-4 ml-1" />
-                                        قبول المنظمة
-                                      </Button>
-                                      <Button
-                                        onClick={() =>
-                                          setShowRejectionForm(true)
-                                        }
-                                        disabled={isLoading}
-                                        variant="destructive"
-                                      >
-                                        <XCircle className="h-4 w-4 ml-1" />
-                                        رفض المنظمة
-                                      </Button>
-                                    </div>
-                                  )}
+                                {selectedOrg.isVerified === "pending" && (
+                                  <div className="flex justify-center gap-4 pt-4 border-t">
+                                    <Button
+                                      onClick={() =>
+                                        handleStatusUpdate(
+                                          selectedOrg.id,
+                                          "approved"
+                                        )
+                                      }
+                                      disabled={isPending}
+                                      className="bg-green-600 hover:bg-green-700"
+                                    >
+                                      <CheckCircle className="h-4 w-4 ml-1" />
+                                      قبول المنظمة
+                                    </Button>
+                                    <Button
+                                      onClick={() => {
+                                        setShowDetailsDialog(false);
+                                        setShowRejectionDialog(true);
+                                      }}
+                                      disabled={isPending}
+                                      variant="destructive"
+                                    >
+                                      <XCircle className="h-4 w-4 ml-1" />
+                                      رفض المنظمة
+                                    </Button>
+                                  </div>
+                                )}
 
                                 {/* Status Info */}
                                 {selectedOrg.isVerified !== "pending" && (
@@ -517,7 +501,7 @@ const OrganizationsManagement = ({
                               onClick={() =>
                                 handleStatusUpdate(org.id, "approved")
                               }
-                              disabled={isLoading}
+                              disabled={isPending}
                               className="bg-green-600 hover:bg-green-700 text-xs px-2"
                             >
                               قبول
@@ -527,9 +511,9 @@ const OrganizationsManagement = ({
                               variant="destructive"
                               onClick={() => {
                                 setSelectedOrg(org);
-                                setShowRejectionForm(true);
+                                setShowRejectionDialog(true);
                               }}
-                              disabled={isLoading}
+                              disabled={isPending}
                               className="text-xs px-2"
                             >
                               رفض
@@ -557,6 +541,53 @@ const OrganizationsManagement = ({
           )}
         </CardContent>
       </Card>
+
+      {/* Rejection Dialog - Separate from Details Dialog */}
+      <Dialog open={showRejectionDialog} onOpenChange={setShowRejectionDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>رفض المنظمة - {selectedOrg?.name}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4" dir="rtl">
+            <div className="space-y-2">
+              <Label htmlFor="rejectionReason">
+                سبب رفض المنظمة <span className="text-red-500">*</span>
+              </Label>
+              <Textarea
+                id="rejectionReason"
+                value={rejectionReason}
+                onChange={(e) => setRejectionReason(e.target.value)}
+                placeholder="اكتب سبب رفض المنظمة..."
+                rows={4}
+                className="resize-none"
+              />
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button
+                onClick={() => {
+                  setShowRejectionDialog(false);
+                  setRejectionReason("");
+                }}
+                variant="outline"
+                disabled={isPending}
+              >
+                إلغاء
+              </Button>
+              <Button
+                onClick={() => {
+                  if (selectedOrg) {
+                    handleStatusUpdate(selectedOrg.id, "rejected");
+                  }
+                }}
+                disabled={isPending || !rejectionReason.trim()}
+                variant="destructive"
+              >
+                {isPending ? "جاري الرفض..." : "تأكيد الرفض"}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -131,7 +131,6 @@ export async function updateInitiativeStatusAction(
     return {
       success: true,
       message: result.message,
-      data: {},
     };
   } catch (error) {
     console.error("Error updating initiative status:", error);

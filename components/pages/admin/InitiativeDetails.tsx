@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+"use client";
+import { useState, useTransition } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,13 +19,16 @@ import {
 } from "lucide-react";
 import { AdminService } from "@/services/admin";
 import { AdminInitiativeStatusBadge } from "../AdminStatusBadge";
+import { formatDate } from "@/lib/utils";
+import { updateInitiativeStatusAction } from "@/actions/admin";
+import { toast } from "sonner";
 
 interface InitiativeDetailsProps {
   initiative: Awaited<ReturnType<typeof AdminService.getInitiativeById>>;
 }
 
 const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [rejectionReason, setRejectionReason] = useState("");
   const [showRejectionForm, setShowRejectionForm] = useState(false);
 
@@ -45,39 +49,33 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
       return;
     }
 
-    setIsUpdating(true);
     try {
-      // Replace with actual server action call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log(`Updating initiative ${initiative.id} to ${status}`, {
-        rejectionReason,
+      startTransition(async () => {
+        const result = await updateInitiativeStatusAction(
+          initiative.id,
+          status
+        );
+
+        if (result.success) {
+          toast.success(
+            `تم ${status === "published" ? "نشر" : "إلغاء"} المبادرة بنجاح`
+          );
+        } else {
+          toast.error(result.error || "حدث خطأ أثناء تحديث الحالة");
+        }
       });
-      // Handle success (show notification, redirect, etc.)
     } catch (error) {
       console.error("Error updating initiative status:", error);
     } finally {
-      setIsUpdating(false);
       setShowRejectionForm(false);
       setRejectionReason("");
     }
-  };
-
-  const formatDate = (date: Date | string | null | undefined) => {
-    if (!date) return "غير متوفر";
-    return new Date(date).toLocaleDateString("ar-DZ", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
   };
 
   return (
     <div className="p-6 max-w-6xl mx-auto" dir="rtl">
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
-        <Button variant="ghost" size="sm" className="p-2">
-          <ArrowLeft className="w-4 h-4" />
-        </Button>
         <div className="flex-1">
           <h1 className="text-2xl font-bold text-gray-900">
             {initiative.titleAr}
@@ -154,7 +152,9 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
                     آخر موعد للتسجيل
                   </Label>
                   <p className="mt-1 text-gray-900">
-                    {formatDate(initiative.registrationDeadline)}
+                    {initiative.registrationDeadline
+                      ? formatDate(initiative.registrationDeadline)
+                      : "غير متوفر"}
                   </p>
                 </div>
 
@@ -244,7 +244,9 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
                       تاريخ انضمام المنظم
                     </Label>
                     <p className="text-gray-900">
-                      {formatDate(initiative.organizerUser?.createdAt)}
+                      {initiative.organizerUser?.createdAt
+                        ? formatDate(initiative.organizerUser.createdAt)
+                        : "غير متوفر"}
                     </p>
                   </div>
                 </div>
@@ -275,7 +277,7 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
                     <div className="flex gap-2">
                       <Button
                         onClick={() => handleStatusUpdate("cancelled")}
-                        disabled={isUpdating || !rejectionReason.trim()}
+                        disabled={isPending || !rejectionReason.trim()}
                         variant="destructive"
                         size="sm"
                       >
@@ -297,7 +299,7 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
                   <>
                     <Button
                       onClick={() => handleStatusUpdate("published")}
-                      disabled={isUpdating}
+                      disabled={isPending}
                       className="w-full bg-green-600 hover:bg-green-700"
                     >
                       <CheckCircle className="w-4 h-4 ml-1" />
@@ -305,7 +307,7 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
                     </Button>
                     <Button
                       onClick={() => setShowRejectionForm(true)}
-                      disabled={isUpdating}
+                      disabled={isPending}
                       variant="destructive"
                       className="w-full"
                     >
@@ -389,7 +391,7 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
         </div>
       </div>
 
-      {isUpdating && (
+      {isPending && (
         <Alert className="fixed bottom-4 right-4 w-auto">
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>جاري تحديث حالة المبادرة...</AlertDescription>

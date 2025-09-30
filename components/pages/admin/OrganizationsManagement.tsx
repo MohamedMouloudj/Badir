@@ -4,14 +4,6 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -19,12 +11,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
   Building2,
-  Search,
   Eye,
   Mail,
   Phone,
@@ -32,11 +22,15 @@ import {
   Calendar,
   CheckCircle,
   XCircle,
-  Clock,
-  AlertTriangle,
   Users,
 } from "lucide-react";
 import { AdminOrganizationCard, AdminService } from "@/services/admin";
+import { AdminOrganizationStatusBadge } from "../AdminStatusBadge";
+import SearchInput from "@/components/SearchInput";
+import FilterSelect from "@/components/FilterSelect";
+import { organizationTypeOptions } from "@/types/Profile";
+import PaginationControls from "@/components/PaginationControls";
+import { formatDate } from "@/lib/utils";
 
 interface PaginationData {
   page: number;
@@ -73,36 +67,6 @@ const OrganizationsManagement = ({
   const [rejectionReason, setRejectionReason] = useState("");
   const [showRejectionForm, setShowRejectionForm] = useState(false);
 
-  const getStatusBadge = (status: string) => {
-    const statusConfig = {
-      pending: {
-        label: "قيد المراجعة",
-        variant: "secondary" as const,
-        icon: Clock,
-      },
-      approved: {
-        label: "مقبولة",
-        variant: "default" as const,
-        icon: CheckCircle,
-      },
-      rejected: {
-        label: "مرفوضة",
-        variant: "destructive" as const,
-        icon: XCircle,
-      },
-    };
-
-    const config = statusConfig[status as keyof typeof statusConfig];
-    const Icon = config.icon;
-
-    return (
-      <Badge variant={config.variant} className="flex items-center gap-1">
-        <Icon className="w-3 h-3" />
-        {config.label}
-      </Badge>
-    );
-  };
-
   const handleStatusUpdate = async (
     id: string,
     status: "approved" | "rejected"
@@ -133,13 +97,7 @@ const OrganizationsManagement = ({
     }
   };
 
-  const formatDate = (date: Date | string) => {
-    return new Date(date).toLocaleDateString("ar-DZ", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
+  const handlePageChange = (page: number) => {};
 
   return (
     <div className="p-6 max-w-7xl mx-auto" dir="rtl">
@@ -150,7 +108,7 @@ const OrganizationsManagement = ({
         <p className="text-gray-600">مراجعة وموافقة على طلبات المنظمات</p>
       </div>
 
-      <Card>
+      <Card className="bg-transparent shadow-none border-none gap-2 pt-0">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Building2 className="h-5 w-5" />
@@ -159,54 +117,56 @@ const OrganizationsManagement = ({
         </CardHeader>
         <CardContent>
           {/* Filters */}
-          <div className="flex gap-4 mb-6 flex-wrap">
-            <div className="flex items-center gap-2">
-              <Search className="h-4 w-4" />
-              <Input
-                placeholder="البحث عن منظمة..."
+          <div className="flex-center-column sm:justify-between gap-4 mb-6 flex-wrap mt-6">
+            <div className="max-w-full flex-center sm:justify-center gap-4 max-sm:flex-wrap">
+              <SearchInput
                 value={filters.search}
-                onChange={(e) =>
-                  setFilters((prev) => ({ ...prev, search: e.target.value }))
+                onChange={(value) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    search: value,
+                  }))
                 }
-                className="w-64"
+                placeholder="البحث عن منظمة..."
+                className="w-full"
               />
             </div>
-
-            <Select
-              value={filters.status}
-              onValueChange={(value) =>
-                setFilters((prev) => ({ ...prev, status: value }))
-              }
+            {/* Filters */}
+            <div
+              className="grid grid-cols-1 md:grid-cols-2 gap-4 w-fit"
+              dir="rtl"
             >
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="الحالة" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">جميع الحالات</SelectItem>
-                <SelectItem value="pending">قيد المراجعة</SelectItem>
-                <SelectItem value="approved">مقبولة</SelectItem>
-                <SelectItem value="rejected">مرفوضة</SelectItem>
-              </SelectContent>
-            </Select>
+              <FilterSelect
+                value={filters.status}
+                onChange={(value) =>
+                  setFilters((prev) => ({ ...prev, status: value }))
+                }
+                options={[
+                  { value: "all", label: "جميع الحالات" },
+                  { value: "pending", label: "قيد المراجعة" },
+                  { value: "approved", label: "مقبولة" },
+                  { value: "rejected", label: "مرفوضة" },
+                ]}
+                placeholder="الحالة"
+                className="w-40"
+              />
 
-            <Select
-              value={filters.organizationType}
-              onValueChange={(value) =>
-                setFilters((prev) => ({ ...prev, organizationType: value }))
-              }
-            >
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="النوع" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">جميع الأنواع</SelectItem>
-                <SelectItem value="خيرية">خيرية</SelectItem>
-                <SelectItem value="تنموية">تنموية</SelectItem>
-                <SelectItem value="تعليمية">تعليمية</SelectItem>
-                <SelectItem value="رياضية">رياضية</SelectItem>
-                <SelectItem value="ثقافية">ثقافية</SelectItem>
-              </SelectContent>
-            </Select>
+              <FilterSelect
+                value={filters.organizationType}
+                onChange={(value) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    organizationType: value,
+                  }))
+                }
+                options={[
+                  ...organizationTypeOptions,
+                  { value: "all", label: "جميع الأنواع" },
+                ]}
+                placeholder="النوع"
+                className="w-40"
+              />
+            </div>
           </div>
 
           {/* Organizations List */}
@@ -258,7 +218,7 @@ const OrganizationsManagement = ({
                         </div>
                       </div>
                       <div className="flex flex-col items-end gap-2">
-                        {getStatusBadge(org.isVerified)}
+                        <AdminOrganizationStatusBadge status={org.isVerified} />
                         <Badge variant="outline" className="text-xs">
                           {org.organizationType}
                         </Badge>
@@ -535,7 +495,9 @@ const OrganizationsManagement = ({
                                 {selectedOrg.isVerified !== "pending" && (
                                   <div className="text-center py-4 border-t">
                                     <div className="flex items-center justify-center gap-2">
-                                      {getStatusBadge(selectedOrg.isVerified)}
+                                      <AdminOrganizationStatusBadge
+                                        status={selectedOrg.isVerified}
+                                      />
                                       <span className="text-sm text-gray-600">
                                         تم التحديث في{" "}
                                         {formatDate(selectedOrg.updatedAt)}
@@ -584,43 +546,17 @@ const OrganizationsManagement = ({
 
           {/* Pagination */}
           {pagination.totalPages > 1 && (
-            <div className="flex justify-center items-center gap-2 mt-6">
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={!pagination.hasPrev || isLoading}
-                onClick={() => {
-                  /* Handle previous page */
-                }}
-              >
-                السابق
-              </Button>
-
-              <span className="mx-4 text-sm text-gray-600">
-                صفحة {pagination.page} من {pagination.totalPages}
-              </span>
-
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={!pagination.hasNext || isLoading}
-                onClick={() => {
-                  /* Handle next page */
-                }}
-              >
-                التالي
-              </Button>
-            </div>
+            <PaginationControls
+              currentPage={pagination.page}
+              totalPages={pagination.totalPages}
+              hasNext={pagination.hasNext}
+              hasPrev={pagination.hasPrev}
+              onPageChange={handlePageChange}
+              className="mt-8"
+            />
           )}
         </CardContent>
       </Card>
-
-      {error && (
-        <Alert variant="destructive" className="mt-4">
-          <AlertTriangle className="h-4 w-4" />
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
     </div>
   );
 };

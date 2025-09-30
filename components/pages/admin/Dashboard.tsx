@@ -36,12 +36,28 @@ import {
   Calendar,
   TrendingUp,
   AlertCircle,
+  Loader2,
+  ArrowUpLeft,
 } from "lucide-react";
 import {
   AdminOrganizationCard,
   AdminInitiativeCard,
   AdminService,
 } from "@/services/admin";
+import {
+  getOrganizationsAction,
+  getUserInitiativesAction,
+} from "@/actions/admin";
+import {
+  AdminInitiativeStatusBadge,
+  AdminOrganizationStatusBadge,
+} from "../AdminStatusBadge";
+import FilterSelect from "@/components/FilterSelect";
+import SearchInput from "@/components/SearchInput";
+import { organizationTypeOptions } from "@/types/Profile";
+import { toast } from "sonner";
+import Link from "next/link";
+import AppButton from "@/components/AppButton";
 
 type AdminStatsType = Awaited<ReturnType<typeof AdminService.getAdminStats>>;
 
@@ -51,7 +67,7 @@ interface AdminDashboardProps {
 
 const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
   const [activeTab, setActiveTab] = useState("overview");
-  const [stats, setStats] = useState<AdminStatsType>(
+  const [stats] = useState<AdminStatsType>(
     initialStats || {
       organizations: { pending: 0, approved: 0, rejected: 0, total: 0 },
       initiatives: { draft: 0, published: 0, cancelled: 0, total: 0 },
@@ -82,132 +98,29 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
     useState<AdminInitiativeCard | null>(null);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  // Mock data for demonstration
   useEffect(() => {
-    // Load mock data - replace with actual API calls
-    setOrganizations([
-      {
-        id: "1",
-        userId: "user1",
-        name: "جمعية الخير للتنمية المجتمعية",
-        shortName: "جمعية الخير",
-        description: "منظمة خيرية تهدف للتنمية المجتمعية",
-        logo: null,
-        contactEmail: "info@khair.org",
-        contactPhone: "+213 555 123 456",
-        website: null,
-        city: "الجزائر",
-        state: "الجزائر",
-        country: "الجزائر",
-        createdAt: new Date("2024-01-15T10:00:00Z"),
-        updatedAt: new Date(),
-        foundingDate: new Date("2020-01-01"),
-        headquarters: "الجزائر العاصمة",
-        identificationCard: null,
-        membersCount: 50,
-        officialLicense: null,
-        organizationType: "خيرية",
-        previousInitiatives: null,
-        socialLinks: {},
-        userRole: "رئيس المنظمة",
-        workAreas: ["التعليم", "الصحة"],
-        isVerified: "pending" as const,
-        owner: {
-          id: "user1",
-          name: "أحمد محمد",
-          email: "ahmed@example.com",
-          phone: "+213 555 111 222",
-        },
-        _count: { initiatives: 3 },
-      } as AdminOrganizationCard,
-    ]);
+    async function fetchData() {
+      try {
+        setIsLoading(true);
+        const organizationsData = await getOrganizationsAction();
+        setOrganizations(
+          organizationsData.data ? organizationsData.data.data.slice(0, 3) : []
+        );
 
-    setInitiatives([
-      {
-        id: "1",
-        organizerType: "user" as const,
-        organizerUserId: "user3",
-        organizerOrgId: null,
-        categoryId: "cat1",
-        titleAr: "حملة تشجير الأحياء السكنية",
-        titleEn: "Neighborhood Tree Planting Campaign",
-        descriptionAr: "حملة لتشجير الأحياء السكنية وتحسين البيئة",
-        descriptionEn: null,
-        shortDescriptionAr: "حملة تشجير للأحياء السكنية",
-        shortDescriptionEn: null,
-        location: "حي السلام، الجزائر",
-        city: "الجزائر",
-        state: "الجزائر",
-        country: "الجزائر",
-        startDate: new Date("2024-03-01"),
-        endDate: new Date("2024-03-15"),
-        registrationDeadline: new Date("2024-02-25"),
-        maxParticipants: 100,
-        currentParticipants: 25,
-        isOpenParticipation: true,
-        targetAudience: "both" as const,
-        requiredQualifications: null,
-        status: "draft" as const,
-        coverImage: null,
-        createdAt: new Date("2024-01-20T14:00:00Z"),
-        updatedAt: new Date(),
-        participationQstForm: null,
-        category: {
-          nameAr: "البيئة",
-          nameEn: "Environment",
-        },
-        organizerUser: {
-          id: "user3",
-          name: "عمر خالد",
-          email: "omar@example.com",
-        },
-        _count: { participants: 25 },
-      } as AdminInitiativeCard,
-    ]);
+        const initiativesData = await getUserInitiativesAction();
+        setInitiatives(
+          initiativesData.data ? initiativesData.data.data.slice(0, 3) : []
+        );
+      } catch (error) {
+        toast.error("حدث خطأ أثناء جلب البيانات");
+        console.error("Error fetching admin data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchData();
   }, []);
-
-  const getStatusBadge = (status: string) => {
-    const statusConfig = {
-      pending: {
-        label: "قيد المراجعة",
-        variant: "secondary" as const,
-        icon: Clock,
-      },
-      approved: {
-        label: "مقبول",
-        variant: "default" as const,
-        icon: CheckCircle,
-      },
-      rejected: {
-        label: "مرفوض",
-        variant: "destructive" as const,
-        icon: XCircle,
-      },
-      draft: { label: "مسودة", variant: "secondary" as const, icon: FileText },
-      published: {
-        label: "منشور",
-        variant: "default" as const,
-        icon: CheckCircle,
-      },
-      cancelled: {
-        label: "ملغي",
-        variant: "destructive" as const,
-        icon: XCircle,
-      },
-    };
-
-    const config = statusConfig[status as keyof typeof statusConfig];
-    const Icon = config.icon;
-
-    return (
-      <Badge variant={config.variant} className="flex items-center gap-1">
-        <Icon className="w-3 h-3" />
-        {config.label}
-      </Badge>
-    );
-  };
 
   const handleStatusUpdate = async (
     id: string,
@@ -236,7 +149,7 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
         );
       }
     } catch (error) {
-      setError("حدث خطأ أثناء تحديث الحالة");
+      toast.error("حدث خطأ أثناء تحديث الحالة");
     } finally {
       setIsLoading(false);
     }
@@ -400,80 +313,78 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
         </TabsContent>
 
         {/* Organizations Tab */}
-        <TabsContent value="organizations" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Building2 className="h-5 w-5" />
-                إدارة المنظمات
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {/* Filters */}
-              <div className="flex gap-4 mb-6 flex-wrap">
-                <div className="flex items-center gap-2">
-                  <Search className="h-4 w-4" />
-                  <Input
-                    placeholder="البحث عن منظمة..."
-                    value={orgFilters.search}
-                    onChange={(e) =>
-                      setOrgFilters((prev) => ({
-                        ...prev,
-                        search: e.target.value,
-                      }))
-                    }
-                    className="w-64"
-                  />
-                </div>
+        <TabsContent value="organizations" className="space-y-6" dir="rtl">
+          <div className="flex-center-column sm:justify-between gap-4 mb-6 flex-wrap mt-6">
+            <div className="max-w-full flex-center sm:justify-center gap-4 max-sm:flex-wrap">
+              <SearchInput
+                value={orgFilters.search}
+                onChange={(value) =>
+                  setOrgFilters((prev) => ({
+                    ...prev,
+                    search: value,
+                  }))
+                }
+                placeholder="البحث عن منظمة..."
+                className="w-full"
+              />
+            </div>
+            {/* Filters */}
+            <div
+              className="grid grid-cols-1 md:grid-cols-2 gap-4 w-fit"
+              dir="rtl"
+            >
+              <FilterSelect
+                value={orgFilters.status}
+                onChange={(value) =>
+                  setOrgFilters((prev) => ({ ...prev, status: value }))
+                }
+                options={[
+                  { value: "all", label: "جميع الحالات" },
+                  { value: "pending", label: "قيد المراجعة" },
+                  { value: "approved", label: "مقبولة" },
+                  { value: "rejected", label: "مرفوضة" },
+                ]}
+                placeholder="الحالة"
+                className="w-40"
+              />
 
-                <Select
-                  value={orgFilters.status}
-                  onValueChange={(value) =>
-                    setOrgFilters((prev) => ({ ...prev, status: value }))
-                  }
-                >
-                  <SelectTrigger className="w-40">
-                    <SelectValue placeholder="الحالة" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">جميع الحالات</SelectItem>
-                    <SelectItem value="pending">قيد المراجعة</SelectItem>
-                    <SelectItem value="approved">مقبولة</SelectItem>
-                    <SelectItem value="rejected">مرفوضة</SelectItem>
-                  </SelectContent>
-                </Select>
+              <FilterSelect
+                value={orgFilters.organizationType}
+                onChange={(value) =>
+                  setOrgFilters((prev) => ({
+                    ...prev,
+                    organizationType: value,
+                  }))
+                }
+                options={[
+                  ...organizationTypeOptions,
+                  { value: "all", label: "جميع الأنواع" },
+                ]}
+                placeholder="النوع"
+                className="w-40"
+              />
+            </div>
+          </div>
 
-                <Select
-                  value={orgFilters.organizationType}
-                  onValueChange={(value) =>
-                    setOrgFilters((prev) => ({
-                      ...prev,
-                      organizationType: value,
-                    }))
-                  }
-                >
-                  <SelectTrigger className="w-40">
-                    <SelectValue placeholder="النوع" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">جميع الأنواع</SelectItem>
-                    <SelectItem value="خيرية">خيرية</SelectItem>
-                    <SelectItem value="تنموية">تنموية</SelectItem>
-                    <SelectItem value="تعليمية">تعليمية</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Organizations List */}
-              <div className="space-y-4">
+          {/* Organizations List */}
+          <div className="space-y-4">
+            {isLoading ? (
+              <Loader2 className="w-6 h-6 animate-spin mx-auto text-gray-500" />
+            ) : organizations.length > 0 ? (
+              <>
                 {organizations.map((org) => (
                   <Card key={org.id} className="border-l-4 border-l-blue-500">
                     <CardContent className="p-6">
                       <div className="flex justify-between items-start mb-4">
                         <div className="flex-1">
-                          <h3 className="text-lg font-semibold text-gray-900">
-                            {org.name}
-                          </h3>
+                          <Link
+                            href={`/organizations/${org.id}`}
+                            target="_blank"
+                          >
+                            <h3 className="text-lg font-semibold text-gray-900 hover:underline">
+                              {org.name}
+                            </h3>
+                          </Link>
                           <p className="text-sm text-gray-600">
                             {org.shortName}
                           </p>
@@ -495,7 +406,9 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                           </div>
                         </div>
                         <div className="flex flex-col items-end gap-2">
-                          {getStatusBadge(org.isVerified)}
+                          <AdminOrganizationStatusBadge
+                            status={org.isVerified}
+                          />
                           <span className="text-sm text-gray-500">
                             {org._count.initiatives} مبادرة
                           </span>
@@ -666,65 +579,71 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                     </CardContent>
                   </Card>
                 ))}
-              </div>
-            </CardContent>
-          </Card>
+                <div className="w-full" dir="rtl">
+                  <AppButton
+                    type="outline"
+                    url="/admin/organizations"
+                    className="mx-auto"
+                    border="default"
+                    icon={<ArrowUpLeft className="h-4 w-4 ml-1" />}
+                  >
+                    عرض المزيد
+                  </AppButton>
+                </div>
+              </>
+            ) : (
+              <p className="text-center text-gray-500">لا توجد منظمات لعرضها</p>
+            )}
+          </div>
         </TabsContent>
 
         {/* Initiatives Tab */}
-        <TabsContent value="initiatives" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
-                إدارة مبادرات المستخدمين
-              </CardTitle>
-              <Alert>
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>
-                  هذه الصفحة تعرض فقط المبادرات المنشأة من قبل المستخدمين
-                  العاديين والتي تحتاج لموافقة المسؤول قبل النشر.
-                </AlertDescription>
-              </Alert>
-            </CardHeader>
-            <CardContent>
-              {/* Filters */}
-              <div className="flex gap-4 mb-6 flex-wrap">
-                <div className="flex items-center gap-2">
-                  <Search className="h-4 w-4" />
-                  <Input
-                    placeholder="البحث عن مبادرة..."
-                    value={initiativeFilters.search}
-                    onChange={(e) =>
-                      setInitiativeFilters((prev) => ({
-                        ...prev,
-                        search: e.target.value,
-                      }))
-                    }
-                    className="w-64"
-                  />
-                </div>
+        <TabsContent value="initiatives" className="space-y-6" dir="rtl">
+          <Alert className="mt-6" dir="rtl">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              هذه الصفحة تعرض فقط المبادرات المنشأة من قبل المستخدمين العاديين
+              والتي تحتاج لموافقة المسؤول قبل النشر.
+            </AlertDescription>
+          </Alert>
 
-                <Select
-                  value={initiativeFilters.status}
-                  onValueChange={(value) =>
-                    setInitiativeFilters((prev) => ({ ...prev, status: value }))
-                  }
-                >
-                  <SelectTrigger className="w-40">
-                    <SelectValue placeholder="الحالة" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">جميع الحالات</SelectItem>
-                    <SelectItem value="draft">مسودة</SelectItem>
-                    <SelectItem value="published">منشورة</SelectItem>
-                    <SelectItem value="cancelled">ملغية</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+          {/* Filters */}
+          <div className="flex-center-column sm:justify-between gap-4 mb-6 flex-wrap mt-6">
+            <div className="max-w-full flex-center sm:justify-center gap-4 max-sm:flex-wrap">
+              <SearchInput
+                value={initiativeFilters.search}
+                onChange={(value) =>
+                  setInitiativeFilters((prev) => ({
+                    ...prev,
+                    search: value,
+                  }))
+                }
+                placeholder="البحث عن مبادرة..."
+                className="w-full"
+              />
+            </div>
+            <FilterSelect
+              value={initiativeFilters.status}
+              onChange={(value) =>
+                setInitiativeFilters((prev) => ({ ...prev, status: value }))
+              }
+              options={[
+                { value: "all", label: "جميع الحالات" },
+                { value: "draft", label: "مسودة" },
+                { value: "published", label: "منشورة" },
+                { value: "cancelled", label: "ملغية" },
+              ]}
+              placeholder="الحالة"
+              className="w-40"
+            />
+          </div>
 
-              {/* Initiatives List */}
-              <div className="space-y-4">
+          {/* Initiatives List */}
+          <div className="space-y-4">
+            {isLoading ? (
+              <Loader2 className="w-6 h-6 animate-spin mx-auto text-gray-500" />
+            ) : organizations.length > 0 ? (
+              <>
                 {initiatives.map((initiative) => (
                   <Card
                     key={initiative.id}
@@ -763,7 +682,9 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                           </div>
                         </div>
                         <div className="flex flex-col items-end gap-2">
-                          {getStatusBadge(initiative.status)}
+                          <AdminInitiativeStatusBadge
+                            status={initiative.status}
+                          />
                           <Badge variant="outline" className="text-xs">
                             {initiative.category.nameAr}
                           </Badge>
@@ -944,18 +865,26 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                     </CardContent>
                   </Card>
                 ))}
-              </div>
-            </CardContent>
-          </Card>
+                <div className="w-full" dir="rtl">
+                  <AppButton
+                    type="outline"
+                    url="/admin/initiatives"
+                    className="mx-auto"
+                    border="default"
+                    icon={<ArrowUpLeft className="h-4 w-4 ml-1" />}
+                  >
+                    عرض المزيد
+                  </AppButton>
+                </div>
+              </>
+            ) : (
+              <p className="text-center text-gray-500">
+                لا توجد مبادرات لعرضها
+              </p>
+            )}
+          </div>
         </TabsContent>
       </Tabs>
-
-      {error && (
-        <Alert variant="destructive" className="mt-4">
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
     </div>
   );
 };

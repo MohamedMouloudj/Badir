@@ -17,6 +17,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { AdminService } from "@/services/admin";
+import { AdminInitiativeStatusBadge } from "../AdminStatusBadge";
 
 interface InitiativeDetailsProps {
   initiative: Awaited<ReturnType<typeof AdminService.getInitiativeById>>;
@@ -61,32 +62,6 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
     }
   };
 
-  const getStatusBadge = (status: string) => {
-    const configs = {
-      draft: { label: "مسودة", variant: "secondary" as const, icon: FileText },
-      published: {
-        label: "منشورة",
-        variant: "default" as const,
-        icon: CheckCircle,
-      },
-      cancelled: {
-        label: "ملغية",
-        variant: "destructive" as const,
-        icon: XCircle,
-      },
-    };
-
-    const config = configs[status as keyof typeof configs];
-    const Icon = config.icon;
-
-    return (
-      <Badge variant={config.variant} className="flex items-center gap-1">
-        <Icon className="w-4 h-4" />
-        {config.label}
-      </Badge>
-    );
-  };
-
   const formatDate = (date: Date | string | null | undefined) => {
     if (!date) return "غير متوفر";
     return new Date(date).toLocaleDateString("ar-DZ", {
@@ -109,7 +84,7 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
           </h1>
           <p className="text-gray-600">تفاصيل المبادرة</p>
         </div>
-        {getStatusBadge(initiative.status)}
+        <AdminInitiativeStatusBadge status={initiative.status} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

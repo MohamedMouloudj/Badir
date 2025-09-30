@@ -3,14 +3,6 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -23,7 +15,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
   Users,
-  Search,
   Eye,
   MapPin,
   Calendar,
@@ -31,51 +22,23 @@ import {
   XCircle,
   FileText,
   AlertCircle,
-  Clock,
 } from "lucide-react";
-import { AdminService } from "@/services/admin";
+import { AdminInitiativeCard, AdminService } from "@/services/admin";
+import { PaginatedResponse } from "@/types/Pagination";
+import PaginationControls from "@/components/PaginationControls";
+import { formatDate } from "@/lib/utils";
+import { AdminInitiativeStatusBadge } from "../AdminStatusBadge";
+import SearchInput from "@/components/SearchInput";
+import FilterSelect from "@/components/FilterSelect";
 
-// AdminService types
-interface InitiativeCard {
-  id: string;
-  titleAr: string;
-  titleEn?: string | null;
-  shortDescriptionAr?: string | null;
-  shortDescriptionEn?: string | null;
-  city: string;
-  startDate: Date | string;
-  endDate: Date | string;
-  status: "draft" | "published" | "cancelled";
-  createdAt: Date | string;
-  category: {
-    nameAr: string;
-    nameEn?: string | null;
-  };
-  organizerUser: {
-    id: string;
-    name: string;
-    email: string;
-  } | null;
-  _count: {
-    participants: number;
-  };
-}
-
-interface PaginationData {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-  hasNext: boolean;
-  hasPrev: boolean;
-}
+type PaginationData = PaginatedResponse<AdminInitiativeCard[]>["pagination"];
 
 interface InitiativesManagementProps {
   initialData: Awaited<ReturnType<typeof AdminService.getUserInitiatives>>;
 }
 
 const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
-  const [initiatives, setInitiatives] = useState<InitiativeCard[]>(
+  const [initiatives, setInitiatives] = useState<AdminInitiativeCard[]>(
     initialData.data
   );
   const [pagination, setPagination] = useState<PaginationData>(
@@ -87,37 +50,11 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
     categoryId: "",
   });
   const [selectedInitiative, setSelectedInitiative] =
-    useState<InitiativeCard | null>(null);
+    useState<AdminInitiativeCard | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [rejectionReason, setRejectionReason] = useState("");
   const [showRejectionForm, setShowRejectionForm] = useState(false);
-
-  const getStatusBadge = (status: string) => {
-    const statusConfig = {
-      draft: { label: "مسودة", variant: "secondary" as const, icon: Clock },
-      published: {
-        label: "منشور",
-        variant: "default" as const,
-        icon: CheckCircle,
-      },
-      cancelled: {
-        label: "ملغي",
-        variant: "destructive" as const,
-        icon: XCircle,
-      },
-    };
-
-    const config = statusConfig[status as keyof typeof statusConfig];
-    const Icon = config.icon;
-
-    return (
-      <Badge variant={config.variant} className="flex items-center gap-1">
-        <Icon className="w-3 h-3" />
-        {config.label}
-      </Badge>
-    );
-  };
 
   const handleStatusUpdate = async (
     id: string,
@@ -147,13 +84,9 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
     }
   };
 
-  const formatDate = (date: Date | string) => {
-    return new Date(date).toLocaleDateString("ar-DZ", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
+  const handleSearch = (searchTerm: string) => {};
+
+  const handlePageChange = (page: number) => {};
 
   return (
     <div className="p-6 max-w-7xl mx-auto" dir="rtl">
@@ -174,7 +107,7 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
         </AlertDescription>
       </Alert>
 
-      <Card>
+      <Card className="bg-transparent shadow-none border-none gap-2 pt-0">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="h-5 w-5" />
@@ -182,36 +115,37 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {/* Filters */}
-          <div className="flex gap-4 mb-6 flex-wrap">
-            <div className="flex items-center gap-2">
-              <Search className="h-4 w-4" />
-              <Input
-                placeholder="البحث عن مبادرة..."
+          <div
+            className="flex-center-column sm:justify-between gap-4 mb-6 flex-wrap mt-6"
+            dir="rtl"
+          >
+            <div className="max-w-full flex-center sm:justify-center gap-4 max-sm:flex-wrap">
+              <SearchInput
                 value={filters.search}
-                onChange={(e) =>
-                  setFilters((prev) => ({ ...prev, search: e.target.value }))
+                onChange={(value) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    search: value,
+                  }))
                 }
-                className="w-64"
+                placeholder="البحث عن مبادرة..."
+                className="w-full"
               />
             </div>
-
-            <Select
+            <FilterSelect
               value={filters.status}
-              onValueChange={(value) =>
+              onChange={(value) =>
                 setFilters((prev) => ({ ...prev, status: value }))
               }
-            >
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="الحالة" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">جميع الحالات</SelectItem>
-                <SelectItem value="draft">مسودة</SelectItem>
-                <SelectItem value="published">منشورة</SelectItem>
-                <SelectItem value="cancelled">ملغية</SelectItem>
-              </SelectContent>
-            </Select>
+              options={[
+                { value: "all", label: "جميع الحالات" },
+                { value: "draft", label: "مسودة" },
+                { value: "published", label: "منشورة" },
+                { value: "cancelled", label: "ملغية" },
+              ]}
+              placeholder="الحالة"
+              className="w-40"
+            />
           </div>
 
           {/* Initiatives List */}
@@ -265,7 +199,9 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
                         </div>
                       </div>
                       <div className="flex flex-col items-end gap-2">
-                        {getStatusBadge(initiative.status)}
+                        <AdminInitiativeStatusBadge
+                          status={initiative.status}
+                        />
                         <Badge variant="outline" className="text-xs">
                           {initiative.category.nameAr}
                         </Badge>
@@ -490,33 +426,14 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
 
           {/* Pagination */}
           {pagination.totalPages > 1 && (
-            <div className="flex justify-center items-center gap-2 mt-6">
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={!pagination.hasPrev || isLoading}
-                onClick={() => {
-                  /* Handle previous page */
-                }}
-              >
-                السابق
-              </Button>
-
-              <span className="mx-4 text-sm text-gray-600">
-                صفحة {pagination.page} من {pagination.totalPages}
-              </span>
-
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={!pagination.hasNext || isLoading}
-                onClick={() => {
-                  /* Handle next page */
-                }}
-              >
-                التالي
-              </Button>
-            </div>
+            <PaginationControls
+              currentPage={pagination.page}
+              totalPages={pagination.totalPages}
+              hasNext={pagination.hasNext}
+              hasPrev={pagination.hasPrev}
+              onPageChange={handlePageChange}
+              className="mt-8"
+            />
           )}
         </CardContent>
       </Card>

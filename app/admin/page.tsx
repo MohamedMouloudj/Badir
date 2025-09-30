@@ -1,4 +1,3 @@
-import React from "react";
 import { redirect } from "next/navigation";
 import getSessionWithCheckProfile from "@/hooks/getSessionWithCheckProfile";
 import { getAdminStatsAction } from "@/actions/admin";
@@ -7,8 +6,7 @@ import AdminDashboard from "@/components/pages/admin/Dashboard";
 export default async function AdminPage() {
   const session = await getSessionWithCheckProfile();
 
-  // Check if user has admin permissions
-  // TODO: Implement your admin permission check logic
+  // TODO: Change admin permission check logic
   const isAdmin = session?.user?.email === process.env.ADMIN_EMAIL;
 
   if (!isAdmin) {

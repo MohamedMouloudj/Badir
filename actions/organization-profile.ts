@@ -18,7 +18,7 @@ import { OrganizationService } from "@/services/organizations";
 import { getCallingCodeFromCountry, mimeTypeToExtension } from "@/lib/utils";
 import path from "path";
 import { OrganizationProfile, validateOrganizationProfile } from "@/schemas";
-import { getPublicStorageUrl } from "./supabaseHelpers";
+import { getPublicStorageUrl } from "./helpers";
 
 type FileField = "officialLicense" | "logo" | "identificationCard";
 
@@ -28,7 +28,14 @@ type FileField = "officialLicense" | "logo" | "identificationCard";
  */
 export async function completeOrgProfileAction(
   data: OrgRegistrationFormData
-): Promise<ActionResponse<OrganizationProfile, {}>> {
+): Promise<
+  ActionResponse<
+    OrganizationProfile,
+    {
+      redirectTo: string;
+    }
+  >
+> {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -200,7 +207,11 @@ export async function completeOrgProfileAction(
     });
 
     revalidatePath(AUTHORIZED_REDIRECTION);
-    return { success: true };
+    return {
+      success: true,
+      message: "تم إكمال تسجيل المنظمة بنجاح",
+      data: { redirectTo: AUTHORIZED_REDIRECTION },
+    };
   } catch (error) {
     if (error instanceof z.ZodError) {
       const treeError = z.treeifyError(error);

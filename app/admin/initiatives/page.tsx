@@ -46,14 +46,18 @@ function InitiativesLoading() {
 }
 
 async function InitiativesContent({ searchParams }: InitiativesPageProps) {
-  const page = parseInt(searchParams.page || "1");
+  const { page, status, search, categoryId } = searchParams;
   const filters = {
-    status: searchParams.status as any,
-    search: searchParams.search || "",
-    categoryId: searchParams.categoryId || "",
+    status: status as any,
+    search: search || "",
+    categoryId: categoryId || "",
   };
 
-  const result = await getUserInitiativesAction(filters, page, 10);
+  const result = await getUserInitiativesAction(
+    filters,
+    parseInt(page || "1", 10),
+    10
+  );
 
   if (!result.success) {
     return (
@@ -75,6 +79,7 @@ async function InitiativesContent({ searchParams }: InitiativesPageProps) {
 export default async function InitiativesPage({
   searchParams,
 }: InitiativesPageProps) {
+  const awaitedSearchParams = await searchParams;
   const session = await getSessionWithCheckProfile();
 
   // Check if user has admin permissions
@@ -86,7 +91,7 @@ export default async function InitiativesPage({
 
   return (
     <Suspense fallback={<InitiativesLoading />}>
-      <InitiativesContent searchParams={searchParams} />
+      <InitiativesContent searchParams={awaitedSearchParams} />
     </Suspense>
   );
 }

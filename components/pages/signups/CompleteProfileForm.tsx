@@ -13,7 +13,6 @@ import AppButton from "@/components/AppButton";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { completeProfileAction } from "@/actions/user-profile";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 // Import step components
@@ -42,7 +41,6 @@ export default function CompleteProfileForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isProfileComplete, setIsProfileComplete] = useState(false);
-  const router = useRouter();
 
   const methods = useForm<RegistrationFormData>({
     mode: "onChange",
@@ -107,10 +105,10 @@ export default function CompleteProfileForm() {
 
       const result = await completeProfileAction(data);
 
-      if (result.success) {
+      if (result.success && result.data) {
         setIsProfileComplete(true);
         toast.success("تم إكمال الملف الشخصي بنجاح!");
-        router.replace(AUTHORIZED_REDIRECTION);
+        window.location.href = result.data.redirectTo;
       } else {
         setIsProfileComplete(false);
         toast.error(result.error || "حدث خطأ أثناء حفظ البيانات");

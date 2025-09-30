@@ -46,14 +46,18 @@ function OrganizationsLoading() {
 }
 
 async function OrganizationsContent({ searchParams }: OrganizationsPageProps) {
-  const page = parseInt(searchParams.page || "1");
+  const { page, status, search, organizationType } = searchParams;
   const filters = {
-    status: searchParams.status as any,
-    search: searchParams.search || "",
-    organizationType: searchParams.organizationType || "",
+    status: status as any,
+    search: search || "",
+    organizationType: organizationType || "",
   };
 
-  const result = await getOrganizationsAction(filters, page, 10);
+  const result = await getOrganizationsAction(
+    filters,
+    parseInt(page || "1", 10),
+    10
+  );
 
   if (!result.success) {
     return (
@@ -76,6 +80,7 @@ async function OrganizationsContent({ searchParams }: OrganizationsPageProps) {
 export default async function OrganizationsPage({
   searchParams,
 }: OrganizationsPageProps) {
+  const awaitedSearchParams = await searchParams;
   const session = await getSessionWithCheckProfile();
 
   // Check if user has admin permissions
@@ -87,7 +92,7 @@ export default async function OrganizationsPage({
 
   return (
     <Suspense fallback={<OrganizationsLoading />}>
-      <OrganizationsContent searchParams={searchParams} />
+      <OrganizationsContent searchParams={awaitedSearchParams} />
     </Suspense>
   );
 }

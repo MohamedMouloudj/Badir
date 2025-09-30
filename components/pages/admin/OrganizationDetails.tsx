@@ -19,8 +19,9 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { AdminService } from "@/services/admin";
+import { formatDate } from "@/lib/utils";
+import { AdminOrganizationStatusBadge } from "../AdminStatusBadge";
 
-// Organization Details Component
 interface OrganizationDetailsProps {
   organization: Awaited<ReturnType<typeof AdminService.getOrganizationById>>;
 }
@@ -64,45 +65,6 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
     }
   };
 
-  const getStatusBadge = (status: string) => {
-    const configs = {
-      pending: {
-        label: "قيد المراجعة",
-        variant: "secondary" as const,
-        icon: AlertTriangle,
-      },
-      approved: {
-        label: "مقبولة",
-        variant: "default" as const,
-        icon: CheckCircle,
-      },
-      rejected: {
-        label: "مرفوضة",
-        variant: "destructive" as const,
-        icon: XCircle,
-      },
-    };
-
-    const config = configs[status as keyof typeof configs];
-    const Icon = config.icon;
-
-    return (
-      <Badge variant={config.variant} className="flex items-center gap-1">
-        <Icon className="w-4 h-4" />
-        {config.label}
-      </Badge>
-    );
-  };
-
-  const formatDate = (date: Date | string | null | undefined) => {
-    if (!date) return "غير متوفر";
-    return new Date(date).toLocaleDateString("ar-DZ", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
   return (
     <div className="p-6 max-w-6xl mx-auto" dir="rtl">
       {/* Header */}
@@ -116,7 +78,7 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
           </h1>
           <p className="text-gray-600">تفاصيل المنظمة</p>
         </div>
-        {getStatusBadge(organization.isVerified)}
+        <AdminOrganizationStatusBadge status={organization.isVerified} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -161,7 +123,7 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
                     تاريخ التأسيس
                   </Label>
                   <p className="mt-1 text-gray-900">
-                    {formatDate(organization.foundingDate)}
+                    {formatDate(organization.foundingDate!)}
                   </p>
                 </div>
 

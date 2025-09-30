@@ -1,7 +1,5 @@
 "use server";
 
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import {
   AdminService,
   OrganizationFilters,
@@ -10,28 +8,7 @@ import {
 import { OrganizationStatus, InitiativeStatus, UserType } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { ActionResponse } from "@/types/Statics";
-
-// Check if user is admin (you'll need to implement your admin logic)
-async function checkAdminPermission() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user) {
-    throw new Error("يجب تسجيل الدخول");
-  }
-
-  // TODO: Implement your admin permission check
-  // This could be based on user role, specific admin table, or environment variable
-  // For now, assuming you have an isAdmin field or similar
-  // Replace this with your actual admin check logic
-  const isAdmin = session.user.email === process.env.ADMIN_EMAIL;
-  if (!isAdmin) {
-    throw new Error("غير مصرح لك بالوصول لهذه الصفحة");
-  }
-
-  return session.user.id;
-}
+import { checkAdminPermission } from "./helpers";
 
 /**
  * Get paginated organizations for admin review

@@ -19,28 +19,28 @@ const landingRoute: Route[] = [
   },
 ];
 
-const appRoutes: Route[] = [
-  {
-    url: "/dashboard",
-    label: "لوحة التحكم",
-  },
-  {
-    url: "/organizations",
-    label: "المنظمات",
-  },
-  {
-    url: "/initiatives",
-    label: "المبادرات",
-  },
-  {
-    url: "/settings",
-    label: "الإعدادات",
-  },
-  {
-    url: "/contact",
-    label: "تواصل معنا",
-  },
-];
+// const appRoutes: Route[] = [
+//   {
+//     url: "/dashboard",
+//     label: "لوحة التحكم",
+//   },
+//   {
+//     url: "/organizations",
+//     label: "المنظمات",
+//   },
+//   {
+//     url: "/initiatives",
+//     label: "المبادرات",
+//   },
+//   {
+//     url: "/settings",
+//     label: "الإعدادات",
+//   },
+//   {
+//     url: "/contact",
+//     label: "تواصل معنا",
+//   },
+// ];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const authRoutes: Record<string, any> = {
@@ -82,10 +82,4 @@ const forMiddleware = {
 
 const AUTHORIZED_REDIRECTION = "/initiatives";
 
-export {
-  landingRoute,
-  appRoutes,
-  authRoutes,
-  forMiddleware,
-  AUTHORIZED_REDIRECTION,
-};
+export { landingRoute, authRoutes, forMiddleware, AUTHORIZED_REDIRECTION };

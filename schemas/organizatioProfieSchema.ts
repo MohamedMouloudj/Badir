@@ -1,3 +1,4 @@
+import { ORGANIZATION_TYPES, organizationTypeOptions } from "@/types/Profile";
 import z from "zod";
 
 const OrganizationProfileSchema = z.object({
@@ -56,14 +57,9 @@ const OrganizationProfileSchema = z.object({
   contactPhoneCountryCode: z.string().default("DZ"),
 
   organizationType: z.enum(
-    [
-      "charity",
-      "youth",
-      "educational",
-      "cultural",
-      "health",
-      "religious",
-      "other",
+    Object.keys(ORGANIZATION_TYPES) as [
+      keyof typeof ORGANIZATION_TYPES,
+      ...Array<keyof typeof ORGANIZATION_TYPES>
     ],
     {
       error: "الرجاء اختيار نوع المنظمة",

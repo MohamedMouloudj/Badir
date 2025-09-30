@@ -5,7 +5,7 @@ import {
   OrganizationFilters,
   InitiativeFilters,
 } from "@/services/admin";
-import { OrganizationStatus, InitiativeStatus, UserType } from "@prisma/client";
+import { OrganizationStatus, InitiativeStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { ActionResponse } from "@/types/Statics";
 import { checkAdminPermission } from "./helpers";

@@ -54,7 +54,8 @@
 
 ### Folder Structure
 
-badir-bunian-hackathon/
+```
+badir-bunian/
 ├── actions/ # Server actions for API logic
 ├── app/ # Next.js App Router pages
 │ ├── (auth)/ # Authentication pages
@@ -72,6 +73,7 @@ badir-bunian-hackathon/
 ├── schemas/ # Zod validation schemas
 ├── services/ # Business logic layer
 └── types/ # TypeScript definitions
+```
 
 ### Database Schema
 
@@ -389,6 +391,7 @@ Client Request → Server Function / Next.js API Route → Service Layer → Pri
 ### Initiative Features
 
 - [ ] Add cancel initiative functionality for users with userType: User
+- [ ] Fix allowed participation roles based on UserType and initiative organizer choices
 - [ ] Create rating component for users to rate joined initiatives
 - [ ] Add rating handlers and API endpoints (see [Ratings](#reusable-ui-components))
 - [ ] Recommend initiatives based on user location (latitude/longitude)
@@ -397,6 +400,10 @@ Client Request → Server Function / Next.js API Route → Service Layer → Pri
   - [ ] `InitiativeCard` component (`/components/pages/InitiativeCard.tsx`)
   - [ ] `ParticipationCard` component (`/components/pages/ParticipationCard.tsx`)
   - [ ] `InitiativeOrgCard` component (`/components/pages/InitiativeOrgCard.tsx`)
+
+### Support Requests
+
+- [ ] Implement support request creation for organizations
 
 ### Channels & Editor
 
@@ -437,5 +444,5 @@ Client Request → Server Function / Next.js API Route → Service Layer → Pri
 - [ ] Implement i18n or Lingo.dev compiler (but make sure to not make all routes dynamic) for Arabic and English
 
 ---
-<a href="https://github.com/MohamedMouloudj/Badir">Badir</a> © 2025 by <a href="https://github.com/MohamedMouloudj/">Mohamed Mouloudj</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</a></br><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
 
+`<a href="https://github.com/MohamedMouloudj/Badir">`Badir`</a>` © 2025 by `<a href="https://github.com/MohamedMouloudj/">`Mohamed Mouloudj`</a>` is licensed under `<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">`Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International` </a></br>``<img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">``<img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"> `

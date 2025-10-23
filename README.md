@@ -405,6 +405,11 @@ Client Request → Server Function / Next.js API Route → Service Layer → Pri
 
 - [ ] Implement support request creation for organizations
 
+### User Profile
+
+- [ ] Improve joined initiatives accessibility
+- [ ] Allow users and organizations to remove their profile pictures
+
 ### Channels & Editor
 
 - [ ] Improve Tiptap editor in initiatives channels
@@ -413,7 +418,7 @@ Client Request → Server Function / Next.js API Route → Service Layer → Pri
 
 ### Admin System
 
-- [ ] Create Admin DB table with two types: Admin, Supervisor
+- [ ] Update Admin DB table to include two types: Admin, Supervisor
 - [ ] Remove email-based admin check from environment variables
 - [ ] Add admin authentication and authorization
 - [ ] Create route to add/manage initiative categories

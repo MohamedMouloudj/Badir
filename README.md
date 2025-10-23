@@ -388,6 +388,10 @@ Client Request → Server Function / Next.js API Route → Service Layer → Pri
 - [ ] Implement file management system using Buckets
 - [ ] Migrate all database operations to new backend
 
+### Mobile App
+
+- [ ] Configure PWA settings for mobile experience
+
 ### Initiative Features
 
 - [ ] Add cancel initiative functionality for users with userType: User

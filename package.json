@@ -6,10 +6,10 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "lint": "next lint",
+    "db:reset": "tsx prisma/reset.ts",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:reset-seed": "tsx prisma/reset-and-seed.ts"
   },
   "dependencies": {
     "@better-fetch/fetch": "^1.1.18",

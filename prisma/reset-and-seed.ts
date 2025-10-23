@@ -1,16 +1,37 @@
+// prisma/reset-and-seed.ts
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-async function main() {
+async function resetDatabase() {
+  console.log("🗑️  Resetting database...");
+
+  // Delete in reverse dependency order
+  await prisma.postAttachment.deleteMany({});
+  await prisma.initiativePost.deleteMany({});
+  await prisma.initiativeParticipant.deleteMany({});
+  await prisma.userInitiativeRating.deleteMany({});
+  await prisma.supportRequest.deleteMany({});
+  await prisma.initiative.deleteMany({});
+  await prisma.initiativeCategory.deleteMany({});
+  await prisma.organization.deleteMany({});
+  await prisma.userQualification.deleteMany({});
+  await prisma.platformRating.deleteMany({});
+  await prisma.account.deleteMany({});
+  await prisma.session.deleteMany({});
+  await prisma.verification.deleteMany({});
+  await prisma.user.deleteMany({});
+
+  console.log("✅ Database reset completed!");
+}
+
+async function seedDatabase() {
   console.log("🌱 Starting to seed the database...");
 
-  // Create a single user (organization owner)
+  // Create user
   console.log("👤 Creating user...");
-  const user = await prisma.user.upsert({
-    where: { email: "org@example.com" },
-    update: {},
-    create: {
+  const user = await prisma.user.create({
+    data: {
       id: "user_org_owner",
       name: "Organization Owner",
       email: "org@example.com",
@@ -27,7 +48,7 @@ async function main() {
     },
   });
 
-  // Create a single organization
+  // Create organization
   console.log("🏢 Creating organization...");
   const organization = await prisma.organization.create({
     data: {
@@ -46,7 +67,7 @@ async function main() {
     },
   });
 
-  // Create a single initiative category
+  // Create category
   console.log("📂 Creating initiative category...");
   const category = await prisma.initiativeCategory.create({
     data: {
@@ -61,14 +82,14 @@ async function main() {
     },
   });
 
-  // Calculate dates: start in 20 days, end in 25 days
+  // Calculate dates
   const startDate = new Date();
   startDate.setDate(startDate.getDate() + 20);
 
   const endDate = new Date();
   endDate.setDate(endDate.getDate() + 25);
 
-  // Create a single initiative
+  // Create initiative
   console.log("🚀 Creating initiative...");
   const initiative = await prisma.initiative.create({
     data: {
@@ -95,7 +116,7 @@ async function main() {
     },
   });
 
-  // Create a single post for the initiative
+  // Create post
   console.log("📝 Creating initiative post...");
   await prisma.initiativePost.create({
     data: {
@@ -114,9 +135,14 @@ async function main() {
   console.log(`📅 Initiative ends: ${endDate.toLocaleDateString()}`);
 }
 
+async function main() {
+  await resetDatabase();
+  await seedDatabase();
+}
+
 main()
   .catch((e) => {
-    console.error("❌ Error during seeding:", e);
+    console.error("❌ Error:", e);
     process.exit(1);
   })
   .finally(async () => {

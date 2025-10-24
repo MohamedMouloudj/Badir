@@ -28,7 +28,7 @@ interface InitiativesListProps {
   categories: CategoryCard[];
   isOrg?: boolean;
   isOrgVerified?: boolean;
-  userId: string;
+  userId?: string;
 }
 
 export default function InitiativesList({

@@ -152,7 +152,7 @@ export default function InitiativeCard({
             size="md"
             icon={<ArrowUpLeft />}
             className="w-full sm:w-auto"
-            url={`/initiatives/${id}`}
+            url={userId ? `/initiatives/${id}` : `/login`}
             disabled={
               !isAvailable ||
               isCompleted ||

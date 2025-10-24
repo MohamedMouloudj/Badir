@@ -282,24 +282,8 @@ const sampleRatings: TestimonialOpinion[] = [
 
 const partners: Partner[] = [
   {
-    imageSrc: "/images/fake-partner.png",
-    name: "الجزائر الخضراء",
-  },
-  {
-    imageSrc: "/images/fake-partner.png",
-    name: "الجزائر الخضراء",
-  },
-  {
-    imageSrc: "/images/fake-partner.png",
-    name: "الجزائر الخضراء",
-  },
-  {
-    imageSrc: "/images/fake-partner.png",
-    name: "الجزائر الخضراء",
-  },
-  {
-    imageSrc: "/images/fake-partner.png",
-    name: "الجزائر الخضراء",
+    imageSrc: "/images/bunian-logo-nbg.png",
+    name: "بنيان",
   },
 ];
 

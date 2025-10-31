@@ -8,14 +8,20 @@ export default function Footer() {
   return (
     <footer dir="rtl">
       <div className="flex-center justify-center gap-4 mb-16" dir="ltr">
-        <Image
-          src="/images/logos/bunian.png"
-          alt="Badir and Bunian logos"
-          width={160}
-          height={40}
-          quality={100}
-          className="object-contain w-auto h-auto"
-        />
+        <a
+          href="https://www.linkedin.com/company/bunian-%D8%A8%D9%86%D9%8A%D8%A7%D9%86/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Image
+            src="/images/logos/bunian.png"
+            alt="Badir and Bunian logos"
+            width={160}
+            height={40}
+            quality={100}
+            className="object-contain w-auto h-auto"
+          />
+        </a>
         <div className="h-16 w-0.5 bg-neutrals-100" />
         <Image
           src="/images/logos/logo-white.png"

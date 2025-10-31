@@ -10,9 +10,11 @@ import { ChevronLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import AppButton from "@/components/AppButton";
 import { toast } from "sonner";
+import { useSearchParams } from "next/navigation";
 
 export default function LoginForm() {
   const [isPending, startTransition] = useTransition();
+  const searchParams = useSearchParams();
   const [isLoginSuccessful, setIsLoginSuccessful] = useState(false);
 
   const {
@@ -28,6 +30,7 @@ export default function LoginForm() {
       email: "",
       password: "",
     },
+    mode: "onBlur",
   });
 
   const onSubmit = (data: LoginFormData) => {
@@ -39,6 +42,7 @@ export default function LoginForm() {
         if (result.message) {
           toast.success(result.message);
         }
+        const callbackFromSearchParams = searchParams.get("callbackUrl");
         window.location.href = result.redirectTo;
       } else {
         setIsLoginSuccessful(false);

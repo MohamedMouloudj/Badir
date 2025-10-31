@@ -22,6 +22,7 @@ import MembersPanel from "@/components/pages/initiatives/MembersPanel";
 import RequestsPanel from "@/components/pages/initiatives/RequestsPanel";
 import InitiativeHeader from "@/components/pages/InitiativeHeader";
 import AppButton from "@/components/AppButton";
+import Link from "next/link";
 
 export async function generateMetadata({
   params,
@@ -57,7 +58,7 @@ export default async function InitiativeDetailsPage({
     notFound();
   }
 
-  const userParticipation = initiative.participants[0] || null;
+  const userParticipation = initiative.participants?.[0] || null;
 
   const isDeadlinePassed =
     initiative.registrationDeadline &&
@@ -277,12 +278,12 @@ export default async function InitiativeDetailsPage({
                 <p className="text-neutrals-700">
                   يجب تسجيل الدخول للانضمام إلى المبادرة
                 </p>
-                <a
+                <Link
                   href={`/login?callbackUrl=/initiatives/${initiative.id}`}
                   className="text-primary-600 font-semibold hover:underline mt-2 inline-block"
                 >
                   تسجيل الدخول
-                </a>
+                </Link>
               </div>
             )}
           </div>

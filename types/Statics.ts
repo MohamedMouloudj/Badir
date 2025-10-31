@@ -1,3 +1,5 @@
+import { JSX } from "react";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type CarouselImage = {
   id: number;
@@ -16,7 +18,7 @@ export type Partner = {
 };
 export type AboutInfo = {
   title: string;
-  description: string;
+  description: string | JSX.Element;
 };
 
 // ===== FORM TYPES =====

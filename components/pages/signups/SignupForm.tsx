@@ -1,115 +1,160 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
-import { signupAction, type SignupState } from "@/actions/signup";
+import { useState, useTransition } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signupAction } from "@/actions/signup";
 import FormInput from "@/components/FormInput";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
 import AppButton from "@/components/AppButton";
 import { ChevronLeft, Loader2 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { initialSignupSchema, type InitialSignupFormData } from "@/schemas";
+import { UserType } from "@prisma/client";
 
 export function SignupForm() {
   const pathname = usePathname();
+  const router = useRouter();
   const isUserSigningUp = pathname.includes("user");
-  const [state, formAction, isPending] = useActionState<
-    SignupState | null,
-    FormData
-  >(signupAction, null);
+  const [isPending, startTransition] = useTransition();
   const [isRegisterSuccessful, setIsRegisterSuccessful] = useState(false);
 
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    userType: isUserSigningUp ? "both" : "organization",
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<InitialSignupFormData>({
+    resolver: zodResolver(initialSignupSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      userType: isUserSigningUp ? "both" : ("organization" as UserType),
+    },
   });
 
-  useEffect(() => {
-    if (state?.error) {
-      setIsRegisterSuccessful(false);
-      toast.error(state.error);
-    } else if (state?.success && state?.message) {
-      setIsRegisterSuccessful(true);
-      toast.success(state.message);
-    }
-  }, [state]);
+  const onSubmit = (data: InitialSignupFormData) => {
+    startTransition(async () => {
+      try {
+        const formData = new FormData();
+        Object.entries(data).forEach(([key, value]) => {
+          formData.append(key, String(value));
+        });
 
-  const handleInputChange = (
-    name: string,
-    value: string | boolean | string[]
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value as string,
-    }));
+        const result = await signupAction(null, formData);
+
+        if (result.error) {
+          setIsRegisterSuccessful(false);
+          toast.error(result.error);
+        } else if (result.success && result.message) {
+          setIsRegisterSuccessful(true);
+          toast.success(result.message);
+
+          const completeRoute =
+            data.userType === "both"
+              ? "/complete-profile/user"
+              : "/complete-profile/organization";
+          router.push(completeRoute);
+        }
+      } catch (error) {
+        console.error("Signup error:", error);
+        toast.error("حدث خطأ أثناء إنشاء الحساب");
+      }
+    });
   };
 
   return (
     <div className="w-full h-full">
       <Card className="w-full bg-transparent border-none shadow-none">
         <CardContent>
-          <form action={formAction} className="space-y-4">
-            {/* Hidden inputs for server action */}
-            <input type="hidden" name="firstName" value={formData.firstName} />
-            <input type="hidden" name="lastName" value={formData.lastName} />
-            <input type="hidden" name="email" value={formData.email} />
-            <input type="hidden" name="password" value={formData.password} />
-            <input
-              type="hidden"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-            />
-            <input type="hidden" name="userType" value={formData.userType} />
-
-            {/* Form Inputs */}
-
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-              <FormInput
-                label="الاسم الأول"
-                type="text"
+              <Controller
                 name="firstName"
-                placeholder="أدخل اسمك الأول"
-                value={formData.firstName}
-                onChange={(value) => handleInputChange("firstName", value)}
+                control={control}
+                render={({ field }) => (
+                  <FormInput
+                    label="الاسم الأول"
+                    type="text"
+                    name={field.name}
+                    placeholder="أدخل اسمك الأول"
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={errors.firstName?.message}
+                    disabled={isPending || isRegisterSuccessful}
+                  />
+                )}
               />
-              <FormInput
-                label="اسم العائلة"
-                type="text"
+              <Controller
                 name="lastName"
-                placeholder="أدخل اسم العائلة"
-                value={formData.lastName}
-                onChange={(value) => handleInputChange("lastName", value)}
+                control={control}
+                render={({ field }) => (
+                  <FormInput
+                    label="اسم العائلة"
+                    type="text"
+                    name={field.name}
+                    placeholder="أدخل اسم العائلة"
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={errors.lastName?.message}
+                    disabled={isPending || isRegisterSuccessful}
+                  />
+                )}
               />
             </div>
 
-            <FormInput
-              label="البريد الإلكتروني"
-              type="email"
+            <Controller
               name="email"
-              placeholder="example@domain.com"
-              value={formData.email}
-              onChange={(value) => handleInputChange("email", value)}
+              control={control}
+              render={({ field }) => (
+                <FormInput
+                  label="البريد الإلكتروني"
+                  type="email"
+                  name={field.name}
+                  placeholder="example@domain.com"
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.email?.message}
+                  disabled={isPending || isRegisterSuccessful}
+                />
+              )}
             />
 
-            <FormInput
-              label="كلمة المرور"
-              type="password"
+            <Controller
               name="password"
-              placeholder="أدخل كلمة مرور قوية"
-              value={formData.password}
-              onChange={(value) => handleInputChange("password", value)}
+              control={control}
+              render={({ field }) => (
+                <FormInput
+                  label="كلمة المرور"
+                  type="password"
+                  name={field.name}
+                  placeholder="أدخل كلمة مرور قوية"
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.password?.message}
+                  disabled={isPending || isRegisterSuccessful}
+                />
+              )}
             />
 
-            <FormInput
-              label="تأكيد كلمة المرور"
-              type="password"
+            <Controller
               name="confirmPassword"
-              placeholder="أعد إدخال كلمة المرور"
-              value={formData.confirmPassword}
-              onChange={(value) => handleInputChange("confirmPassword", value)}
+              control={control}
+              render={({ field }) => (
+                <FormInput
+                  label="تأكيد كلمة المرور"
+                  type="password"
+                  name={field.name}
+                  placeholder="أعد إدخال كلمة المرور"
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.confirmPassword?.message}
+                  disabled={isPending || isRegisterSuccessful}
+                />
+              )}
             />
 
             <div className="flex-center justify-center mt-8">

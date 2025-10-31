@@ -15,6 +15,7 @@ export default async function Partners() {
       return {
         name: item.name,
         imageSrc: item.logo,
+        url: `/organizations/${item.id}`,
       } as Partner;
     }) ?? [];
 

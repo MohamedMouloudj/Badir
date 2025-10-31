@@ -65,6 +65,7 @@ const forMiddleware = {
   publicRoutes: [
     "/",
     "/organizations",
+    "/organizations/:id",
     "/initiatives",
     "/contact",
     "/about",
@@ -77,7 +78,12 @@ const forMiddleware = {
     "/assistance",
   ],
   authRoutes: ["/signup", "/login", "/forgot-password"],
-  apiAuthPrefix: "/api/auth",
+  api: {
+    authPrefix: "/api/auth",
+    organizationPrefix: "/api/organizations",
+    initiativePrefix: "/api/initiatives",
+    participantPrefix: "/api/participants",
+  },
 };
 
 const AUTHORIZED_REDIRECTION = "/initiatives";

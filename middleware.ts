@@ -4,33 +4,53 @@ import { AUTHORIZED_REDIRECTION, forMiddleware } from "./data/routes";
 
 export default async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
-
-  const sessionCookie = getSessionCookie(request);
   // Performance issue
   // const { data: session } = await betterFetch<Session>(
   //   "/api/auth/get-session",
   //   {
   //     baseURL: process.env.BETTER_AUTH_URL,
   //     headers: {
-  //       //get the cookie from the request
   //       cookie: request.headers.get("cookie") || "",
   //     },
   //   }
   // );
+  const sessionCookie = getSessionCookie(request);
 
-  const isPublicRoute = forMiddleware.publicRoutes.includes(pathname);
+  const isExactPublicRoute = forMiddleware.publicRoutes.includes(pathname);
+  // /organizations/:id is public
+  const isPublicOrgProfile =
+    pathname.startsWith("/organizations/") && pathname !== "/organizations/";
+
+  // /initiatives/:id is public (but NOT /initiatives/new or /initiatives/edit)
+  const isPublicInitiativeDetail =
+    pathname.startsWith("/initiatives/") &&
+    pathname !== "/initiatives/" &&
+    !pathname.startsWith("/initiatives/new") &&
+    !pathname.includes("/edit");
+
+  const isPublicRoute =
+    isExactPublicRoute || isPublicOrgProfile || isPublicInitiativeDetail;
+
   const isAuthRoute = forMiddleware.authRoutes.some(
     (route) => pathname === route || pathname.startsWith(route + "/")
   );
-  const isApiAuthRoute = pathname.startsWith(forMiddleware.apiAuthPrefix);
 
-  if (isApiAuthRoute) return null;
+  const isApiRoute = new RegExp(
+    `^(${[
+      forMiddleware.api.authPrefix,
+      forMiddleware.api.organizationPrefix,
+      forMiddleware.api.initiativePrefix,
+      forMiddleware.api.participantPrefix,
+    ].join("|")})`
+  ).test(pathname);
+
+  if (isApiRoute) return null;
 
   if (isAuthRoute) {
+    // if (!session?.user.profileCompleted && pathname !== "/complete-profile") {
+    //   return NextResponse.redirect(new URL("/complete-profile", request.url));
+    // } ---> Moved it to component level validation
     if (sessionCookie) {
-      // if (!session?.user.profileCompleted && pathname !== "/complete-profile") {
-      //   return NextResponse.redirect(new URL("/complete-profile", request.url));
-      // } ---> Moved it to component level validation
       return NextResponse.redirect(
         new URL(AUTHORIZED_REDIRECTION, request.url)
       );
@@ -38,6 +58,7 @@ export default async function middleware(request: NextRequest) {
     return null;
   }
 
+  // Redirect to login if not authenticated and not a public route
   if (!sessionCookie && !isPublicRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
@@ -47,7 +68,6 @@ export default async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // skip Next.js internals, API routes, TRPC routes, and all static files
-    "/((?!_next|api|trpc|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/((?!_next|trpc|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
   ],
 };

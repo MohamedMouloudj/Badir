@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { IBMPlex } from "@/lib/fonts";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Toaster } from "sonner";
 import "./globals.css";
+import { iosSplashScreens } from "@/data/iosSplashScreens";
 
 export const metadata: Metadata = {
   title: {
@@ -12,6 +13,43 @@ export const metadata: Metadata = {
   },
   description:
     "تنظم الجهود وتقيم جسوراً بين من يملكون القدرة على العطاء، ومن يتطلعون إلى من يعينهم",
+
+  manifest: "/manifest.webmanifest",
+
+  // Apple-specific metadata
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "بادر",
+    startupImage: iosSplashScreens,
+  },
+
+  // Icons (including apple-touch-icon)
+  icons: {
+    icon: [
+      {
+        url: "/pwa/icons/manifest-icon-192.maskable.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        url: "/pwa/icons/manifest-icon-512.maskable.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
+    ],
+    apple: [
+      {
+        url: "/pwa/icons/apple-icon-180.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
+  },
+};
+export const viewport: Viewport = {
+  maximumScale: 1,
+  userScalable: false,
 };
 export default async function RootLayout({
   children,

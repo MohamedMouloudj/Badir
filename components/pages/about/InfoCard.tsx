@@ -1,6 +1,8 @@
+import { JSX } from "react";
+
 interface InfoCardProps {
   title: string;
-  description: string;
+  description: string | JSX.Element;
   className?: string;
   titleClassName?: string;
   descriptionClassName?: string;
@@ -70,8 +72,9 @@ const InfoCard: React.FC<InfoCardProps> = ({
           paddingTop: "calc(var(--badge-height) / 2 + 1rem)",
         }}
       >
-        <p
-          className={`
+        {typeof description === "string" ? (
+          <p
+            className={`
           text-base 
           leading-relaxed 
           text-neutrals-700
@@ -81,9 +84,27 @@ const InfoCard: React.FC<InfoCardProps> = ({
           font-ibm-plex-sans-arabic
           ${descriptionClassName}
         `}
-        >
-          {description}
-        </p>
+          >
+            {description}
+          </p>
+        ) : (
+          <div
+            className={`
+          text-base 
+          leading-relaxed 
+          text-neutrals-700
+          text-secondary-md
+          max-sm:text-secondary-sm
+          font-semibold
+          font-ibm-plex-sans-arabic
+          text-right
+          md:px-8
+          ${descriptionClassName}
+        `}
+          >
+            {description}
+          </div>
+        )}
       </div>
     </div>
   );

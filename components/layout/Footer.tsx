@@ -88,7 +88,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/signup"
+                  href="/signup/user"
                   className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
                 >
                   انضم كمتطوع
@@ -126,7 +126,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/signup"
+                  href="/signup/organization"
                   className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
                 >
                   انضم كمنظمة{" "}

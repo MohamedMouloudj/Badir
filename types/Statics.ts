@@ -15,6 +15,7 @@ export type TestimonialOpinion = {
 export type Partner = {
   imageSrc: string;
   name: string;
+  url?: string;
 };
 export type AboutInfo = {
   title: string;

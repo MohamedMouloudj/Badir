@@ -43,6 +43,10 @@ export default function LoginForm() {
           toast.success(result.message);
         }
         const callbackFromSearchParams = searchParams.get("callbackUrl");
+        if (callbackFromSearchParams) {
+          window.location.href = callbackFromSearchParams;
+          return;
+        }
         window.location.href = result.redirectTo;
       } else {
         setIsLoginSuccessful(false);

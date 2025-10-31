@@ -9,6 +9,7 @@
 ### Mobile App
 
 - [ ] Configure PWA settings for mobile experience
+- [ ] Add notification for new initiative posts
 
 ### Initiative Features
 
@@ -69,3 +70,4 @@
 ### Multi-language Support
 
 - [ ] Implement i18n or Lingo.dev compiler (but make sure to not make all routes dynamic) for Arabic and English
+

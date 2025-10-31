@@ -1,7 +1,9 @@
 import LoginForm from "@/components/pages/login/LoginForm";
 import { authRoutes } from "@/data/routes";
+import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default function LoginPage() {
   return (
@@ -45,7 +47,9 @@ export default function LoginPage() {
             </h2>
 
             {/* Form */}
-            <LoginForm />
+            <Suspense fallback={<Loader2 className="w-4 h-4 animate-spin" />}>
+              <LoginForm />
+            </Suspense>
 
             {/* Sign up link */}
             <div className="text-center mt-2 pt-4">

@@ -38,4 +38,10 @@ export class UserService {
       select: { image: true },
     });
   }
+
+  static async getUsersCount() {
+    return await prisma.user.count({
+      where: { isActive: true },
+    });
+  }
 }

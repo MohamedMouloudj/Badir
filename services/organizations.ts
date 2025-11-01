@@ -160,4 +160,8 @@ export class OrganizationService {
       throw new Error("Failed to fetch user organizations");
     }
   }
+
+  static async getOrganizationsCount() {
+    return await prisma.organization.count();
+  }
 }

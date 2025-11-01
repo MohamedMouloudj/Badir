@@ -28,7 +28,7 @@ export default async function LastInitiatives() {
 
   return (
     <section className="flex-center-column items-center" dir="rtl">
-      <h2 className="section-title">آخـــر مبادراتنا</h2>
+      <h2 className="section-title">آخـــر المبادرات</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
         {threeInitiatives.map((initiative) => (
           <InitiativeCard key={initiative.id} initiative={initiative} />

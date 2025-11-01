@@ -429,4 +429,8 @@ export class InitiativeService {
     });
     return initiative?.coverImage || null;
   }
+
+  static async getInitiativesCount() {
+    return await prisma.initiative.count();
+  }
 }

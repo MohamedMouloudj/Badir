@@ -46,8 +46,7 @@ export default function Hero() {
             .. بصُنع الأثر
           </h1>
           <p className="hero-description font-bold text-primary-sm">
-            منصّة تُنظّم عطاءك ليصنع الفرق، من خلال الوصل بين الخير وأهله،
-            والعمل ومُحتاجيه.
+            نُقرّب المسافة بين من يريد العطاء ومن يحتاجه، ليكبر الأثر معًا.
           </p>
           <div className="flex-center max-xl:justify-center max-sm:items-end gap-4 flex-1 py-6">
             <AppButton

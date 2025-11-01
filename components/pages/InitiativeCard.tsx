@@ -132,7 +132,7 @@ export default function InitiativeCard({
           <span className="font-medium text-neutrals-600 hover:text-primary-500 hover:underline">
             <Link
               href={
-                organizer.id !== "unknown"
+                organizer.id
                   ? organizer.type === OrganizerType.organization
                     ? `/organizations/${organizer.id}`
                     : `/profile/${organizer.id}`

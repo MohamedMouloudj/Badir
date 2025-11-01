@@ -21,6 +21,12 @@ export type AboutInfo = {
   title: string;
   description: string | JSX.Element;
 };
+export type StatProps = {
+  id: number;
+  title: string;
+  key: "organizations" | "initiatives" | "activeVolunteers";
+  icon: JSX.Element;
+};
 
 // ===== FORM TYPES =====
 export interface FormData {

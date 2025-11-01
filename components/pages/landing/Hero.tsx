@@ -13,23 +13,28 @@ import { useMediaQuery } from "react-responsive";
 export default function Hero() {
   const isMobile = useMediaQuery({ maxWidth: 767 });
   useGSAP(() => {
-    const heroTitle = new SplitText(".hero-title", { type: "words" });
-    const heroSplit = new SplitText(".hero-description", { type: "lines" });
+    document.fonts.ready.then(() => {
+      const heroTitle = new SplitText(".hero-title", { type: "words" });
+      const heroSplit = new SplitText(".hero-description", { type: "words" });
 
-    gsap.from(heroTitle.words, {
-      yPercent: 100,
-      opacity: 0,
-      duration: 1.5,
-      ease: "expo.out",
-      stagger: 0.1,
-    });
-    gsap.from(heroSplit.lines, {
-      opacity: 0,
-      yPercent: isMobile ? 40 : 100,
-      duration: 1.5,
-      ease: "expo.out",
-      stagger: 0.05,
-      delay: 1,
+      gsap.from(heroTitle.words, {
+        yPercent: 100,
+        opacity: 0,
+        duration: 1.5,
+        ease: "expo.out",
+        stagger: 0.1,
+      });
+      gsap.from(heroSplit.words, {
+        direction: "rtl",
+        opacity: 0,
+        autoAlpha: 0,
+        filter: "blur(8px)",
+        xPercent: isMobile ? 0 : 100,
+        duration: 1.5,
+        ease: "expo.out",
+        stagger: 0.05,
+        delay: 1,
+      });
     });
   }, []);
   return (
@@ -37,8 +42,8 @@ export default function Hero() {
       className="flex-center-column xl:flex-center justify-evenly items-stretch"
       dir="rtl"
     >
-      <div className="flex-center-column max-xl:text-center gap-10 justify-between items-center h-full flex-1/2 xl:pr-8">
-        <div className="flex-center-column gap-8 justify-between h-full">
+      <div className="flex-center-column max-xl:text-center gap-10 justify-center items-center h-full flex-1/2 xl:pr-8">
+        <div className="flex-center-column gap-10 justify-center h-full">
           <h1 className="hero-title text-neutrals-700 font-bold mb-4 text-hero-md lg:text-hero-lg">
             <span className="text-primary-500 max-xl:block max-xl:w-full">
               بــادِر
@@ -48,7 +53,7 @@ export default function Hero() {
           <p className="hero-description font-bold text-primary-sm">
             نُقرّب المسافة بين من يريد العطاء ومن يحتاجه، ليكبر الأثر معًا.
           </p>
-          <div className="flex-center max-xl:justify-center max-sm:items-end gap-4 flex-1 py-6">
+          <div className="flex-center max-xl:justify-center max-sm:items-end gap-4 py-6">
             <AppButton
               type="outline"
               border="rounded"

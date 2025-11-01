@@ -2,6 +2,10 @@ import { Route } from "@/types/Routes";
 
 const landingRoute: Route[] = [
   {
+    url: "/",
+    label: "الرئيسية",
+  },
+  {
     url: "/about",
     label: "عن المنصة",
   },
@@ -18,29 +22,6 @@ const landingRoute: Route[] = [
     label: "تواصل معنا",
   },
 ];
-
-// const appRoutes: Route[] = [
-//   {
-//     url: "/dashboard",
-//     label: "لوحة التحكم",
-//   },
-//   {
-//     url: "/organizations",
-//     label: "المنظمات",
-//   },
-//   {
-//     url: "/initiatives",
-//     label: "المبادرات",
-//   },
-//   {
-//     url: "/settings",
-//     label: "الإعدادات",
-//   },
-//   {
-//     url: "/contact",
-//     label: "تواصل معنا",
-//   },
-// ];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const authRoutes: Record<string, any> = {

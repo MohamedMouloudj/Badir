@@ -3,8 +3,9 @@ import { IBMPlex } from "@/lib/fonts";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Toaster } from "sonner";
-import "./globals.css";
 import { iosSplashScreens } from "@/data/iosSplashScreens";
+import { RegisterServiceWorker } from "./register-sw";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
@@ -59,6 +60,7 @@ export default async function RootLayout({
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <body className={`${IBMPlex.variable} antialiased`}>
+        <RegisterServiceWorker />
         <Navbar />
         <main>{children}</main>
         <Footer />

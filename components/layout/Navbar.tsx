@@ -7,11 +7,13 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AuthProfileButtons } from "@/components/AuthProfileButtons";
 import Logo from "@/components/Logo";
+import { useMediaQuery } from "react-responsive";
 
 export default function Navbar() {
   const pathname = usePathname();
   const navRef = useRef<HTMLElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1023 });
 
   useEffect(() => {
     const updateNavbarHeight = () => {
@@ -79,16 +81,21 @@ export default function Navbar() {
       {/* Desktop Navigation */}
       <div className="hidden md:flex items-center gap-6 flex-1">
         <ul>
-          {landingRoute.map((navRoute) => (
-            <li key={navRoute.url}>
-              <Link
-                className={`${pathname === navRoute.url ? "underline" : ""}`}
-                href={`${navRoute.url}`}
-              >
-                {navRoute.label}
-              </Link>
-            </li>
-          ))}
+          {landingRoute.map((navRoute) => {
+            if (isTablet && navRoute.url === "/") {
+              return null;
+            }
+            return (
+              <li key={navRoute.url}>
+                <Link
+                  className={`${pathname === navRoute.url ? "underline" : ""}`}
+                  href={`${navRoute.url}`}
+                >
+                  {navRoute.label}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
         <AuthProfileButtons isMobile={false} />
       </div>

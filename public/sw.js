@@ -17,7 +17,7 @@ self.addEventListener("install", (event) => {
       .then((cache) => {
         return cache.addAll(PRECACHE_URLS);
       })
-      .then(() => self.skipWaiting())
+      .then(() => self.skipWaiting()),
   );
 });
 
@@ -34,10 +34,10 @@ self.addEventListener("activate", (event) => {
             if (!cacheWhitelist.includes(cacheName)) {
               return caches.delete(cacheName);
             }
-          })
+          }),
         );
       })
-      .then(() => self.clients.claim())
+      .then(() => self.clients.claim()),
   );
 });
 
@@ -71,7 +71,6 @@ self.addEventListener("fetch", (event) => {
             return response;
           }
 
-          // Clone the response
           const responseToCache = response.clone();
 
           // Cache successful responses
@@ -84,6 +83,6 @@ self.addEventListener("fetch", (event) => {
         .catch(() => {
           return caches.match("/offline.html");
         });
-    })
+    }),
   );
 });

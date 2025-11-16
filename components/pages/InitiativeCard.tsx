@@ -44,10 +44,10 @@ export default function InitiativeCard({
 
   return (
     <Card
-      className="relative w-full max-w-2xl h-full mx-auto bg-neutrals-100 border-2 border-secondary-700 rounded-xl p-4 md:p-6 shadow-md"
+      className="bg-neutrals-100 border-secondary-700 relative mx-auto h-full w-full max-w-2xl rounded-xl border-2 p-4 shadow-md md:p-6"
       dir="rtl"
     >
-      <CardContent className="p-0.5 flex-center-column justify-between h-full gap-2">
+      <CardContent className="flex-center-column h-full justify-between gap-2 p-0.5">
         {registrationDeadline && (
           <TooltipProvider>
             <Tooltip>
@@ -59,13 +59,13 @@ export default function InitiativeCard({
                 className="absolute top-1 right-1"
                 aria-label="Show registration deadline"
               >
-                <Clock className="w-6 h-6 text-neutrals-400" />
+                <Clock className="text-neutrals-400 h-6 w-6" />
               </TooltipTrigger>
             </Tooltip>
           </TooltipProvider>
         )}
         {/* Header with badges */}
-        <div className="flex justify-between items-start mt-2 sm:mt-1">
+        <div className="mt-2 flex items-start justify-between sm:mt-1">
           <CategoryBadge
             nameAr={category.nameAr}
             bgColor={category.bgColor ?? "transparent"}
@@ -81,14 +81,14 @@ export default function InitiativeCard({
         </div>
 
         {/* Title and Date - Responsive Layout */}
-        <div className="flex flex-col lg:flex-row lg:items-start gap-4">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
           {/* Title */}
-          <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-neutrals-700 leading-tight flex-1">
+          <h3 className="text-neutrals-700 flex-1 text-lg leading-tight font-bold md:text-xl lg:text-2xl">
             {titleAr}
           </h3>
 
           {/* Date */}
-          <div className="text-neutrals-700 text-sm md:text-base flex-wrap lg:border-r-2 lg:border-secondary-700 lg:pr-4">
+          <div className="text-neutrals-700 lg:border-secondary-700 flex-wrap text-sm md:text-base lg:border-r-2 lg:pr-4">
             <span className="font-semibold">{formatDate(startDate)}</span>
             <span className="mx-2">إلى</span>
             <span className="font-semibold">{formatDate(endDate)}</span>
@@ -97,28 +97,28 @@ export default function InitiativeCard({
 
         {/* Description */}
         {shortDescriptionAr && (
-          <p className="text-sm md:text-base text-neutrals-500 leading-relaxed">
+          <p className="text-neutrals-500 text-sm leading-relaxed md:text-base">
             {shortDescriptionAr}
           </p>
         )}
 
         {/* Location and participants */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-          <div className="flex items-center gap-2 text-neutrals-600 text-sm md:text-base">
-            <div className="flex-center size-fit p-0.5 bg-primary-500 rounded-full">
-              <MapPin className="w-5 h-5 md:w-5 md:h-5 text-neutrals-100" />
+        <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+          <div className="text-neutrals-600 flex items-center gap-2 text-sm md:text-base">
+            <div className="flex-center bg-primary-500 size-fit rounded-full p-0.5">
+              <MapPin className="text-neutrals-100 h-5 w-5 md:h-5 md:w-5" />
             </div>
             <span>{city}</span>
           </div>
 
-          <div className="flex items-center gap-2 text-neutrals-600 text-sm md:text-base">
+          <div className="text-neutrals-600 flex items-center gap-2 text-sm md:text-base">
             <Image
               src="/images/icons/group.svg"
               alt="عدد المشاركين"
               width={24}
               height={24}
             />
-            <span className="whitespace-nowrap truncate">
+            <span className="truncate whitespace-nowrap">
               {maxParticipants
                 ? `${currentParticipants} / ${maxParticipants} متطوع`
                 : `${currentParticipants}`}
@@ -129,7 +129,7 @@ export default function InitiativeCard({
         {/* Organizer */}
         <div className="text-neutrals-500 text-sm md:text-base">
           نُظِّمت بواسطة:{" "}
-          <span className="font-medium text-neutrals-600 hover:text-primary-500 hover:underline">
+          <span className="text-neutrals-600 hover:text-primary-500 font-medium hover:underline">
             <Link
               href={
                 organizer.id
@@ -145,7 +145,7 @@ export default function InitiativeCard({
         </div>
 
         {/* Action button */}
-        <div className="flex justify-center pt-4 justify-self-end">
+        <div className="flex justify-center justify-self-end pt-4">
           <AppButton
             type="outline"
             border="rounded"

@@ -5,25 +5,25 @@ import Logo from "@/components/Logo";
 export default function NotFound() {
   return (
     <div
-      className="min-h-screen bg-neutrals-100 flex flex-col items-center justify-center px-6"
+      className="bg-neutrals-100 flex min-h-screen flex-col items-center justify-center px-6"
       dir="rtl"
     >
-      <div className="max-w-md w-full text-center space-y-8">
+      <div className="w-full max-w-md space-y-8 text-center">
         {/* Logo */}
-        <div className="flex justify-center mb-8">
+        <div className="mb-8 flex justify-center">
           <Logo />
         </div>
 
         {/* 404 Illustration */}
         <div className="relative">
-          <div className="text-9xl font-bold text-neutrals-300 select-none">
+          <div className="text-neutrals-300 text-9xl font-bold select-none">
             404
           </div>
         </div>
 
         {/* Content */}
         <div className="space-y-4">
-          <h1 className="text-primary-lg font-bold text-neutrals-700">
+          <h1 className="text-primary-lg text-neutrals-700 font-bold">
             الصفحة غير موجودة
           </h1>
 
@@ -37,25 +37,25 @@ export default function NotFound() {
         <div className="space-y-4">
           <Link
             href="/"
-            className="w-full inline-block px-6 py-3 bg-primary-500 hover:bg-primary-400 text-white font-semibold rounded-lg transition-colors duration-200 text-button-lg"
+            className="bg-primary-500 hover:bg-primary-400 text-button-lg inline-block w-full rounded-lg px-6 py-3 font-semibold text-white transition-colors duration-200"
           >
             العودة للصفحة الرئيسية
           </Link>
 
           <Link
             href="/contact"
-            className="w-full inline-block px-6 py-3 bg-transparent border-2 border-primary-500 text-primary-500 hover:bg-primary-50 font-semibold rounded-lg transition-colors duration-200 text-button-lg"
+            className="border-primary-500 text-primary-500 hover:bg-primary-50 text-button-lg inline-block w-full rounded-lg border-2 bg-transparent px-6 py-3 font-semibold transition-colors duration-200"
           >
             تواصل معنا
           </Link>
         </div>
 
         {/* Helpful Links */}
-        <div className="pt-8 border-t border-neutrals-300">
+        <div className="border-neutrals-300 border-t pt-8">
           <p className="text-paragraph-sm text-neutrals-400 mb-4">
             ربما تبحث عن:
           </p>
-          <div className="flex flex-wrap justify-center gap-4 text-caption-note">
+          <div className="text-caption-note flex flex-wrap justify-center gap-4">
             <Link
               href="/about"
               className="text-primary-500 hover:text-primary-400 transition-colors"

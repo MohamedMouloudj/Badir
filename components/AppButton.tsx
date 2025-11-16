@@ -54,15 +54,15 @@ function AppButton({
   return (
     <ShadcnButton
       className={cn(
-        "font-medium transition-all flex-center cursor-pointer",
+        "flex-center cursor-pointer font-medium transition-all",
         sizeClasses[size],
         (type === "primary" || type === "submit") &&
-          "bg-primary-500 text-white hover:bg-primary-400",
+          "bg-primary-500 hover:bg-primary-400 text-white",
         (type === "outline" || type === "outline-submit") &&
-          "border border-primary-500 text-primary-500 bg-transparent hover:bg-primary-100 hover:text-primary-400",
+          "border-primary-500 text-primary-500 hover:bg-primary-100 hover:text-primary-400 border bg-transparent",
         border === "rounded" && "rounded-full",
         border === "default" && "rounded-md",
-        className
+        className,
       )}
       onClick={onClick}
       disabled={disabled}

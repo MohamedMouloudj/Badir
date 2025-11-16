@@ -18,7 +18,7 @@ import { OrganizationService } from "@/services/organizations";
 import { getCallingCodeFromCountry, mimeTypeToExtension } from "@/lib/utils";
 import path from "path";
 import { OrganizationProfile, validateOrganizationProfile } from "@/schemas";
-import { getPublicStorageUrl } from "./helpers";
+import { getPublicStorageUrl } from "./helpers-sf";
 
 type FileField = "officialLicense" | "logo" | "identificationCard";
 
@@ -27,7 +27,7 @@ type FileField = "officialLicense" | "logo" | "identificationCard";
  * @param data the organization registration form data
  */
 export async function completeOrgProfileAction(
-  data: OrgRegistrationFormData
+  data: OrgRegistrationFormData,
 ): Promise<
   ActionResponse<
     OrganizationProfile,
@@ -111,7 +111,7 @@ export async function completeOrgProfileAction(
     }
 
     const uploadResults = await Promise.all(
-      uploadPromises.map((p) => p.url.then((url) => ({ field: p.field, url })))
+      uploadPromises.map((p) => p.url.then((url) => ({ field: p.field, url }))),
     );
 
     const uploadedUrls: Record<FileField, string | null> = {
@@ -130,13 +130,13 @@ export async function completeOrgProfileAction(
 
     const formattedPhone = processedFormData.contactPhone
       ? `+${getCallingCodeFromCountry(
-          processedFormData.contactPhoneCountryCode
+          processedFormData.contactPhoneCountryCode,
         )} ${processedFormData.contactPhone}`
       : undefined;
 
     const formattedPhoneOrg = processedFormData.contactPhoneOrg
       ? `+${getCallingCodeFromCountry(
-          processedFormData.contactPhoneOrgCountryCode
+          processedFormData.contactPhoneOrgCountryCode,
         )} ${processedFormData.contactPhoneOrg}`
       : undefined;
 
@@ -254,7 +254,7 @@ export async function completeOrgProfileAction(
  * @param data the organization profile data to update
  */
 export async function updateOrganizationProfileAction(
-  data: OrganizationProfile
+  data: OrganizationProfile,
 ): Promise<ActionResponse<OrganizationProfile, {}>> {
   try {
     const session = await auth.api.getSession({
@@ -335,7 +335,7 @@ export async function updateOrganizationProfileAction(
             bucketName,
             filePath,
             fileBuffer,
-            type
+            type,
           );
 
           if (result.path && orgLogo && orgLogo) {
@@ -348,7 +348,7 @@ export async function updateOrganizationProfileAction(
 
           uploadResults[field] = await getPublicStorageUrl(
             bucketName,
-            result.path
+            result.path,
           );
         } catch (error) {
           console.error(`Error uploading ${field}:`, error);

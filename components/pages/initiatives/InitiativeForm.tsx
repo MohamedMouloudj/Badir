@@ -19,8 +19,7 @@ import { toast } from "sonner";
 import { InitiativeStatus, TargetAudience } from "@prisma/client";
 import { Loader2, Save, Info, Check } from "lucide-react";
 import AppButton from "@/components/AppButton";
-import { targetAudienceOptions } from "@/data/statics";
-import country from "country-list-js";
+import { countryList, targetAudienceOptions } from "@/data/statics";
 import { BUCKET_MIME_TYPES, BUCKET_SIZE_LIMITS } from "@/types/Statics";
 import { handleFileUpload, mimeTypeToExtension } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -87,7 +86,7 @@ export default function InitiativeForm({
   >(
     initialData?.participationQstForm
       ? parseParticipationQstForm(initialData?.participationQstForm)
-      : []
+      : [],
   );
 
   const {
@@ -176,18 +175,17 @@ export default function InitiativeForm({
     }
   });
   const COUNTRIES = useMemo(() => {
-    const countries = country.names();
-    return countries.sort().map((countryName) => ({
-      value: countryName,
-      label: countryName,
+    return countryList.sort().map((country) => ({
+      value: country.labelEn,
+      label: country.label,
     }));
   }, []);
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="mx-auto w-full max-w-4xl">
       <form onSubmit={formSubmitHandler} className="space-y-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-6">
+          <TabsList className="mb-6 grid w-full grid-cols-3">
             <TabsTrigger value="basic-info">المعلومات الأساسية</TabsTrigger>
             <TabsTrigger value="participation">المشاركة</TabsTrigger>
             <TabsTrigger value="form-settings" disabled={!requiresForm}>
@@ -197,12 +195,12 @@ export default function InitiativeForm({
 
           <TabsContent value="basic-info" className="space-y-6">
             {/* Basic Info Tab */}
-            <div className="bg-neutrals-100 p-6 rounded-lg border border-neutrals-300">
-              <h3 className="text-lg font-semibold text-neutrals-700 mb-4">
+            <div className="bg-neutrals-100 border-neutrals-300 rounded-lg border p-6">
+              <h3 className="text-neutrals-700 mb-4 text-lg font-semibold">
                 المعلومات الأساسية
               </h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 {/* Arabic Title */}
                 <Controller
                   name="titleAr"
@@ -264,8 +262,8 @@ export default function InitiativeForm({
             </div>
 
             {/* Description Section */}
-            <div className="bg-neutrals-100 p-6 rounded-lg border border-neutrals-300">
-              <h3 className="text-lg font-semibold text-neutrals-700 mb-4">
+            <div className="bg-neutrals-100 border-neutrals-300 rounded-lg border p-6">
+              <h3 className="text-neutrals-700 mb-4 text-lg font-semibold">
                 وصف المبادرة
               </h3>
 
@@ -354,12 +352,12 @@ export default function InitiativeForm({
             </div>
 
             {/* Location Section */}
-            <div className="bg-neutrals-100 p-6 rounded-lg border border-neutrals-300">
-              <h3 className="text-lg font-semibold text-neutrals-700 mb-4">
+            <div className="bg-neutrals-100 border-neutrals-300 rounded-lg border p-6">
+              <h3 className="text-neutrals-700 mb-4 text-lg font-semibold">
                 موقع المبادرة
               </h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 {/* Location Address */}
                 <Controller
                   name="location"
@@ -440,12 +438,12 @@ export default function InitiativeForm({
             </div>
 
             {/* Date and Time Section */}
-            <div className="bg-neutrals-100 p-6 rounded-lg border border-neutrals-300">
-              <h3 className="text-lg font-semibold text-neutrals-700 mb-4">
+            <div className="bg-neutrals-100 border-neutrals-300 rounded-lg border p-6">
+              <h3 className="text-neutrals-700 mb-4 text-lg font-semibold">
                 التاريخ والوقت
               </h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 {/* Start Date */}
                 <Controller
                   name="startDate"
@@ -519,8 +517,8 @@ export default function InitiativeForm({
             </div>
 
             {/* Cover Image */}
-            <div className="bg-neutrals-100 p-6 rounded-lg border border-neutrals-300">
-              <h3 className="text-lg font-semibold text-neutrals-700 mb-4">
+            <div className="bg-neutrals-100 border-neutrals-300 rounded-lg border p-6">
+              <h3 className="text-neutrals-700 mb-4 text-lg font-semibold">
                 صورة الغلاف
               </h3>
 
@@ -540,7 +538,7 @@ export default function InitiativeForm({
                     isOptional
                     rtl={true}
                     fileAccept={BUCKET_MIME_TYPES["post-images"].map(
-                      mimeTypeToExtension
+                      mimeTypeToExtension,
                     )}
                     fileMaxSize={
                       BUCKET_SIZE_LIMITS["post-images"] / 1024 / 1024
@@ -549,7 +547,7 @@ export default function InitiativeForm({
                       handleFileUpload(
                         file,
                         BUCKET_SIZE_LIMITS["post-images"],
-                        (value) => onChange(JSON.stringify(value))
+                        (value) => onChange(JSON.stringify(value)),
                       )
                     }
                   />
@@ -571,12 +569,12 @@ export default function InitiativeForm({
 
           <TabsContent value="participation" className="space-y-6">
             {/* Target Audience and Participation Settings */}
-            <div className="bg-neutrals-100 p-6 rounded-lg border border-neutrals-300">
-              <h3 className="text-lg font-semibold text-neutrals-700 mb-4">
+            <div className="bg-neutrals-100 border-neutrals-300 rounded-lg border p-6">
+              <h3 className="text-neutrals-700 mb-4 text-lg font-semibold">
                 إعدادات المشاركة
               </h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 {/* Target Audience */}
                 <Controller
                   name="targetAudience"
@@ -609,7 +607,7 @@ export default function InitiativeForm({
                       value={field.value?.toString() || ""}
                       onChange={(value) =>
                         field.onChange(
-                          value ? parseInt(value as string, 10) : undefined
+                          value ? parseInt(value as string, 10) : undefined,
                         )
                       }
                       onBlur={field.onBlur}
@@ -641,22 +639,22 @@ export default function InitiativeForm({
               </div>
               <div>
                 {/* Target Audience Information */}
-                <div className="md:col-span-2 mt-3">
+                <div className="mt-3 md:col-span-2">
                   {watch("targetAudience") === TargetAudience.helpers && (
-                    <p className="text-sm text-amber-600 bg-amber-50 p-2 rounded-md flex items-center">
-                      <Info className="h-4 w-4 mr-2" />
+                    <p className="flex items-center rounded-md bg-amber-50 p-2 text-sm text-amber-600">
+                      <Info className="mr-2 h-4 w-4" />
                       سيتمكن المساعدون فقط من الانضمام إلى هذه المبادرة.
                     </p>
                   )}
                   {watch("targetAudience") === TargetAudience.participants && (
-                    <p className="text-sm text-amber-600 bg-amber-50 p-2 rounded-md flex items-center">
-                      <Info className="h-4 w-4 mr-2" />
+                    <p className="flex items-center rounded-md bg-amber-50 p-2 text-sm text-amber-600">
+                      <Info className="mr-2 h-4 w-4" />
                       سيتمكن المشاركون فقط من الانضمام إلى هذه المبادرة.
                     </p>
                   )}
                   {watch("targetAudience") === TargetAudience.both && (
-                    <p className="text-sm text-green-600 bg-green-50 p-2 rounded-md flex items-center">
-                      <Check className="h-4 w-4 mr-2" />
+                    <p className="flex items-center rounded-md bg-green-50 p-2 text-sm text-green-600">
+                      <Check className="mr-2 h-4 w-4" />
                       يمكن للمساعدين والمشاركين الانضمام إلى هذه المبادرة.
                     </p>
                   )}
@@ -665,8 +663,8 @@ export default function InitiativeForm({
             </div>
 
             {/* Participation Form Settings */}
-            <div className="bg-neutrals-100 p-6 rounded-lg border border-neutrals-300">
-              <h3 className="text-lg font-semibold text-neutrals-700 mb-4">
+            <div className="bg-neutrals-100 border-neutrals-300 rounded-lg border p-6">
+              <h3 className="text-neutrals-700 mb-4 text-lg font-semibold">
                 نموذج التسجيل
               </h3>
 

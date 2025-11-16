@@ -92,7 +92,7 @@ export default function PaginationControls({
               onClick={() => hasPrev && onPageChange(currentPage - 1)}
               className={cn(
                 "cursor-pointer",
-                !hasPrev && "opacity-50 cursor-not-allowed pointer-events-none"
+                !hasPrev && "pointer-events-none cursor-not-allowed opacity-50",
               )}
             >
               السابق
@@ -122,7 +122,7 @@ export default function PaginationControls({
               onClick={() => hasNext && onPageChange(currentPage + 1)}
               className={cn(
                 "cursor-pointer",
-                !hasNext && "opacity-50 cursor-not-allowed pointer-events-none"
+                !hasNext && "pointer-events-none cursor-not-allowed opacity-50",
               )}
             >
               التالي

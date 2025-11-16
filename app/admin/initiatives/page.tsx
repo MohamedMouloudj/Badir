@@ -20,18 +20,18 @@ interface InitiativesPageProps {
 
 function InitiativesLoading() {
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="mx-auto max-w-7xl p-6">
       <div className="mb-8">
-        <Skeleton className="h-8 w-64 mb-2" />
+        <Skeleton className="mb-2 h-8 w-64" />
         <Skeleton className="h-4 w-96" />
       </div>
       <Card>
         <CardContent className="p-6">
           <div className="space-y-4">
             {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="border rounded-lg p-4">
-                <Skeleton className="h-6 w-64 mb-2" />
-                <Skeleton className="h-4 w-48 mb-4" />
+              <div key={i} className="rounded-lg border p-4">
+                <Skeleton className="mb-2 h-6 w-64" />
+                <Skeleton className="mb-4 h-4 w-48" />
                 <div className="flex justify-between">
                   <Skeleton className="h-4 w-32" />
                   <Skeleton className="h-8 w-24" />
@@ -56,14 +56,14 @@ async function InitiativesContent({ searchParams }: InitiativesPageProps) {
   const result = await getUserInitiativesAction(
     filters,
     parseInt(page || "1", 10),
-    10
+    10,
   );
 
   if (!result.success) {
     return (
-      <div className="flex items-center justify-center min-h-96">
+      <div className="flex min-h-96 items-center justify-center">
         <div className="text-center">
-          <h2 className="text-xl font-bold text-red-600 mb-2">
+          <h2 className="mb-2 text-xl font-bold text-red-600">
             خطأ في تحميل المبادرات
           </h2>
           <p className="text-gray-600">{result.error}</p>

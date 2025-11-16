@@ -69,7 +69,7 @@ export const signupOrgStep2Schema = z.object({
     ],
     {
       error: "الرجاء اختيار نوع المنظمة",
-    }
+    },
   ),
 
   workAreas: z
@@ -192,7 +192,7 @@ export const validateOrgStep = (step: number, data: any) => {
 // File validation
 export const validateFile = (
   file: File,
-  bucketName: keyof typeof BUCKET_MIME_TYPES
+  bucketName: keyof typeof BUCKET_MIME_TYPES,
 ) => {
   const allowedTypes = BUCKET_MIME_TYPES[bucketName];
   const maxSize = BUCKET_SIZE_LIMITS[bucketName];

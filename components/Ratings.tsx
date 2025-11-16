@@ -76,7 +76,7 @@ export default function Ratings({
 
   const handleMouseMove = (
     event: React.MouseEvent<HTMLDivElement>,
-    starIndex: number
+    starIndex: number,
   ) => {
     if (readOnly || !allowHalf) return;
 
@@ -115,7 +115,7 @@ export default function Ratings({
           !readOnly && "cursor-pointer",
           isFilled && "text-amber-400",
           isHalfFilled && "text-amber-400",
-          !isFilled && !isHalfFilled && "text-neutrals-300"
+          !isFilled && !isHalfFilled && "text-neutrals-300",
         )}
         onClick={() => handleStarClick(starValue)}
         onMouseMove={(e) => handleMouseMove(e, starIndex)}

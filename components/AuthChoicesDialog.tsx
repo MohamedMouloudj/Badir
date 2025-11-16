@@ -8,28 +8,28 @@ export default function AuthChoicesDialog({ close }: { close: () => void }) {
   return (
     <DialogContent
       dir="rtl"
-      className="px-6 md:px-12 min-w-2/3 py-10 bg-neutrals-100 space-y-6"
+      className="bg-neutrals-100 min-w-2/3 space-y-6 px-6 py-10 md:px-12"
     >
       <DialogHeader className="w-full">
-        <DialogTitle className="text-primary-sm md:text-primary-lg font-bold text-neutrals-700 text-center block w-full">
+        <DialogTitle className="text-primary-sm md:text-primary-lg text-neutrals-700 block w-full text-center font-bold">
           سجل كـــ
         </DialogTitle>
         <DialogDescription></DialogDescription>
       </DialogHeader>
 
       <div
-        className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14 mt-4 w-full items-center justify-items-center"
+        className="mt-4 grid w-full grid-cols-1 items-center justify-items-center gap-10 md:grid-cols-2 md:gap-14"
         dir="ltr"
       >
         <Link
           href={authRoutes.signup.signupIndividual.url}
-          className="flex-center-column items-center size-max"
+          className="flex-center-column size-max items-center"
           dir="rtl"
           onClick={close}
         >
-          <div className="p-3 md:p-4 bg-primary-500 rounded-full">
+          <div className="bg-primary-500 rounded-full p-3 md:p-4">
             <User
-              className="w-12 md:w-16 h-12 md:h-16 text-neutrals-100"
+              className="text-neutrals-100 h-12 w-12 md:h-16 md:w-16"
               strokeWidth={1}
             />
           </div>
@@ -37,18 +37,18 @@ export default function AuthChoicesDialog({ close }: { close: () => void }) {
             <span className="text-secondary-sm md:text-secondary-lg text-neutrals-700 font-bold underline">
               {authRoutes.signup.signupIndividual.label}
             </span>
-            <ArrowUpLeft className="w-5 md:w-6 h-5 md:h-6" />
+            <ArrowUpLeft className="h-5 w-5 md:h-6 md:w-6" />
           </div>
         </Link>
         <Link
           href={authRoutes.signup.signupOrganization.url}
-          className="flex-center-column items-center size-max"
+          className="flex-center-column size-max items-center"
           dir="rtl"
           onClick={close}
         >
-          <div className="p-3 md:p-4 bg-primary-500 rounded-full">
+          <div className="bg-primary-500 rounded-full p-3 md:p-4">
             <Building
-              className="w-12 md:w-16 h-12 md:h-16 text-neutrals-100"
+              className="text-neutrals-100 h-12 w-12 md:h-16 md:w-16"
               strokeWidth={1}
             />
           </div>
@@ -56,7 +56,7 @@ export default function AuthChoicesDialog({ close }: { close: () => void }) {
             <span className="text-secondary-sm md:text-secondary-lg text-neutrals-700 font-bold underline">
               {authRoutes.signup.signupOrganization.label}
             </span>
-            <ArrowUpLeft className="w-5 md:w-6 h-5 md:h-6" />
+            <ArrowUpLeft className="h-5 w-5 md:h-6 md:w-6" />
           </div>
         </Link>
       </div>

@@ -8,7 +8,7 @@ export default function TestimonialCard({
 }) {
   return (
     <div
-      className="flex-center-column items-start border-2 border-primary-600 py-6 px-4 gap-4 rounded-xl"
+      className="flex-center-column border-primary-600 items-start gap-4 rounded-xl border-2 px-4 py-6"
       dir="rtl"
     >
       <p className="text-paragraph-md">{testimonial.comment}</p>

@@ -20,21 +20,21 @@ export default function HeroCarousel() {
 
   if (!heroCarouselItems || heroCarouselItems.length === 0) {
     return (
-      <div className="w-full aspect-square bg-gray-200 rounded-xl flex items-center justify-center">
+      <div className="flex aspect-square w-full items-center justify-center rounded-xl bg-gray-200">
         <p className="text-gray-500">No carousel items found</p>
       </div>
     );
   }
 
   return (
-    <div className="relative w-full mx-auto max-w-3xl">
-      <div className="relative w-full aspect-square rounded-xl overflow-hidden shadow-2xl bg-gray-100">
+    <div className="relative mx-auto w-full max-w-3xl">
+      <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-gray-100 shadow-2xl">
         {/* All Slides - Simple approach without transforms */}
         {heroCarouselItems.map((item, index) => (
           <div
             key={item.id}
             className={`absolute inset-0 transition-opacity duration-500 ${
-              index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
+              index === currentIndex ? "z-10 opacity-100" : "z-0 opacity-0"
             }`}
           >
             {/* Fallback colored background */}
@@ -57,8 +57,8 @@ export default function HeroCarousel() {
             />
 
             {/* Content overlay */}
-            <div className="absolute bottom-4 left-4 text-white z-20">
-              <div className="bg-black/50 px-3 py-1 rounded-full text-sm backdrop-blur-sm">
+            <div className="absolute bottom-4 left-4 z-20 text-white">
+              <div className="rounded-full bg-black/50 px-3 py-1 text-sm backdrop-blur-sm">
                 {item.alt}
               </div>
             </div>
@@ -66,7 +66,7 @@ export default function HeroCarousel() {
         ))}
 
         {/* Static Dark Gradient Overlay - Stays in place over all images */}
-        <div className="absolute inset-0 z-30 pointer-events-none bg-gradient-to-br from-black/40 via-black/20 to-black/60" />
+        <div className="pointer-events-none absolute inset-0 z-30 bg-gradient-to-br from-black/40 via-black/20 to-black/60" />
       </div>
     </div>
   );

@@ -12,19 +12,19 @@ interface ErrorProps {
 export default function Error({ error, reset }: ErrorProps) {
   return (
     <div
-      className="min-h-screen bg-neutrals-100 flex flex-col items-center justify-center px-6"
+      className="bg-neutrals-100 flex min-h-screen flex-col items-center justify-center px-6"
       dir="rtl"
     >
-      <div className="max-w-md w-full text-center space-y-8">
+      <div className="w-full max-w-md space-y-8 text-center">
         {/* Logo */}
-        <div className="flex justify-center mb-8">
+        <div className="mb-8 flex justify-center">
           <Logo />
         </div>
 
         {/* Error Icon */}
-        <div className="w-24 h-24 mx-auto bg-state-error rounded-full flex items-center justify-center">
+        <div className="bg-state-error mx-auto flex h-24 w-24 items-center justify-center rounded-full">
           <svg
-            className="w-12 h-12 text-white"
+            className="h-12 w-12 text-white"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -41,7 +41,7 @@ export default function Error({ error, reset }: ErrorProps) {
 
         {/* Error Content */}
         <div className="space-y-4">
-          <h1 className="text-primary-lg font-bold text-neutrals-700">
+          <h1 className="text-primary-lg text-neutrals-700 font-bold">
             حدث خطأ غير متوقع
           </h1>
 
@@ -52,11 +52,11 @@ export default function Error({ error, reset }: ErrorProps) {
 
           {/* Error Details (only in development) */}
           {process.env.NODE_ENV === "development" && (
-            <details className="mt-4 p-4 bg-neutrals-200 rounded-lg text-left">
-              <summary className="cursor-pointer text-sm font-medium text-neutrals-600 mb-2">
+            <details className="bg-neutrals-200 mt-4 rounded-lg p-4 text-left">
+              <summary className="text-neutrals-600 mb-2 cursor-pointer text-sm font-medium">
                 تفاصيل الخطأ (للمطورين)
               </summary>
-              <code className="text-xs text-state-error break-all">
+              <code className="text-state-error text-xs break-all">
                 {error.message}
               </code>
             </details>
@@ -67,21 +67,21 @@ export default function Error({ error, reset }: ErrorProps) {
         <div className="space-y-4">
           <button
             onClick={reset}
-            className="w-full px-6 py-3 bg-primary-500 hover:bg-primary-400 text-white font-semibold rounded-lg transition-colors duration-200 text-button-lg"
+            className="bg-primary-500 hover:bg-primary-400 text-button-lg w-full rounded-lg px-6 py-3 font-semibold text-white transition-colors duration-200"
           >
             المحاولة مرة أخرى
           </button>
 
           <Link
             href="/"
-            className="w-full inline-block px-6 py-3 bg-transparent border-2 border-primary-500 text-primary-500 hover:bg-primary-50 font-semibold rounded-lg transition-colors duration-200 text-button-lg"
+            className="border-primary-500 text-primary-500 hover:bg-primary-50 text-button-lg inline-block w-full rounded-lg border-2 bg-transparent px-6 py-3 font-semibold transition-colors duration-200"
           >
             العودة للصفحة الرئيسية
           </Link>
         </div>
 
         {/* Support Contact */}
-        <div className="pt-8 border-t border-neutrals-300">
+        <div className="border-neutrals-300 border-t pt-8">
           <p className="text-paragraph-sm text-neutrals-400">
             هل تحتاج للمساعدة؟{" "}
             <Link

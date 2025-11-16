@@ -83,7 +83,7 @@ export const NewInitiativeSchema = z
     {
       message: "تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء",
       path: ["endDate"],
-    }
+    },
   )
   .refine(
     (data) => {
@@ -95,7 +95,7 @@ export const NewInitiativeSchema = z
     {
       message: "الموعد النهائي للتسجيل يجب أن يكون قبل تاريخ الانتهاء",
       path: ["registrationDeadline"],
-    }
+    },
   )
   // .refine(
   //   (data) => {
@@ -121,7 +121,7 @@ export const NewInitiativeSchema = z
     {
       message: "يجب إضافة أسئلة نموذج المشاركة",
       path: ["participationQstForm"],
-    }
+    },
   );
 
 export type NewInitiativeFormData = z.infer<typeof NewInitiativeSchema>;

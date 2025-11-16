@@ -7,29 +7,29 @@ import Link from "next/link";
 const PartnerMarquee = ({ partners }: { partners: Partner[] }) => {
   return (
     <div
-      className="wrapper max-w-full flex-center bg-primary-400"
+      className="wrapper flex-center bg-primary-400 max-w-full"
       style={{ "--number-marquee": partners.length } as React.CSSProperties}
     >
       {partners.map((partner, index) => (
         <div
-          className="item itemRight flex-center-column items-center gap-2 h-full py-1"
+          className="item itemRight flex-center-column h-full items-center gap-2 py-1"
           style={{ "--position": index } as React.CSSProperties}
           key={`marquee-card-${index}`}
         >
-          <div className="min-w-20 min-h-20 bg-neutrals-100 rounded-full overflow-hidden border w-20 h-20 flex-shrink-0">
+          <div className="bg-neutrals-100 h-20 min-h-20 w-20 min-w-20 flex-shrink-0 overflow-hidden rounded-full border">
             {partner.url ? (
               <Link href={partner.url}>
                 {partner.imageSrc ? (
                   <Image
                     alt={partner.name}
                     src={partner.imageSrc}
-                    className="overflow-hidden object-cover rounded-full"
+                    className="overflow-hidden rounded-full object-cover"
                     width={80}
                     height={80}
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <Building className="w-8 h-8 text-neutrals-500" />
+                  <div className="flex h-full w-full items-center justify-center">
+                    <Building className="text-neutrals-500 h-8 w-8" />
                   </div>
                 )}
               </Link>
@@ -40,19 +40,19 @@ const PartnerMarquee = ({ partners }: { partners: Partner[] }) => {
                   <Image
                     alt={partner.name}
                     src={partner.imageSrc}
-                    className="overflow-hidden object-cover rounded-full"
+                    className="overflow-hidden rounded-full object-cover"
                     width={80}
                     height={80}
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <Building className="w-8 h-8 text-neutrals-500" />
+                  <div className="flex h-full w-full items-center justify-center">
+                    <Building className="text-neutrals-500 h-8 w-8" />
                   </div>
                 )}
               </>
             )}
           </div>
-          <span className="text-sm text-neutrals-100 mt-2 font-medium text-center block w-max">
+          <span className="text-neutrals-100 mt-2 block w-max text-center text-sm font-medium">
             {partner.name}
           </span>
         </div>

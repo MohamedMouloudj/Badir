@@ -8,7 +8,7 @@
 
 ### Mobile App
 
-- [ ] Configure PWA settings for mobile experience
+- [x] Configure PWA settings for mobile experience
 - [ ] Add notification for new initiative posts
 
 ### Initiative Features
@@ -19,7 +19,6 @@
 - [ ] Add rating handlers and API endpoints (see [Ratings](./README.md#reusable-ui-components))
 - [ ] Recommend initiatives based on user location (latitude/longitude)
 - [ ] Review and fix bugs in Initiative cards:
-
   - [ ] `InitiativeCard` component (`/components/pages/InitiativeCard.tsx`)
   - [ ] `ParticipationCard` component (`/components/pages/ParticipationCard.tsx`)
   - [ ] `InitiativeOrgCard` component (`/components/pages/InitiativeOrgCard.tsx`)
@@ -70,4 +69,3 @@
 ### Multi-language Support
 
 - [ ] Implement i18n or Lingo.dev compiler (but make sure to not make all routes dynamic) for Arabic and English
-

@@ -43,7 +43,7 @@ export default function MembersPanel({
 
   return loading ? (
     <div className="flex-center justify-center gap-2" dir="rtl">
-      <Loader2 className="w-4 h-4 animate-spin" />
+      <Loader2 className="h-4 w-4 animate-spin" />
       <span>جاري التحميل...</span>
     </div>
   ) : members.length === 0 ? (
@@ -55,13 +55,13 @@ export default function MembersPanel({
       {members.map((m) => (
         <div
           key={m.id}
-          className="flex items-center justify-between p-3 border border-neutrals-300 rounded-lg bg-white"
+          className="border-neutrals-300 flex items-center justify-between rounded-lg border bg-white p-3"
         >
           <div>
             <Link href={`/profile/${m.user.id}`} className="hover:underline">
               <p className="font-medium">{m.user.name}</p>
             </Link>
-            <p className="text-sm text-neutrals-500">{m.participantRole}</p>
+            <p className="text-neutrals-500 text-sm">{m.participantRole}</p>
           </div>
           {m.participantRole !== "manager" && (
             <Button variant="destructive" onClick={() => kick(m.id)}>

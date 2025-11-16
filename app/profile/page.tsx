@@ -28,7 +28,7 @@ export default async function Page() {
       if (organizationData.isVerified === OrganizationStatus.pending) {
         return (
           <div
-            className="min-h-screen flex items-center justify-center bg-neutrals-100 p-6"
+            className="bg-neutrals-100 flex min-h-screen items-center justify-center p-6"
             dir="rtl"
           >
             <p>
@@ -39,7 +39,7 @@ export default async function Page() {
       } else if (organizationData.isVerified === OrganizationStatus.rejected) {
         return (
           <div
-            className="min-h-screen flex items-center justify-center bg-neutrals-100 p-6"
+            className="bg-neutrals-100 flex min-h-screen items-center justify-center p-6"
             dir="rtl"
           >
             <p>
@@ -55,13 +55,13 @@ export default async function Page() {
 
       const orgInitiatives =
         await InitiativeService.getOrgInitiativesWithAvgRating(
-          organizationData.id
+          organizationData.id,
         );
 
       return (
-        <div className="min-h-screen bg-neutrals-100 p-6" dir="rtl">
+        <div className="bg-neutrals-100 min-h-screen p-6" dir="rtl">
           <div
-            className="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-sm border-2 border-neutrals-300"
+            className="border-neutrals-300 mx-auto max-w-5xl rounded-lg border-2 bg-white p-6 shadow-sm"
             dir="rtl"
           >
             <OrganizationProfileForm defaultValues={plainOrgData} />
@@ -70,8 +70,8 @@ export default async function Page() {
                 className="container w-full px-4 pt-2 pb-6 md:px-6"
                 dir="rtl"
               >
-                <h2 className="text-2xl font-semibold mb-4">مبادراتكم</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <h2 className="mb-4 text-2xl font-semibold">مبادراتكم</h2>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   {orgInitiatives.map((initiative) => (
                     <OrgInitiative
                       key={initiative.id}
@@ -92,19 +92,19 @@ export default async function Page() {
       if (userProfile) {
         userProfileData = toPlainUser(
           userProfile,
-          userProfile.qualifications?.[0]
+          userProfile.qualifications?.[0],
         );
       }
 
       const participations = await ParticipationService.getUserParticipations(
         session.user.id,
-        true
+        true,
       );
 
       return (
-        <div className="min-h-screen bg-neutrals-100 p-6" dir="rtl">
+        <div className="bg-neutrals-100 min-h-screen p-6" dir="rtl">
           <div
-            className="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-sm border-2 border-neutrals-300"
+            className="border-neutrals-300 mx-auto max-w-5xl rounded-lg border-2 bg-white p-6 shadow-sm"
             dir="rtl"
           >
             <UserProfileForm defaultValues={userProfileData} />
@@ -113,8 +113,8 @@ export default async function Page() {
                 className="container w-full px-4 pt-2 pb-6 md:px-6"
                 dir="rtl"
               >
-                <h2 className="text-2xl font-semibold mb-4">مشاركاتي</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <h2 className="mb-4 text-2xl font-semibold">مشاركاتي</h2>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   {participations.map((participation) => (
                     <ParticipationCard
                       key={participation.initiative.id}

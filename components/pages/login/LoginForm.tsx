@@ -135,9 +135,9 @@ export default function LoginForm() {
             className="justify-center"
             icon={
               isPending ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
-                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft className="h-4 w-4" />
               )
             }
           >

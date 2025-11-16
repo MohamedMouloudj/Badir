@@ -67,11 +67,11 @@ export function SignupForm() {
   };
 
   return (
-    <div className="w-full h-full">
-      <Card className="w-full bg-transparent border-none shadow-none">
+    <div className="h-full w-full">
+      <Card className="w-full border-none bg-transparent shadow-none">
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
               <Controller
                 name="firstName"
                 control={control}
@@ -157,16 +157,16 @@ export function SignupForm() {
               )}
             />
 
-            <div className="flex-center justify-center mt-8">
+            <div className="flex-center mt-8 justify-center">
               <AppButton
                 type="submit"
                 border="rounded"
                 disabled={isPending || isRegisterSuccessful}
                 icon={
                   isPending ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
+                    <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
                   )
                 }
               >

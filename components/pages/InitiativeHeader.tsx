@@ -39,7 +39,7 @@ export default function InitiativeHeader({
       {
         threshold: 0,
         rootMargin: "-120px 0px 0px 0px",
-      }
+      },
     );
 
     const headerRef = document.querySelector("[data-header-trigger]");
@@ -54,18 +54,18 @@ export default function InitiativeHeader({
       return;
     }
     setImage(null);
-  }, []);
+  }, [coverImage]);
 
   useEffect(() => {
     fetchInitiativeCover();
-  }, []);
+  }, [fetchInitiativeCover]);
 
   return (
-    <div className="w-full h-48 sm:h-60" data-header-trigger>
+    <div className="h-48 w-full sm:h-60" data-header-trigger>
       {/* Hero area */}
       <div className="relative w-full overflow-hidden">
         {image ? (
-          <div className="w-full h-48 sm:h-60 relative">
+          <div className="relative h-48 w-full sm:h-60">
             <Image
               src={image || ""}
               alt={title}
@@ -77,30 +77,30 @@ export default function InitiativeHeader({
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/20" />
           </div>
         ) : (
-          <div className="w-full h-[200px] md:h-[240px] bg-gradient-to-br from-primary-800 to-primary-600" />
+          <div className="from-primary-800 to-primary-600 h-[200px] w-full bg-gradient-to-br md:h-[240px]" />
         )}
 
         {/* Overlay content with smooth fade animation */}
         <div
           className={`absolute inset-0 flex items-end transition-opacity duration-300 ease-in-out ${
-            compact ? "opacity-0 pointer-events-none" : "opacity-100"
+            compact ? "pointer-events-none opacity-0" : "opacity-100"
           }`}
         >
-          <div className="mb-4 flex justify-end absolute top-4 left-4">
+          <div className="absolute top-4 left-4 mb-4 flex justify-end">
             <BackButton />
           </div>
-          <div className="w-full max-w-5xl mx-auto p-6 pb-10 text-right">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white drop-shadow-lg">
+          <div className="mx-auto w-full max-w-5xl p-6 pb-10 text-right">
+            <h1 className="text-3xl font-bold text-white drop-shadow-lg md:text-4xl lg:text-5xl">
               {title}
             </h1>
 
             {shortDescription && (
-              <p className="mt-2 text-white/90 max-w-3xl text-sm md:text-base drop-shadow">
+              <p className="mt-2 max-w-3xl text-sm text-white/90 drop-shadow md:text-base">
                 {shortDescription}
               </p>
             )}
 
-            <div className="mt-4 flex gap-4 text-white/90 text-sm md:text-base">
+            <div className="mt-4 flex gap-4 text-sm text-white/90 md:text-base">
               {startDate && (
                 <div>
                   <div className="text-xs text-white/70">تاريخ البداية</div>
@@ -124,20 +124,20 @@ export default function InitiativeHeader({
 
       {/* Compact bar with smooth slide-down animation */}
       {compact && (
-        <div className="w-full h-[60px] bg-transparent" /> // Adjust height to match your compact bar
+        <div className="h-[60px] w-full bg-transparent" /> // Adjust height to match your compact bar
       )}
 
       {/* Compact bar */}
       <div
-        className={`w-full bg-white border-b border-neutrals-200 transition-all duration-300 ease-in-out transform ${
+        className={`border-neutrals-200 w-full transform border-b bg-white transition-all duration-300 ease-in-out ${
           compact
-            ? "translate-y-0 opacity-100 fixed top-[var(--navbar-height)] shadow-sm z-10"
-            : "-translate-y-full opacity-0 pointer-events-none"
+            ? "fixed top-[var(--navbar-height)] z-10 translate-y-0 opacity-100 shadow-sm"
+            : "pointer-events-none -translate-y-full opacity-0"
         }`}
       >
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center gap-4">
+        <div className="mx-auto flex max-w-5xl items-center gap-4 px-4 py-3">
           {image ? (
-            <div className="w-12 h-12 relative rounded-md overflow-hidden flex-shrink-0">
+            <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-md">
               <Image
                 src={image || ""}
                 alt={title}
@@ -147,13 +147,13 @@ export default function InitiativeHeader({
               />
             </div>
           ) : (
-            <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-700 rounded-md flex-shrink-0" />
+            <div className="from-primary-500 to-primary-700 h-12 w-12 flex-shrink-0 rounded-md bg-gradient-to-br" />
           )}
-          <div className="text-right overflow-hidden">
-            <div className="font-semibold text-neutrals-900 truncate">
+          <div className="overflow-hidden text-right">
+            <div className="text-neutrals-900 truncate font-semibold">
               {title}
             </div>
-            <div className="text-xs text-neutrals-500">
+            <div className="text-neutrals-500 text-xs">
               {startDate ? formatDate(startDate) : ""}{" "}
               {endDate ? ` - ${formatDate(endDate)}` : ""}
             </div>

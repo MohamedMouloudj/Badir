@@ -10,10 +10,10 @@ export default function Stat({
   stat: Record<StatProps["key"], number>;
 }) {
   return (
-    <div className="flex-center gap-2 justify-center" dir="rtl">
+    <div className="flex-center justify-center gap-2" dir="rtl">
       {config.icon}
       <div className="flex-center-column items-start">
-        <h3 className="text-primary-sm font-bold text-neutrals-700 " dir="ltr">
+        <h3 className="text-primary-sm text-neutrals-700 font-bold" dir="ltr">
           + {stat[config.key] ?? 0}
         </h3>
         <p className="text-secondary-sm font-semibold">{config.title}</p>

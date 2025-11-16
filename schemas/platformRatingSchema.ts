@@ -53,7 +53,7 @@ export const platformRatingSchema = z
     {
       error: "يرجى تقديم تفاصيل حول الصعوبات التي واجهتها",
       path: ["difficultiesDetails"],
-    }
+    },
   );
 
 export type PlatformRatingFormData = z.infer<typeof platformRatingSchema>;

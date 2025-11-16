@@ -17,11 +17,11 @@ import path from "path";
 import { UserProfile, validateUserProfile } from "@/schemas";
 import { UserService } from "@/services/user";
 import { ActionResponse } from "@/types/Statics";
-import { getPublicStorageUrl } from "./helpers";
+import { getPublicStorageUrl } from "./helpers-sf";
 import { AUTHORIZED_REDIRECTION } from "@/data/routes";
 
 export async function updateUserProfileAction(
-  data: UserProfile
+  data: UserProfile,
 ): Promise<ActionResponse<UserProfile, {}>> {
   try {
     // Just in case
@@ -64,7 +64,7 @@ export async function updateUserProfileAction(
           "avatars",
           filePath,
           fileBuffer,
-          type
+          type,
         );
 
         if (result.path && currentImage && currentImage.image) {
@@ -178,7 +178,7 @@ export async function updateUserProfileAction(
 }
 
 export async function completeProfileAction(
-  data: RegistrationFormData
+  data: RegistrationFormData,
 ): Promise<
   ActionResponse<
     RegistrationFormData,

@@ -43,7 +43,6 @@ export function toPlainUser(user: User, qualifications?: UserQualification) {
     phoneCountryCode: user.phone
       ? getCountryFromCallingCode(user.phone.split(" ")[0].replace("+", ""))
       : "DZ",
-    phone: user.phone ? user.phone.split(" ")[1] : "",
     latitude: user.latitude ? Number(user.latitude) : undefined,
     longitude: user.longitude ? Number(user.longitude) : undefined,
   };
@@ -55,7 +54,7 @@ export function toPlainUser(user: User, qualifications?: UserQualification) {
  * @returns A plain normalized object representation of the organization.
  */
 export function toPlainOrganization(
-  organization: Organization
+  organization: Organization,
 ): Partial<Organization> & {
   contactPhoneCountryCode: string;
 } {
@@ -68,7 +67,7 @@ export function toPlainOrganization(
       : "",
     contactPhoneCountryCode: organization.contactPhone
       ? getCountryFromCallingCode(
-          organization.contactPhone.split(" ")[0].replace("+", "")
+          organization.contactPhone.split(" ")[0].replace("+", ""),
         ) || "DZ"
       : "DZ",
     membersCount: organization.membersCount || 0,
@@ -82,7 +81,7 @@ export function toPlainOrganization(
  * Get calling code from country code. (e.g: "DZ" => "213")
  */
 export function getCallingCodeFromCountry(
-  countryCode: CountryCode | string
+  countryCode: CountryCode | string,
 ): string | undefined {
   try {
     return getCountryCallingCode(countryCode as CountryCode);
@@ -96,7 +95,7 @@ export function getCallingCodeFromCountry(
  * Returns the first matching country code, or undefined if not found
  */
 export function getCountryFromCallingCode(
-  callingCode: CountryCallingCode | string
+  callingCode: CountryCallingCode | string,
 ): string | undefined {
   const countries = getCountries();
   for (const country of countries) {
@@ -116,13 +115,13 @@ export function getCountryFromCallingCode(
 export const handleFileUpload = async (
   file: File | null,
   fileSize: number,
-  onChange: (value: { base64: string; name: string; type: string }) => void
+  onChange: (value: { base64: string; name: string; type: string }) => void,
 ) => {
   if (!file) return;
 
   if (file.size > fileSize) {
     toast.error(
-      `حجم الملف كبير جدًا (الحد الأقصى ${fileSize / 1024 / 1024} ميجابايت)`
+      `حجم الملف كبير جدًا (الحد الأقصى ${fileSize / 1024 / 1024} ميجابايت)`,
     );
     return;
   }

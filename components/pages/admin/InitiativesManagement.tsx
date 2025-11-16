@@ -43,10 +43,10 @@ interface InitiativesManagementProps {
 
 const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
   const [initiatives, setInitiatives] = useState<AdminInitiativeCard[]>(
-    initialData.data
+    initialData.data,
   );
   const [pagination, setPagination] = useState<PaginationData>(
-    initialData.pagination
+    initialData.pagination,
   );
   const [filters, setFilters] = useState({
     status: "all",
@@ -61,7 +61,7 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
 
   const handleStatusUpdate = async (
     id: string,
-    status: "published" | "cancelled"
+    status: "published" | "cancelled",
   ) => {
     if (status === "cancelled" && !rejectionReason.trim()) {
       setShowRejectionForm(true);
@@ -74,13 +74,13 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
 
         if (result.success) {
           setInitiatives((prev) =>
-            prev.map((init) => (init.id === id ? { ...init, status } : init))
+            prev.map((init) => (init.id === id ? { ...init, status } : init)),
           );
           toast.success(
-            `تم ${status === "published" ? "نشر" : "إلغاء"} المبادرة بنجاح`
+            `تم ${status === "published" ? "نشر" : "إلغاء"} المبادرة بنجاح`,
           );
           setSelectedInitiative((prev) =>
-            prev && prev.id === id ? { ...prev, status } : prev
+            prev && prev.id === id ? { ...prev, status } : prev,
           );
         } else {
           toast.error(result.error || "حدث خطأ أثناء تحديث الحالة");
@@ -99,9 +99,9 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
   const handlePageChange = (page: number) => {};
 
   return (
-    <div className="p-6 max-w-7xl mx-auto" dir="rtl">
+    <div className="mx-auto max-w-7xl p-6" dir="rtl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="mb-2 text-3xl font-bold text-gray-900">
           إدارة مبادرات المستخدمين
         </h1>
         <p className="text-gray-600">
@@ -117,7 +117,7 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
         </AlertDescription>
       </Alert>
 
-      <Card className="bg-transparent shadow-none border-none gap-2 pt-0">
+      <Card className="gap-2 border-none bg-transparent pt-0 shadow-none">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="h-5 w-5" />
@@ -126,10 +126,10 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
         </CardHeader>
         <CardContent>
           <div
-            className="flex-center-column sm:justify-between gap-4 mb-6 flex-wrap mt-6"
+            className="flex-center-column mt-6 mb-6 flex-wrap gap-4 sm:justify-between"
             dir="rtl"
           >
-            <div className="max-w-full flex-center sm:justify-center gap-4 max-sm:flex-wrap">
+            <div className="flex-center max-w-full gap-4 max-sm:flex-wrap sm:justify-center">
               <SearchInput
                 value={filters.search}
                 onChange={(value) =>
@@ -161,9 +161,9 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
           {/* Initiatives List */}
           <div className="space-y-4">
             {initiatives.length === 0 ? (
-              <div className="text-center py-12">
-                <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+              <div className="py-12 text-center">
+                <FileText className="mx-auto mb-4 h-12 w-12 text-gray-400" />
+                <h3 className="mb-2 text-lg font-medium text-gray-900">
                   لا توجد مبادرات
                 </h3>
                 <p className="text-gray-500">
@@ -177,14 +177,14 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
                   className="border-l-4 border-l-green-500"
                 >
                   <CardContent className="p-6">
-                    <div className="flex justify-between items-start mb-4">
+                    <div className="mb-4 flex items-start justify-between">
                       <div className="flex-1">
                         <Link
                           href={`/admin/initiatives/${initiative.id}`}
                           target="_blank"
                           className="flex items-center"
                         >
-                          <ArrowUpRight className="h-4 w-4 inline-block ml-1 text-gray-500" />
+                          <ArrowUpRight className="ml-1 inline-block h-4 w-4 text-gray-500" />
                           <h3 className="text-lg font-semibold text-gray-900 hover:underline">
                             {initiative.titleAr}
                           </h3>
@@ -195,11 +195,11 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
                           </p>
                         )}
                         {initiative.shortDescriptionAr && (
-                          <p className="text-sm text-gray-700 mt-1 line-clamp-2">
+                          <p className="mt-1 line-clamp-2 text-sm text-gray-700">
                             {initiative.shortDescriptionAr}
                           </p>
                         )}
-                        <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
+                        <div className="mt-2 flex items-center gap-4 text-sm text-gray-500">
                           <span className="flex items-center gap-1">
                             <MapPin className="h-4 w-4" />
                             {initiative.city}
@@ -245,11 +245,11 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
                               size="sm"
                               onClick={() => setSelectedInitiative(initiative)}
                             >
-                              <Eye className="h-4 w-4 ml-1" />
+                              <Eye className="ml-1 h-4 w-4" />
                               عرض التفاصيل
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                          <DialogContent className="max-h-[80vh] max-w-2xl overflow-y-auto">
                             <DialogHeader>
                               <DialogTitle>تفاصيل المبادرة</DialogTitle>
                             </DialogHeader>
@@ -306,7 +306,7 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
                                     <Label className="font-medium">
                                       الوصف المختصر:
                                     </Label>
-                                    <p className="mt-1 bg-gray-50 p-3 rounded-lg">
+                                    <p className="mt-1 rounded-lg bg-gray-50 p-3">
                                       {selectedInitiative.shortDescriptionAr}
                                     </p>
                                   </div>
@@ -316,7 +316,7 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
                                   <Label className="font-medium">
                                     معلومات المنظم:
                                   </Label>
-                                  <div className="bg-gray-50 p-3 rounded mt-1">
+                                  <div className="mt-1 rounded bg-gray-50 p-3">
                                     <p>
                                       <strong>الاسم:</strong>{" "}
                                       {selectedInitiative.organizerUser?.name ||
@@ -349,7 +349,7 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
                                         onClick={() =>
                                           handleStatusUpdate(
                                             selectedInitiative.id,
-                                            "cancelled"
+                                            "cancelled",
                                           )
                                         }
                                         disabled={
@@ -376,18 +376,18 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
 
                                 {selectedInitiative.status === "draft" &&
                                   !showRejectionForm && (
-                                    <div className="flex justify-center gap-4 pt-4 border-t">
+                                    <div className="flex justify-center gap-4 border-t pt-4">
                                       <Button
                                         onClick={() =>
                                           handleStatusUpdate(
                                             selectedInitiative.id,
-                                            "published"
+                                            "published",
                                           )
                                         }
                                         disabled={isPending}
                                         className="bg-green-600 hover:bg-green-700"
                                       >
-                                        <CheckCircle className="h-4 w-4 ml-1" />
+                                        <CheckCircle className="ml-1 h-4 w-4" />
                                         نشر المبادرة
                                       </Button>
                                       <Button
@@ -397,7 +397,7 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
                                         disabled={isPending}
                                         variant="destructive"
                                       >
-                                        <XCircle className="h-4 w-4 ml-1" />
+                                        <XCircle className="ml-1 h-4 w-4" />
                                         إلغاء المبادرة
                                       </Button>
                                     </div>
@@ -415,7 +415,7 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
                                 handleStatusUpdate(initiative.id, "published")
                               }
                               disabled={isPending}
-                              className="bg-green-600 hover:bg-green-700 text-xs px-2"
+                              className="bg-green-600 px-2 text-xs hover:bg-green-700"
                             >
                               نشر
                             </Button>
@@ -427,7 +427,7 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
                                 setShowRejectionForm(true);
                               }}
                               disabled={isPending}
-                              className="text-xs px-2"
+                              className="px-2 text-xs"
                             >
                               إلغاء
                             </Button>

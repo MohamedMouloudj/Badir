@@ -30,7 +30,7 @@ export class InitiativePostsService {
    * @returns Number of attachments
    */
   static async checkInitiativeAttachmentsLimit(
-    initiativeID: string
+    initiativeID: string,
   ): Promise<number> {
     const count = await prisma.postAttachment.count({
       where: {
@@ -41,7 +41,7 @@ export class InitiativePostsService {
     });
     if (count >= ALLOWED_INITIATIVE_IMAGES) {
       throw new Error(
-        `تجاوزت الحد المسموح لعدد الصور في المبادرة (${ALLOWED_INITIATIVE_IMAGES})`
+        `تجاوزت الحد المسموح لعدد الصور في المبادرة (${ALLOWED_INITIATIVE_IMAGES})`,
       );
     }
     return count;
@@ -55,7 +55,7 @@ export class InitiativePostsService {
    */
   static async list(
     initiativeId: string,
-    opts?: { status?: PostStatus; onlyUserId?: string }
+    opts?: { status?: PostStatus; onlyUserId?: string },
   ): Promise<Post[]> {
     return prisma.initiativePost.findMany({
       where: {
@@ -132,7 +132,7 @@ export class InitiativePostsService {
       postType?: PostType;
       status?: PostStatus;
     },
-    isManager = false
+    isManager = false,
   ) {
     const post = await prisma.initiativePost.findUnique({
       where: { id: postId },

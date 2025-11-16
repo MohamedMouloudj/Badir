@@ -3,11 +3,11 @@ import { Mail, Phone, MapPin, Clock } from "lucide-react";
 
 export default function ContactInfo() {
   return (
-    <div className="size-full flex-1/3 mx-auto" dir="rtl">
-      <div className="h-full bg-neutrals-50 border-2 border-neutrals-300 rounded-3xl p-6 md:p-8 lg:p-10 shadow-sm flex-center-column">
+    <div className="mx-auto size-full flex-1/3" dir="rtl">
+      <div className="bg-neutrals-50 border-neutrals-300 flex-center-column h-full rounded-3xl border-2 p-6 shadow-sm md:p-8 lg:p-10">
         {/* Header */}
-        <div className="text-right mb-8">
-          <h2 className="text-primary-sm font-bold text-primary-500 mb-4">
+        <div className="mb-8 text-right">
+          <h2 className="text-primary-sm text-primary-500 mb-4 font-bold">
             معلومات التواصل
           </h2>
           <p className="text-neutrals-600 text-secondary-sm font-semibold">
@@ -20,17 +20,17 @@ export default function ContactInfo() {
           {/* Email */}
           <div className="flex items-start gap-4">
             <div className="flex-shrink-0">
-              <div className="w-12 h-12 md:w-14 md:h-14 bg-primary-100 rounded-full flex items-center justify-center">
-                <Mail className="w-6 h-6 md:w-7 md:h-7 text-primary-500" />
+              <div className="bg-primary-100 flex h-12 w-12 items-center justify-center rounded-full md:h-14 md:w-14">
+                <Mail className="text-primary-500 h-6 w-6 md:h-7 md:w-7" />
               </div>
             </div>
             <div className="flex-1 text-right">
-              <h3 className="text-paragraph-lg font-semibold text-neutrals-700 mb-2">
+              <h3 className="text-paragraph-lg text-neutrals-700 mb-2 font-semibold">
                 البريد الإلكتروني
               </h3>
               <a
                 href="mailto:info@badir.org"
-                className="text-primary-500 text-paragraph-md font-medium hover:text-primary-600 transition-colors underline decoration-2 underline-offset-4"
+                className="text-primary-500 text-paragraph-md hover:text-primary-600 font-medium underline decoration-2 underline-offset-4 transition-colors"
               >
                 {emailConfig.adminEmail}
               </a>
@@ -43,17 +43,17 @@ export default function ContactInfo() {
           {/* Phone */}
           <div className="flex items-start gap-4">
             <div className="flex-shrink-0">
-              <div className="w-12 h-12 md:w-14 md:h-14 bg-primary-100 rounded-full flex items-center justify-center">
-                <Phone className="w-6 h-6 md:w-7 md:h-7 text-primary-500" />
+              <div className="bg-primary-100 flex h-12 w-12 items-center justify-center rounded-full md:h-14 md:w-14">
+                <Phone className="text-primary-500 h-6 w-6 md:h-7 md:w-7" />
               </div>
             </div>
             <div className="flex-1 text-right">
-              <h3 className="text-paragraph-lg font-semibold text-neutrals-700 mb-2">
+              <h3 className="text-paragraph-lg text-neutrals-700 mb-2 font-semibold">
                 الهاتف
               </h3>
               <a
                 href="tel:+213000000000"
-                className="text-neutrals-700  text-paragraph-md font-medium hover:text-primary-500 transition-colors"
+                className="text-neutrals-700 text-paragraph-md hover:text-primary-500 font-medium transition-colors"
               >
                 +213 000 00 00 00
               </a>
@@ -66,12 +66,12 @@ export default function ContactInfo() {
           {/* Address */}
           <div className="flex items-start gap-4">
             <div className="flex-shrink-0">
-              <div className="w-12 h-12 md:w-14 md:h-14 bg-primary-100 rounded-full flex items-center justify-center">
-                <MapPin className="w-6 h-6 md:w-7 md:h-7 text-primary-500" />
+              <div className="bg-primary-100 flex h-12 w-12 items-center justify-center rounded-full md:h-14 md:w-14">
+                <MapPin className="text-primary-500 h-6 w-6 md:h-7 md:w-7" />
               </div>
             </div>
             <div className="flex-1 text-right">
-              <h3 className="text-paragraph-lg font-semibold text-neutrals-700 mb-2">
+              <h3 className="text-paragraph-lg text-neutrals-700 mb-2 font-semibold">
                 العنوان
               </h3>
               <p className="text-neutrals-700 text-paragraph-md font-medium">
@@ -86,12 +86,12 @@ export default function ContactInfo() {
           {/* Working Hours */}
           <div className="flex items-start gap-4">
             <div className="flex-shrink-0">
-              <div className="w-12 h-12 md:w-14 md:h-14 bg-primary-100 rounded-full flex items-center justify-center">
-                <Clock className="w-6 h-6 md:w-7 md:h-7 text-primary-500" />
+              <div className="bg-primary-100 flex h-12 w-12 items-center justify-center rounded-full md:h-14 md:w-14">
+                <Clock className="text-primary-500 h-6 w-6 md:h-7 md:w-7" />
               </div>
             </div>
             <div className="flex-1 text-right">
-              <h3 className="text-lg font-semibold text-neutrals-700 mb-2">
+              <h3 className="text-neutrals-700 mb-2 text-lg font-semibold">
                 ساعات العمل
               </h3>
               <p className="text-neutrals-700 text-paragraph-md font-medium">

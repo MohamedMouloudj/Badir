@@ -30,7 +30,7 @@ export default function SearchInput({
       <div className={cn("relative", className)} dir={dir}>
         <button
           type="submit"
-          className="absolute left-2 top-1/2 transform -translate-y-1/2 text-neutrals-400 hover:text-primary-500"
+          className="text-neutrals-400 hover:text-primary-500 absolute top-1/2 left-2 -translate-y-1/2 transform"
         >
           <Search className="h-5 w-5" />
         </button>
@@ -39,7 +39,7 @@ export default function SearchInput({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="pl-10 pr-4 py-3 w-full border border-neutrals-300 rounded-lg bg-white text-neutrals-700 placeholder-neutrals-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+          className="border-neutrals-300 text-neutrals-700 placeholder-neutrals-400 focus:ring-primary-500 focus:border-primary-500 w-full rounded-lg border bg-white py-3 pr-4 pl-10 transition-colors focus:ring-2"
           dir={dir}
         />
       </div>

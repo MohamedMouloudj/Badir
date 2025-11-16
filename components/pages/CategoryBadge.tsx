@@ -16,9 +16,9 @@ export default function CategoryBadge({
   return (
     <Badge
       className={cn(
-        "rounded-full text-sm font-medium py-1 px-3 border border-secondary-600",
+        "border-secondary-600 rounded-full border px-3 py-1 text-sm font-medium",
         bgColor === undefined && "bg-transparent",
-        textColor === undefined && "text-secondary-600"
+        textColor === undefined && "text-secondary-600",
       )}
       style={{
         backgroundColor: bgColor ?? "transparent",

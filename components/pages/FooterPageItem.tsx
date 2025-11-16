@@ -5,7 +5,7 @@ interface PolicyListItemProps {
 export function FooterPageItem({ text }: PolicyListItemProps) {
   return (
     <div
-      className="flex items-start justify-start gap-2 mb-2 text-right"
+      className="mb-2 flex items-start justify-start gap-2 text-right"
       dir="rtl"
     >
       <span className="text-primary-500 mt-1">•</span>

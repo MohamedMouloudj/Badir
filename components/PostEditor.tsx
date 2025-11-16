@@ -60,12 +60,12 @@ export default function PostEditor({
   const [title, setTitle] = useState(initialData?.title || "");
   const [content, setContent] = useState(initialData?.content || "");
   const [postType, setPostType] = useState<PostType>(
-    initialData?.postType || "announcement"
+    initialData?.postType || "announcement",
   );
   const [isPending, startTransition] = useTransition();
   const staleImageSrcs = useMemo(
     () => extractImageSrcsFromHtmlBrowser(initialData?.content || ""),
-    [initialData?.content]
+    [initialData?.content],
   );
   const { editorRef } = useEditorState();
 
@@ -82,7 +82,7 @@ export default function PostEditor({
           initiativeId,
           base64.split(",")[1],
           file.name,
-          file.type
+          file.type,
         );
 
         if (result.success && result.url) {
@@ -95,7 +95,7 @@ export default function PostEditor({
         throw error;
       }
     },
-    [initiativeId]
+    [initiativeId],
   );
 
   const extensions = useMemo(
@@ -137,7 +137,7 @@ export default function PostEditor({
       SlashCommand,
       ColumnActionButton,
     ],
-    [handleImageUpload]
+    [handleImageUpload],
   );
 
   const handleSave = async (publishStatus: PostStatus) => {
@@ -151,7 +151,7 @@ export default function PostEditor({
 
       const newImageUrls = extractImageSrcsFromHtmlBrowser(sanitizedContent);
       const removedImageUrls = staleImageSrcs.filter(
-        (u) => !newImageUrls.includes(u)
+        (u) => !newImageUrls.includes(u),
       );
 
       const postData: PostData = {
@@ -171,7 +171,7 @@ export default function PostEditor({
             title.trim(),
             postType,
             publishStatus,
-            removedImageUrls
+            removedImageUrls,
           );
         } else {
           result = await createPostAction(
@@ -179,7 +179,7 @@ export default function PostEditor({
             sanitizedContent,
             title.trim(),
             postType,
-            publishStatus
+            publishStatus,
           );
         }
 
@@ -204,7 +204,7 @@ export default function PostEditor({
       update: "تحديث",
       instruction: "تعليمات",
     }),
-    []
+    [],
   );
 
   return (
@@ -224,7 +224,7 @@ export default function PostEditor({
             placeholder="أدخل عنوان المنشور..."
             value={title}
             onChange={(value) => setTitle(value as string)}
-            className="text-right flex-1"
+            className="flex-1 text-right"
             rtl={true}
           />
           {/* Post Type Selector */}
@@ -252,7 +252,7 @@ export default function PostEditor({
         <div className="space-y-2">
           <Label>المحتوى</Label>
 
-          <div className="p-3 min-h-[300px]">
+          <div className="min-h-[300px] p-3">
             <RichTextEditor
               output="html"
               content={content}
@@ -264,7 +264,7 @@ export default function PostEditor({
               bubbleMenu={{
                 render(
                   { extensionsNames, editor, disabled },
-                  bubbleDefaultDom
+                  bubbleDefaultDom,
                 ) {
                   return (
                     <>
@@ -285,7 +285,7 @@ export default function PostEditor({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-between items-center pt-4 gap-1" dir="ltr">
+        <div className="flex items-center justify-between gap-1 pt-4" dir="ltr">
           <div className="flex gap-2">
             <AppButton
               type="outline"
@@ -305,9 +305,9 @@ export default function PostEditor({
               disabled={isPending}
               icon={
                 isPending ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <Save className="w-4 h-4" />
+                  <Save className="h-4 w-4" />
                 )
               }
               border="default"
@@ -324,9 +324,9 @@ export default function PostEditor({
               size="sm"
               icon={
                 isPending ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <Send className="w-4 h-4" />
+                  <Send className="h-4 w-4" />
                 )
               }
             >

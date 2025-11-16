@@ -5,13 +5,13 @@ import React from "react";
 export default function Logo({ withText = true }: { withText?: boolean }) {
   if (!withText) {
     return (
-      <div className="relative flex-center justify-center">
+      <div className="flex-center relative justify-center">
         <Image
           src="/images/logos/logo-nt.svg"
           alt="Badir logo"
           width={104}
           height={40}
-          className="object-contain h-auto w-auto"
+          className="h-auto w-auto object-contain"
           priority
         />
         <Link href="/" className="absolute inset-0">
@@ -21,13 +21,13 @@ export default function Logo({ withText = true }: { withText?: boolean }) {
     );
   }
   return (
-    <div className="relative flex-center justify-center">
+    <div className="flex-center relative justify-center">
       <Image
         src="/images/logos/logo.svg"
         alt="Badir logo"
         width={104}
         height={40}
-        className="object-contain h-auto w-auto"
+        className="h-auto w-auto object-contain"
         priority
       />
       <Link href="/" className="absolute inset-0">

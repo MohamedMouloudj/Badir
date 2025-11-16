@@ -48,7 +48,7 @@ export default function ContactForm() {
       const result = await emailjs.send(
         emailConfig.serviceId,
         emailConfig.templates.contactUs,
-        templateParams
+        templateParams,
       );
 
       if (result.status === 200) {
@@ -64,11 +64,11 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="size-full flex-2/3 mx-auto" dir="rtl">
-      <div className="h-full bg-neutrals-50 border-2 border-neutrals-300 rounded-3xl p-6 md:p-8 lg:p-10 shadow-sm flex-center-column">
+    <div className="mx-auto size-full flex-2/3" dir="rtl">
+      <div className="bg-neutrals-50 border-neutrals-300 flex-center-column h-full rounded-3xl border-2 p-6 shadow-sm md:p-8 lg:p-10">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h2 className="text-primary-md font-bold text-primary-500 mb-4">
+        <div className="mb-8 text-center">
+          <h2 className="text-primary-md text-primary-500 mb-4 font-bold">
             تواصل معنا
           </h2>
           <p className="text-neutrals-600 text-secondary-md font-semibold">
@@ -79,7 +79,7 @@ export default function ContactForm() {
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* First Row - Name and Email */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <Controller
               name="fullName"
               control={control}
@@ -118,7 +118,7 @@ export default function ContactForm() {
           </div>
 
           {/* Second Row - Inquiry Type and Title */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <Controller
               name="inquiryType"
               control={control}
@@ -191,7 +191,7 @@ export default function ContactForm() {
               border="rounded"
               icon={
                 isSubmitting ? (
-                  <Loader2 className="w-4 h-4 md:w-5 md:h-5 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin md:h-5 md:w-5" />
                 ) : null
               }
             >

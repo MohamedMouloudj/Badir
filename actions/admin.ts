@@ -8,7 +8,7 @@ import {
 import { OrganizationStatus, InitiativeStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { ActionResponse } from "@/types/Statics";
-import { checkAdminPermission } from "./helpers";
+import { checkAdminPermission } from "./helpers-sf";
 
 /**
  * Get paginated organizations for admin review
@@ -16,7 +16,7 @@ import { checkAdminPermission } from "./helpers";
 export async function getOrganizationsAction(
   filters: OrganizationFilters = {},
   page: number = 1,
-  limit: number = 10
+  limit: number = 10,
 ) {
   try {
     await checkAdminPermission();
@@ -45,7 +45,7 @@ export async function getOrganizationsAction(
 export async function getUserInitiativesAction(
   filters: InitiativeFilters = {},
   page: number = 1,
-  limit: number = 10
+  limit: number = 10,
 ) {
   try {
     await checkAdminPermission();
@@ -74,7 +74,7 @@ export async function getUserInitiativesAction(
 export async function updateOrganizationStatusAction(
   organizationId: string,
   status: OrganizationStatus,
-  rejectionReason?: string
+  rejectionReason?: string,
 ): Promise<ActionResponse<{}, {}>> {
   try {
     const adminUserId = await checkAdminPermission();
@@ -83,7 +83,7 @@ export async function updateOrganizationStatusAction(
       organizationId,
       status,
       adminUserId,
-      rejectionReason
+      rejectionReason,
     );
 
     revalidatePath("/admin/organizations");
@@ -112,7 +112,7 @@ export async function updateOrganizationStatusAction(
 export async function updateInitiativeStatusAction(
   initiativeId: string,
   status: InitiativeStatus,
-  rejectionReason?: string
+  rejectionReason?: string,
 ): Promise<ActionResponse<{}, {}>> {
   try {
     const adminUserId = await checkAdminPermission();
@@ -121,7 +121,7 @@ export async function updateInitiativeStatusAction(
       initiativeId,
       status,
       adminUserId,
-      rejectionReason
+      rejectionReason,
     );
 
     revalidatePath("/admin/initiatives");

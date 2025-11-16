@@ -13,10 +13,10 @@ import { InitiativeStatus, OrganizerType, UserType } from "@prisma/client";
 import { OrganizationService } from "@/services/organizations";
 import { ActionResponse } from "@/types/Statics";
 import { InitiativeService } from "@/services/initiatives";
-import { getPublicStorageUrl } from "./helpers";
+import { getPublicStorageUrl } from "./helpers-sf";
 
 export async function createInitiativeAction(
-  data: NewInitiativeFormData
+  data: NewInitiativeFormData,
 ): Promise<ActionResponse<NewInitiativeFormData, { initiativeId?: string }>> {
   console.log("createInitiativeAction data:", data);
 
@@ -36,7 +36,7 @@ export async function createInitiativeAction(
     let organizerOrgId: string | undefined;
     if (session.user.userType === OrganizerType.organization) {
       const orgData = await OrganizationService.getOrganizationByUserId(
-        session.user.id
+        session.user.id,
       );
       organizerOrgId = orgData?.id;
       organizerUserId = undefined;
@@ -108,7 +108,7 @@ export async function createInitiativeAction(
           "post-images",
           filePath,
           fileBuffer,
-          type
+          type,
         );
 
         coverImagePath = await getPublicStorageUrl("post-images", result.path);
@@ -149,7 +149,7 @@ export async function createInitiativeAction(
 
 export async function updateInitiativeAction(
   initiativeId: string,
-  data: NewInitiativeFormData
+  data: NewInitiativeFormData,
 ): Promise<ActionResponse<NewInitiativeFormData, { initiativeId?: string }>> {
   try {
     const session = await auth.api.getSession({
@@ -202,7 +202,7 @@ export async function updateInitiativeAction(
           "post-images",
           filePath,
           fileBuffer,
-          type
+          type,
         );
 
         coverImagePath = await getPublicStorageUrl("post-images", result.path);

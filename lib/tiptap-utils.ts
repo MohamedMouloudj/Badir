@@ -21,7 +21,7 @@ export const duplicateContent = (editor: Editor) => {
       selection.content().content.firstChild?.toJSON(),
       {
         updateSelection: true,
-      }
+      },
     )
     .focus(selection.to)
     .run();

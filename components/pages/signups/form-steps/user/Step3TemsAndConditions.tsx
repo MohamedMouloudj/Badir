@@ -12,8 +12,8 @@ export default function Step3TemsAndConditions() {
 
   return (
     <div className="space-y-6" dir="rtl">
-      <div className="text-right mb-8">
-        <h2 className="text-primary-sm font-bold text-primary-500 mb-2">
+      <div className="mb-8 text-right">
+        <h2 className="text-primary-sm text-primary-500 mb-2 font-bold">
           3. الموافقة والتعهد
         </h2>
       </div>
@@ -35,8 +35,8 @@ export default function Step3TemsAndConditions() {
           )}
         />
 
-        <div className="bg-neutral-50 p-2 rounded-lg border border-neutral-200 ">
-          <p className="w-full font-semibold text-secondary-md text-neutrals-700 leading-relaxed">
+        <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-2">
+          <p className="text-secondary-md text-neutrals-700 w-full leading-relaxed font-semibold">
             أقر بأن جميع البيانات المقدمة صحيحة، وأتعهد بالالتزام بضوابط العمل
             التطوعي وقيم منصة بادر، والمحافظة على سمعتها أثناء مشاركتي في
             أنشطتها.

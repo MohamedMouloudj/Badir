@@ -59,11 +59,11 @@ const OrganizationProfileSchema = z.object({
   organizationType: z.enum(
     Object.keys(ORGANIZATION_TYPES) as [
       keyof typeof ORGANIZATION_TYPES,
-      ...Array<keyof typeof ORGANIZATION_TYPES>
+      ...Array<keyof typeof ORGANIZATION_TYPES>,
     ],
     {
       error: "الرجاء اختيار نوع المنظمة",
-    }
+    },
   ),
 
   workAreas: z

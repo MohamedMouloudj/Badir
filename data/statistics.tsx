@@ -7,13 +7,13 @@ const statistics: StatProps[] = [
     id: 1,
     title: "منظمة",
     key: "organizations",
-    icon: <Building2 className="w-18 h-18 text-primary-500" />,
+    icon: <Building2 className="text-primary-500 h-18 w-18" />,
   },
   {
     id: 2,
     title: "مبادرة",
     key: "initiatives",
-    icon: <Handshake className="w-18 h-18 text-primary-500" />,
+    icon: <Handshake className="text-primary-500 h-18 w-18" />,
   },
   {
     id: 3,

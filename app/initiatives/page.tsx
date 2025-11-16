@@ -37,9 +37,9 @@ export default async function Page() {
   } catch (error) {
     console.error("Error loading initiatives page:", error);
     return (
-      <div className="min-h-screen bg-neutrals-100 flex items-center justify-center">
+      <div className="bg-neutrals-100 flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-neutrals-700 mb-4">
+          <h1 className="text-neutrals-700 mb-4 text-2xl font-bold">
             حدث خطأ أثناء تحميل المبادرات
           </h1>
           <p className="text-neutrals-500">يرجى المحاولة مرة أخرى لاحقاً</p>

@@ -99,6 +99,7 @@ erDiagram
     User {
         string id PK
         string name
+        string image
         string email UK
         boolean emailVerified
         string firstName
@@ -118,6 +119,7 @@ erDiagram
         datetime updatedAt
         boolean profileCompleted
     }
+
     Organization {
         string id PK
         string userId "FK, UK"
@@ -145,6 +147,30 @@ erDiagram
         array workAreas
         enum isVerified
     }
+
+    UserQualification {
+        string id PK
+        string userId FK
+        string specification
+        string educationalLevel
+        string currentJob
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    InitiativeCategory {
+        string id PK
+        string nameAr
+        string nameEn
+        string descriptionAr
+        string descriptionEn
+        string icon
+        string bgColor
+        string textColor
+        boolean isActive
+        datetime createdAt
+    }
+
     Initiative {
         string id PK
         enum organizerType
@@ -155,6 +181,8 @@ erDiagram
         string titleEn
         string descriptionAr
         string descriptionEn
+        string shortDescriptionAr
+        string shortDescriptionEn
         string location
         string city
         string state
@@ -173,18 +201,7 @@ erDiagram
         datetime createdAt
         datetime updatedAt
     }
-    InitiativeCategory {
-        string id PK
-        string nameAr
-        string nameEn
-        string descriptionAr
-        string descriptionEn
-        string icon
-        string bgColor
-        string textColor
-        boolean isActive
-        datetime createdAt
-    }
+
     InitiativeParticipant {
         string id PK
         string initiativeId FK
@@ -197,6 +214,7 @@ erDiagram
         datetime createdAt
         datetime updatedAt
     }
+
     InitiativePost {
         string id PK
         string initiativeId FK
@@ -209,6 +227,7 @@ erDiagram
         datetime createdAt
         datetime updatedAt
     }
+
     PostAttachment {
         string id PK
         string initiativePostId FK
@@ -216,6 +235,7 @@ erDiagram
         datetime createdAt
         datetime updatedAt
     }
+
     SupportRequest {
         string id PK
         string organizationId FK
@@ -228,6 +248,7 @@ erDiagram
         datetime updatedAt
         datetime createdAt
     }
+
     UserInitiativeRating {
         int id PK
         string userId FK
@@ -235,6 +256,7 @@ erDiagram
         decimal rating
         string comment
     }
+
     PlatformRating {
         string id PK
         string userId FK
@@ -252,15 +274,7 @@ erDiagram
         datetime createdAt
         datetime updatedAt
     }
-    UserQualification {
-        string id PK
-        string userId FK
-        string specification
-        string educationalLevel
-        string currentJob
-        datetime createdAt
-        datetime updatedAt
-    }
+
     Session {
         string id PK
         datetime expiresAt
@@ -271,6 +285,7 @@ erDiagram
         string userAgent
         string userId FK
     }
+
     Account {
         string id PK
         string accountId
@@ -283,6 +298,15 @@ erDiagram
         datetime refreshTokenExpiresAt
         string scope
         string password
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    Verification {
+        string id PK
+        string identifier
+        string value
+        datetime expiresAt
         datetime createdAt
         datetime updatedAt
     }
@@ -355,21 +379,21 @@ Client Request → Server Function / Next.js API Route → Service Layer → Pri
 
 ### Reusable UI Components
 
-`FormInput`: Typed input with validation and error mapping
-`AppButton`: Consistent button styles with loading states
-`FilterSelect`: Dynamic filtering for initiatives
-`PostEditor`: TipTap-based rich text editor
-`InitiativeCard`: Initiative display with status badges
-`SearchInput`: Full-text search functionality
-`PaginationControls`: Cursor-based pagination UI
-`Ratings`: Star rating display and input
+- `FormInput`: Typed input with validation and error mapping
+- `AppButton`: Consistent button styles with loading states
+- `FilterSelect`: Dynamic filtering for initiatives
+- `PostEditor`: TipTap-based rich text editor
+- `InitiativeCard`: Initiative display with status badges
+- `SearchInput`: Full-text search functionality
+- `PaginationControls`: Cursor-based pagination UI
+- `Ratings`: Star rating display and input
 
 ### Form Components
 
-`FormFieldCreator`: Dynamic form builder
-`SignupForm`: Multi-step registration flow
-`InitiativeForm`: Initiative creation and editing
-`CompleteProfileForm`: Profile completion workflow
+- `FormFieldCreator`: Dynamic form builder
+- `SignupForm`: Multi-step registration flow
+- `InitiativeForm`: Initiative creation and editing
+- `CompleteProfileForm`: Profile completion workflow
 
 ## API Routes
 
@@ -380,7 +404,25 @@ Client Request → Server Function / Next.js API Route → Service Layer → Pri
 /api/participations/ # Participation requests
 ```
 
+## Server Actions
+
+```bash
+actions
+│  ├─ admin.ts  # Admin-related actions
+│  ├─ helpers.ts    # Helper functions
+│  ├─ initiatives.ts    # Initiative-related actions
+│  ├─ login.ts  # Login action
+│  ├─ logout.ts # Logout action
+│  ├─ organization-profile.ts   # Organization profile actions
+│  ├─ participation.ts  # Participation-related actions
+│  ├─ posts.ts  # Initiative posts actions
+│  ├─ signup.ts  # Signup action
+│  ├─ submitRating.ts  # Submit rating action
+│  └─ user-profile.ts  # User profile actions
+```
+
 ---
 
-<a href="https://github.com/MohamedMouloudj/Badir">Badir</a> © 2025 by <a href="https://github.com/MohamedMouloudj/">Mohamed Mouloudj</a> and <a href="https://www.linkedin.com/company/bunian-%D8%A8%D9%86%D9%8A%D8%A7%D9%86/">Bunian</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</a></br><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+# License
 
+`<a href="https://github.com/MohamedMouloudj/Badir">`Badir`</a>` © 2025 by `<a href="https://github.com/MohamedMouloudj/">`Mohamed Mouloudj`</a>` and `<a href="https://www.linkedin.com/company/bunian-%D8%A8%D9%86%D9%8A%D8%A7%D9%86/">`Bunian`</a>` is licensed under `<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">`Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International`</a></br>``<img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">``<img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">`

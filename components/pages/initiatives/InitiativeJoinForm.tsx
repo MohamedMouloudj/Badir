@@ -42,10 +42,13 @@ export default function InitiativeJoinForm({
   } = useForm<JoinFormData>({
     defaultValues: {
       role: ParticipantRole.participant,
-      ...formQuestions.reduce((acc, q) => {
-        acc[q.id] = q.type === "checkbox" ? [] : "";
-        return acc;
-      }, {} as Record<string, string | string[]>),
+      ...formQuestions.reduce(
+        (acc, q) => {
+          acc[q.id] = q.type === "checkbox" ? [] : "";
+          return acc;
+        },
+        {} as Record<string, string | string[]>,
+      ),
     },
   });
 
@@ -66,12 +69,15 @@ export default function InitiativeJoinForm({
   const onSubmit = async (data: any) => {
     try {
       const formResponses = hasForm
-        ? formQuestions.reduce((acc, q) => {
-            if (data[q.id] !== undefined && data[q.id] !== "") {
-              acc[q.id] = data[q.id];
-            }
-            return acc;
-          }, {} as Record<string, string | string[]>)
+        ? formQuestions.reduce(
+            (acc, q) => {
+              if (data[q.id] !== undefined && data[q.id] !== "") {
+                acc[q.id] = data[q.id];
+              }
+              return acc;
+            },
+            {} as Record<string, string | string[]>,
+          )
         : undefined;
 
       startTransition(async () => {
@@ -100,7 +106,7 @@ export default function InitiativeJoinForm({
   return (
     <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-6">
       {/* Role Selection */}
-      <div className="bg-white p-4 rounded-lg shadow-xs border border-neutrals-300">
+      <div className="border-neutrals-300 rounded-lg border bg-white p-4 shadow-xs">
         <Controller
           name="role"
           control={control}
@@ -121,14 +127,14 @@ export default function InitiativeJoinForm({
 
       {/* Custom Form Questions */}
       {hasForm && formQuestions.length > 0 && (
-        <div className="bg-white p-4 rounded-lg shadow-xs border border-neutrals-300">
-          <h3 className="text-lg font-medium text-neutrals-700 mb-4">
+        <div className="border-neutrals-300 rounded-lg border bg-white p-4 shadow-xs">
+          <h3 className="text-neutrals-700 mb-4 text-lg font-medium">
             أسئلة المشاركة
           </h3>
 
           <div className="space-y-4">
             {formQuestions.map((question) => (
-              <div key={question.id} className="p-3 bg-neutrals-100 rounded-lg">
+              <div key={question.id} className="bg-neutrals-100 rounded-lg p-3">
                 <Controller
                   name={question.id as keyof JoinFormData}
                   control={control}
@@ -141,8 +147,8 @@ export default function InitiativeJoinForm({
                         question.type === "checkbox"
                           ? "checkbox-group"
                           : question.type === "radio"
-                          ? "radio"
-                          : "text"
+                            ? "radio"
+                            : "text"
                       }
                       label={question.question}
                       name={question.id}

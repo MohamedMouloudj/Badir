@@ -57,7 +57,7 @@ export class AdminService {
    */
   static async getOrganizations(
     filters: OrganizationFilters = {},
-    pagination: PaginationParams = { page: 1, limit: 10 }
+    pagination: PaginationParams = { page: 1, limit: 10 },
   ): Promise<PaginatedResponse<AdminOrganizationCard>> {
     const { page, limit } = pagination;
     const skip = (page - 1) * limit;
@@ -137,7 +137,7 @@ export class AdminService {
    */
   static async getUserInitiatives(
     filters: InitiativeFilters = {},
-    pagination: PaginationParams = { page: 1, limit: 10 }
+    pagination: PaginationParams = { page: 1, limit: 10 },
   ): Promise<PaginatedResponse<AdminInitiativeCard>> {
     const { page, limit } = pagination;
     const skip = (page - 1) * limit;
@@ -233,7 +233,7 @@ export class AdminService {
     organizationId: string,
     status: OrganizationStatus,
     adminUserId: string,
-    rejectionReason?: string
+    rejectionReason?: string,
   ) {
     try {
       const organization = await prisma.organization.update({
@@ -274,7 +274,7 @@ export class AdminService {
     initiativeId: string,
     status: InitiativeStatus,
     adminUserId: string,
-    rejectionReason?: string
+    rejectionReason?: string,
   ) {
     try {
       const initiative = await prisma.initiative.update({

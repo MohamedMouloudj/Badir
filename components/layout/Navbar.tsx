@@ -13,7 +13,12 @@ export default function Navbar() {
   const pathname = usePathname();
   const navRef = useRef<HTMLElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1023 });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const updateNavbarHeight = () => {
@@ -26,7 +31,7 @@ export default function Navbar() {
         if (currentHeight !== `${height}px`) {
           document.documentElement.style.setProperty(
             "--navbar-height",
-            `${height}px`
+            `${height}px`,
           );
         }
       }
@@ -66,23 +71,23 @@ export default function Navbar() {
       {/* Mobile Burger Menu Button */}
       <button
         onClick={toggleMenu}
-        className="md:hidden p-2 rounded-md border-none hover:bg-gray-100 transition-colors"
+        className="rounded-md border-none p-2 transition-colors hover:bg-gray-100 md:hidden"
         aria-label="Toggle menu"
       >
         {isMenuOpen ? (
-          <X className="w-6 h-6 text-primary-500" />
+          <X className="text-primary-500 h-6 w-6" />
         ) : (
-          <Menu className="w-6 h-6 text-primary-500" />
+          <Menu className="text-primary-500 h-6 w-6" />
         )}
       </button>
 
       <Logo />
 
       {/* Desktop Navigation */}
-      <div className="hidden md:flex items-center gap-6 flex-1">
+      <div className="hidden flex-1 items-center gap-6 md:flex">
         <ul>
           {landingRoute.map((navRoute) => {
-            if (isTablet && navRoute.url === "/") {
+            if (mounted && isTablet && navRoute.url === "/") {
               return null;
             }
             return (
@@ -103,18 +108,18 @@ export default function Navbar() {
       {/* Mobile Menu Overlay */}
 
       <div
-        className="md:hidden absolute bg-neutrals-100 top-full left-0 right-0 z-50"
+        className="bg-neutrals-100 absolute top-full right-0 left-0 z-50 md:hidden"
         style={{
           height: `calc(100vh - var(--navbar-height))`,
           visibility: isMenuOpen ? "visible" : "hidden",
         }}
       >
-        <div className="flex flex-col justify-between p-4 h-full">
+        <div className="flex h-full flex-col justify-between p-4">
           <ul>
             {landingRoute.map((navRoute) => (
               <li key={navRoute.url}>
                 <Link
-                  className={`py-2 px-3 ${
+                  className={`px-3 py-2 ${
                     pathname === navRoute.url ? "underline" : ""
                   }`}
                   href={`${navRoute.url}`}
@@ -126,7 +131,7 @@ export default function Navbar() {
             ))}
           </ul>
 
-          <div className="bg-secondary-200 h-0.25 w-full mb-6" />
+          <div className="bg-secondary-200 mb-6 h-0.25 w-full" />
           <AuthProfileButtons isMobile={true} onMenuAction={closeMenu} />
         </div>
       </div>

@@ -7,7 +7,7 @@ export default function Footer() {
 
   return (
     <footer dir="rtl">
-      <div className="flex-center justify-center gap-4 mb-16" dir="ltr">
+      <div className="flex-center mb-16 justify-center gap-4" dir="ltr">
         <a
           href="https://www.linkedin.com/company/bunian-%D8%A8%D9%86%D9%8A%D8%A7%D9%86/"
           target="_blank"
@@ -19,30 +19,30 @@ export default function Footer() {
             width={160}
             height={40}
             quality={100}
-            className="object-contain w-auto h-auto"
+            className="h-auto w-auto object-contain"
           />
         </a>
-        <div className="h-16 w-0.5 bg-neutrals-100" />
+        <div className="bg-neutrals-100 h-10 w-0.5" />
         <Image
           src="/images/logos/logo-white.png"
           alt="Badir and Bunian logos"
           width={160}
           height={40}
           quality={100}
-          className="object-contain w-auto h-auto"
+          className="h-auto w-auto object-contain"
         />
       </div>
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto max-w-7xl">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+        <div className="mb-8 grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
           {/* First column */}
           <div>
-            <h3 className="text-xl font-bold text-white mb-4">المنصة</h3>
+            <h3 className="mb-4 text-xl font-bold text-white">المنصة</h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/about"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+                  className="text-neutrals-200 text-sm transition-colors duration-200 hover:text-white"
                 >
                   عن المنصة
                 </Link>
@@ -50,7 +50,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/how-it-works"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+                  className="text-neutrals-200 text-sm transition-colors duration-200 hover:text-white"
                 >
                   كيف تعمل
                 </Link>
@@ -58,7 +58,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/faq"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+                  className="text-neutrals-200 text-sm transition-colors duration-200 hover:text-white"
                 >
                   الأسئلة الشائعة
                 </Link>
@@ -66,7 +66,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/contact"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+                  className="text-neutrals-200 text-sm transition-colors duration-200 hover:text-white"
                 >
                   تواصل معنا
                 </Link>
@@ -76,12 +76,12 @@ export default function Footer() {
 
           {/* Middle column */}
           <div>
-            <h3 className="text-xl font-bold text-white mb-4">للمتطوعين</h3>
+            <h3 className="mb-4 text-xl font-bold text-white">للمتطوعين</h3>
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/assistance"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+                  href="/initiatives"
+                  className="text-neutrals-200 text-sm transition-colors duration-200 hover:text-white"
                 >
                   ابحث عن مبادرات
                 </Link>
@@ -89,7 +89,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/signup/user"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+                  className="text-neutrals-200 text-sm transition-colors duration-200 hover:text-white"
                 >
                   انضم كمتطوع
                 </Link>
@@ -97,7 +97,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/volunteer-guide"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+                  className="text-neutrals-200 text-sm transition-colors duration-200 hover:text-white"
                 >
                   دليل المتطوع
                 </Link>
@@ -105,7 +105,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/terms"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+                  className="text-neutrals-200 text-sm transition-colors duration-200 hover:text-white"
                 >
                   شروط الاستخدام
                 </Link>
@@ -114,12 +114,12 @@ export default function Footer() {
           </div>
 
           {/* Left Column - For Volunteers */}
-          <div className="flex-center items-end h-full">
+          <div className="flex-center h-full items-end">
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/assistance"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+                  className="text-neutrals-200 text-sm transition-colors duration-200 hover:text-white"
                 >
                   ابحث عن مساعدات
                 </Link>
@@ -127,7 +127,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/signup/organization"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+                  className="text-neutrals-200 text-sm transition-colors duration-200 hover:text-white"
                 >
                   انضم كمنظمة{" "}
                 </Link>
@@ -135,7 +135,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/organization-guide"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+                  className="text-neutrals-200 text-sm transition-colors duration-200 hover:text-white"
                 >
                   دليل المنظمة
                 </Link>
@@ -143,7 +143,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/privacy-policy"
-                  className="text-neutrals-200 hover:text-white transition-colors duration-200 text-sm"
+                  className="text-neutrals-200 text-sm transition-colors duration-200 hover:text-white"
                 >
                   سياسة الخصوصية
                 </Link>
@@ -152,20 +152,20 @@ export default function Footer() {
           </div>
 
           {/* Newsletter Section */}
-          <div className="md:col-span-1 space-y-4">
-            <h3 className="text-xl font-bold text-white mb-4">
+          <div className="space-y-4 md:col-span-1">
+            <h3 className="mb-4 text-xl font-bold text-white">
               جريدتنا الإلكترونية
             </h3>
-            <p className="text-neutrals-200 text-sm mb-4">
+            <p className="text-neutrals-200 mb-4 text-sm">
               احصل على آخر المواضيع والأخبار في بريدك
             </p>
 
             {/* Responsive Input Container */}
-            <div className="flex items-center bg-neutrals-100 rounded-full shadow-sm overflow-hidden">
+            <div className="bg-neutrals-100 flex items-center overflow-hidden rounded-full shadow-sm">
               <input
                 type="email"
                 placeholder="بريدك الإلكتروني"
-                className="flex-1 min-w-0 h-10 sm:h-12 px-3 sm:px-4 bg-transparent text-neutrals-700 placeholder-neutrals-400 focus:outline-none text-sm sm:text-base"
+                className="text-neutrals-700 placeholder-neutrals-400 h-10 min-w-0 flex-1 bg-transparent px-3 text-sm focus:outline-none sm:h-12 sm:px-4 sm:text-base"
                 dir="rtl"
               />
               <div className="flex-shrink-0 p-1">
@@ -173,7 +173,7 @@ export default function Footer() {
                   type="primary"
                   border="rounded"
                   size="sm"
-                  className="whitespace-nowrap px-3 sm:px-4 h-8 sm:h-10"
+                  className="h-8 px-3 whitespace-nowrap sm:h-10 sm:px-4"
                 >
                   اشترك
                 </AppButton>
@@ -183,12 +183,12 @@ export default function Footer() {
         </div>
 
         {/* Divider */}
-        <div className="h-0.5 bg-neutrals-100 my-8" />
+        <div className="bg-neutrals-100 my-8 h-0.5" />
 
         {/* Bottom Section */}
-        <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+        <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
           {/* Copyright */}
-          <div className="text-center text-neutrals-400 text-sm">
+          <div className="text-neutrals-400 text-center text-sm">
             © {currentYear} منصة بادر - جميع الحقوق محفوظة
           </div>
         </div>

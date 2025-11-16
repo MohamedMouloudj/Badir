@@ -8,13 +8,13 @@ interface PolicySectionProps {
 export function FooterPageSection({ title, children }: PolicySectionProps) {
   return (
     <div
-      className="w-full bg-neutrals-200 border-2 border-neutrals-300 rounded-xl p-6 mb-4"
+      className="bg-neutrals-200 border-neutrals-300 mb-4 w-full rounded-xl border-2 p-6"
       dir="rtl"
     >
-      <h2 className="text-primary-500 font-bold text-secondary-sm mb-4 text-right">
+      <h2 className="text-primary-500 text-secondary-sm mb-4 text-right font-bold">
         {title}
       </h2>
-      <div className="text-right text-neutrals-600">{children}</div>
+      <div className="text-neutrals-600 text-right">{children}</div>
     </div>
   );
 }

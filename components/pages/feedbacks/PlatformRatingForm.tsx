@@ -54,7 +54,7 @@ export default function PlatformRatingForm() {
           emailjs.send(
             emailConfig.serviceId,
             emailConfig.templates.criticalRating,
-            result.criticalAlertSent
+            result.criticalAlertSent,
           );
         }
       } else {
@@ -74,7 +74,7 @@ export default function PlatformRatingForm() {
   };
 
   return (
-    <Card className="bg-neutrals-100 border border-neutrals-200 rounded-3xl shadow-sm">
+    <Card className="bg-neutrals-100 border-neutrals-200 rounded-3xl border shadow-sm">
       <CardContent className="p-8">
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -84,7 +84,7 @@ export default function PlatformRatingForm() {
           {/* Platform Rating Section */}
           {/* Rating questions - each in a grid for desktop */}
           <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
               <Controller
                 name="easeOfUse"
                 control={control}
@@ -126,7 +126,7 @@ export default function PlatformRatingForm() {
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
               <Controller
                 name="contentDiversity"
                 control={control}
@@ -192,11 +192,11 @@ export default function PlatformRatingForm() {
 
             {/* Useful Sections */}
             <div>
-              <p className="text-neutrals-600 font-medium mb-2">
+              <p className="text-neutrals-600 mb-2 font-medium">
                 أي الأقسام كانت أكثر فائدة لك؟{" "}
                 <span className="text-state-error">*</span>
               </p>
-              <div className="flex-center justify-start flex-wrap gap-4">
+              <div className="flex-center flex-wrap justify-start gap-4">
                 {platformSections.map((section) => (
                   <Controller
                     key={section}
@@ -215,7 +215,7 @@ export default function PlatformRatingForm() {
                             const updatedValue = checked
                               ? [...(field.value || []), section]
                               : (field.value || []).filter(
-                                  (s) => s !== section
+                                  (s) => s !== section,
                                 );
                             field.onChange(updatedValue);
                           }}
@@ -331,13 +331,13 @@ export default function PlatformRatingForm() {
             />
 
             {/* Note */}
-            <p className="text-xs text-neutrals-500 text-center my-4">
+            <p className="text-neutrals-500 my-4 text-center text-xs">
               ملاحظة: جميع المعلومات التي قدمتها ستستخدم لتحسين المنصة وتجربة
               المستخدم فقط
             </p>
 
             {/* Submit Button */}
-            <div className="flex justify-center mt-6">
+            <div className="mt-6 flex justify-center">
               <AppButton
                 type="submit"
                 size="md"

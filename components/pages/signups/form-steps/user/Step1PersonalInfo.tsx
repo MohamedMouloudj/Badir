@@ -4,8 +4,8 @@ import { Controller, useFormContext } from "react-hook-form";
 import FormInput from "@/components/FormInput";
 import { sexOptions, Step1FormData } from "@/schemas/signupUserSchema";
 import { useEffect, useMemo } from "react";
-import country from "country-list-js";
 import { toast } from "sonner";
+import { countryList } from "@/data/statics";
 
 export default function Step1PersonalInfo() {
   const {
@@ -25,7 +25,7 @@ export default function Step1PersonalInfo() {
           },
           (error) => {
             console.error("Error getting location:", error);
-          }
+          },
         );
       } else {
         console.error("Geolocation is not supported by this browser.");
@@ -37,17 +37,16 @@ export default function Step1PersonalInfo() {
   }, [setValue]);
 
   const COUNTRIES = useMemo(() => {
-    const countries = country.names();
-    return countries.sort().map((countryName) => ({
-      value: countryName,
-      label: countryName,
+    return countryList.sort().map((country) => ({
+      value: country.labelEn,
+      label: country.label,
     }));
   }, []);
 
   return (
     <div className="space-y-6" dir="rtl">
-      <div className="text-right mb-8">
-        <h2 className="text-primary-sm font-bold text-primary-500 mb-2">
+      <div className="mb-8 text-right">
+        <h2 className="text-primary-sm text-primary-500 mb-2 font-bold">
           1.المعلومات الشخصية
         </h2>
       </div>
@@ -58,7 +57,7 @@ export default function Step1PersonalInfo() {
           control={control}
           render={({ field: { onChange, value, onBlur } }) => (
             <div className="space-y-1" dir="rtl">
-              <label className="block text-sm font-medium text-neutrals-600 mb-2">
+              <label className="text-neutrals-600 mb-2 block text-sm font-medium">
                 تاريخ الميلاد
                 <span className="text-state-error ml-1">*</span>
               </label>
@@ -68,11 +67,11 @@ export default function Step1PersonalInfo() {
                 value={value || ""}
                 onChange={(e) => onChange(e.target.value)}
                 onBlur={onBlur}
-                className="w-full border border-neutrals-300 rounded-full px-3 py-2 placeholder:text-neutrals-300 text-neutrals-700 focus:border-secondary-600 focus:ring-1 focus:ring-secondary-600 focus:outline-none"
+                className="border-neutrals-300 placeholder:text-neutrals-300 text-neutrals-700 focus:border-secondary-600 focus:ring-secondary-600 w-full rounded-full border px-3 py-2 focus:ring-1 focus:outline-none"
                 dir="rtl"
               />
               {errors.dateOfBirth && (
-                <p className="text-state-error text-sm mt-1">
+                <p className="text-state-error mt-1 text-sm">
                   {errors.dateOfBirth.message}
                 </p>
               )}
@@ -127,7 +126,7 @@ export default function Step1PersonalInfo() {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <Controller
             name="city"
             control={control}

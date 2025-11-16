@@ -68,7 +68,7 @@ export default function PostsPanel({
     const res = await listPostsAction(
       initiativeId,
       onlyMine ? currentUserId : undefined,
-      currentUserId ? undefined : "published"
+      currentUserId ? undefined : "published",
     );
     handleSetPosts((res as any)?.posts || []);
     setLoading(false);
@@ -149,15 +149,15 @@ export default function PostsPanel({
   }
 
   return (
-    <div className="space-y-4 max-w-full">
+    <div className="max-w-full space-y-4">
       {/* New Post Button */}
       {canWrite && (
-        <div className="w-full flex-center justify-stretch gap-4" dir="rtl">
+        <div className="flex-center w-full justify-stretch gap-4" dir="rtl">
           <AppButton
             type="primary"
             onClick={handleNewPost}
             className="flex-1"
-            icon={<Plus className="w-4 h-4" />}
+            icon={<Plus className="h-4 w-4" />}
             size="sm"
           >
             إنشاء منشور جديد
@@ -168,7 +168,7 @@ export default function PostsPanel({
               size="sm"
               url={`/initiatives/${initiativeId}/edit`}
               className="flex-1"
-              icon={<Edit className="w-4 h-4" />}
+              icon={<Edit className="h-4 w-4" />}
             >
               تعديل المبادرة
             </AppButton>
@@ -179,13 +179,13 @@ export default function PostsPanel({
       {/* Posts List */}
       {loading ? (
         <div className="flex-center justify-center gap-2" dir="rtl">
-          <Loader2 className="w-4 h-4 animate-spin" />
+          <Loader2 className="h-4 w-4 animate-spin" />
           <span>جاري التحميل...</span>
         </div>
       ) : posts.length === 0 ? (
         <Card>
           <CardContent
-            className="flex-center justify-center gap-2 w-full p-8"
+            className="flex-center w-full justify-center gap-2 p-8"
             dir="rtl"
           >
             <p className="text-neutrals-500">لا توجد منشورات بعد.</p>
@@ -207,14 +207,14 @@ export default function PostsPanel({
                 key={post.id}
                 className={`${
                   isPinned
-                    ? "ring-2 ring-yellow-200 bg-yellow-50"
+                    ? "bg-yellow-50 ring-2 ring-yellow-200"
                     : "bg-neutrals-200"
                 }`}
               >
                 <CardHeader className="pb-3" dir="rtl">
-                  <div className="grid grid-cols-2 gap-2 items-start w-full">
+                  <div className="grid w-full grid-cols-2 items-start gap-2">
                     <div className="flex-1 justify-self-start">
-                      <div className="flex items-center gap-2 mb-2">
+                      <div className="mb-2 flex items-center gap-2">
                         <Badge
                           variant="secondary"
                           className={getPostTypeBadgeColor(post.postType)}
@@ -233,14 +233,14 @@ export default function PostsPanel({
                             variant="secondary"
                             className="bg-yellow-100 text-yellow-800"
                           >
-                            <Pin className="w-3 h-3 ml-1" />
+                            <Pin className="ml-1 h-3 w-3" />
                             مثبت
                           </Badge>
                         )}
                       </div>
 
                       <h3
-                        className="text-lg font-semibold text-right"
+                        className="text-right text-lg font-semibold"
                         dir="rtl"
                       >
                         {post.title || "بدون عنوان"}
@@ -298,10 +298,7 @@ export default function PostsPanel({
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                              <AlertDialogCancel
-                                className="border border-primary-500 text-primary-500 bg-transparent hover:bg-primary-100 hover:text-primary-400
-                              text-button-sm sm:text-button-md px-3 sm:px-4 h-8 sm:h-10"
-                              >
+                              <AlertDialogCancel className="border-primary-500 text-primary-500 hover:bg-primary-100 hover:text-primary-400 text-button-sm sm:text-button-md h-8 border bg-transparent px-3 sm:h-10 sm:px-4">
                                 إلغاء
                               </AlertDialogCancel>
                               <AlertDialogAction
@@ -312,7 +309,7 @@ export default function PostsPanel({
                                     setPostToDelete(null);
                                   }
                                 }}
-                                className="text-button-sm sm:text-button-md px-3 sm:px-4 h-8 sm:h-10 bg-primary-500 text-white hover:bg-primary-400"
+                                className="text-button-sm sm:text-button-md bg-primary-500 hover:bg-primary-400 h-8 px-3 text-white sm:h-10 sm:px-4"
                               >
                                 حذف
                               </AlertDialogAction>
@@ -321,8 +318,8 @@ export default function PostsPanel({
                         </AlertDialog>
                       </div>
                     )}
-                    <div className="col-span-2 flex items-center gap-2 text-sm text-gray-500 mt-2">
-                      <Calendar className="w-4 h-4" />
+                    <div className="col-span-2 mt-2 flex items-center gap-2 text-sm text-gray-500">
+                      <Calendar className="h-4 w-4" />
                       <span>{formatDate(post.createdAt)}</span>
                       <span>•</span>
                       <Link
@@ -331,7 +328,7 @@ export default function PostsPanel({
                             ? `/organizations/${post.author.organization.id}`
                             : `/profile/${post.author.id}`
                         }
-                        className="text-neutrals-700 hover:underline hover:text-primary-600"
+                        className="text-neutrals-700 hover:text-primary-600 hover:underline"
                       >
                         <span>
                           {post.author.organization
@@ -344,14 +341,14 @@ export default function PostsPanel({
                           "rounded-full text-sm font-medium",
                           isAuthorManager
                             ? "bg-state-success text-secondary-700"
-                            : "bg-state-success/80 text-secondary-700/80"
+                            : "bg-state-success/80 text-secondary-700/80",
                         )}
                       >
                         {isAuthorManager
                           ? "مدير المبادرة"
                           : post.author.id === currentUserId
-                          ? "أنت"
-                          : "مساعد"}
+                            ? "أنت"
+                            : "مساعد"}
                       </Badge>
                     </div>
                   </div>

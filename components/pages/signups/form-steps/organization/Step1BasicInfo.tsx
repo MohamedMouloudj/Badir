@@ -9,13 +9,13 @@ export default function Step1BasicInfoForm() {
 
   return (
     <div className="space-y-6" dir="rtl">
-      <div className="text-right mb-8">
-        <h2 className="text-primary-sm font-bold text-primary-500 mb-2">
+      <div className="mb-8 text-right">
+        <h2 className="text-primary-sm text-primary-500 mb-2 font-bold">
           1. بيانات المنظمة
         </h2>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <Controller
           name="officialName"
           control={control}
@@ -68,7 +68,7 @@ export default function Step1BasicInfoForm() {
         )}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <Controller
           name="foundingDate"
           control={control}
@@ -105,7 +105,7 @@ export default function Step1BasicInfoForm() {
               onChange={(e) => {
                 const val = e ? parseInt(e.toString(), 10) : undefined;
                 field.onChange(
-                  val !== undefined && !isNaN(val) ? val : undefined
+                  val !== undefined && !isNaN(val) ? val : undefined,
                 );
               }}
               error={fieldState.error?.message}
@@ -115,7 +115,7 @@ export default function Step1BasicInfoForm() {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <Controller
           name="city"
           control={control}
@@ -152,7 +152,7 @@ export default function Step1BasicInfoForm() {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <Controller
           name="state"
           control={control}

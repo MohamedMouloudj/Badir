@@ -28,7 +28,7 @@ export class ParticipationService {
 
   static async getUserParticipations(
     userId: string,
-    isOwner: boolean = false
+    isOwner: boolean = false,
   ): Promise<UserParticipation[]> {
     // Participations as participant
     const participations = await prisma.initiativeParticipant.findMany({
@@ -92,7 +92,7 @@ export class ParticipationService {
     // Merge everything
     const participationsData = participations.map((p) => {
       const avgRatingData = ratingAverages.find(
-        (r) => r.initiativeId === p.initiativeId
+        (r) => r.initiativeId === p.initiativeId,
       );
       return {
         type: "participant" as const,
@@ -135,7 +135,7 @@ export class ParticipationService {
 
   static async getByIds(
     userId: string,
-    initiativeId: string
+    initiativeId: string,
   ): Promise<InitiativeParticipant | null> {
     return await prisma.initiativeParticipant.findFirst({
       where: {
@@ -159,7 +159,7 @@ export class ParticipationService {
     userId: string,
     role: ParticipantRole,
     status: ParticipationStatus,
-    sanitizedFormResponses?: Record<string, string | string[]>
+    sanitizedFormResponses?: Record<string, string | string[]>,
   ): Promise<InitiativeParticipant> {
     return await prisma.initiativeParticipant.create({
       data: {

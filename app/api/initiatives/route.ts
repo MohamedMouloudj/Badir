@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
         success: false,
         error: "Failed to fetch initiatives",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

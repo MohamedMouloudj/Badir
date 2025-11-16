@@ -9,7 +9,7 @@ export const ORGANIZATION_TYPES = {
 } as const;
 
 export const organizationTypeOptions = Object.entries(ORGANIZATION_TYPES).map(
-  ([value, label]) => ({ value, label })
+  ([value, label]) => ({ value, label }),
 );
 
 export const workAreaOptions = [

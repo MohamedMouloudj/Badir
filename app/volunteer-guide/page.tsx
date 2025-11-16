@@ -6,15 +6,15 @@ export default function VolunteerGuidePage() {
   return (
     <section className="container mx-auto px-4 py-12" dir="rtl">
       {/* Main Title */}
-      <h1 className="text-3xl md:text-4xl font-bold text-primary-500 text-center mb-10">
+      <h1 className="text-primary-500 mb-10 text-center text-3xl font-bold md:text-4xl">
         دليل المتطوع
       </h1>
 
       {/* Guide Card */}
-      <Card className="bg-neutrals-200 border border-neutrals-300 rounded-3xl shadow-sm max-w-4xl mx-auto p-0">
-        <CardContent className="p-8 space-y-6 text-right">
+      <Card className="bg-neutrals-200 border-neutrals-300 mx-auto max-w-4xl rounded-3xl border p-0 shadow-sm">
+        <CardContent className="space-y-6 p-8 text-right">
           {/* Welcome Message */}
-          <h2 className="text-neutrals-700 text-xl font-bold text-right">
+          <h2 className="text-neutrals-700 text-right text-xl font-bold">
             مرحبًا بك في أسرة بادر!
           </h2>
 
@@ -24,7 +24,7 @@ export default function VolunteerGuidePage() {
           </p>
 
           {/* Guide Items */}
-          <div className="space-y-4 mt-4">
+          <div className="mt-4 space-y-4">
             <GuideItem
               title=""
               content="التعاون مع باقي الفريق بروح إيجابية."
@@ -48,7 +48,7 @@ export default function VolunteerGuidePage() {
           </div>
 
           {/* Closing Statement */}
-          <p className="text-primary-500 font-semibold text-paragraph-lg pt-4 text-center">
+          <p className="text-primary-500 text-paragraph-lg pt-4 text-center font-semibold">
             <span className="underline">تذكّر</span>: العمل التطوعي ليس وقتًا
             تمنحه فحسب، بل أثرًا تتركه في قلوب الناس.
           </p>

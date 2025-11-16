@@ -70,7 +70,7 @@ export function AuthProfileButtons({
   if (isSessionPending || isPending) {
     return (
       <div className="flex items-center justify-center">
-        <div className="h-10 w-10 md:h-12 md:w-12 bg-neutrals-200 rounded-full animate-pulse" />
+        <div className="bg-neutrals-200 h-10 w-10 animate-pulse rounded-full md:h-12 md:w-12" />
       </div>
     );
   }
@@ -83,36 +83,36 @@ export function AuthProfileButtons({
             <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
               <PopoverTrigger asChild>
                 <button
-                  className="focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-full"
+                  className="focus:ring-primary-500 rounded-full focus:ring-2 focus:outline-none"
                   disabled={isPending}
                 >
-                  <Avatar className="size-10 cursor-pointer hover:ring-2 hover:ring-primary-400 ring-offset-1 transition-all aspect-square">
+                  <Avatar className="hover:ring-primary-400 aspect-square size-10 cursor-pointer ring-offset-1 transition-all hover:ring-2">
                     {image && (
                       <Image
                         src={image}
                         alt={session.user.name || "المستخدم"}
                         fill
-                        className="object-cover rounded-full"
+                        className="rounded-full object-cover"
                       />
                     )}
-                    <AvatarFallback className="border-2 border-primary-500 text-primary-500 font-semibold">
+                    <AvatarFallback className="border-primary-500 text-primary-500 border-2 font-semibold">
                       <User className="h-5 w-5" />
                     </AvatarFallback>
                   </Avatar>
                 </button>
               </PopoverTrigger>
               <PopoverContent
-                className="w-48 p-2 bg-neutrals-100 border border-neutrals-300 shadow-lg"
+                className="bg-neutrals-100 border-neutrals-300 w-48 border p-2 shadow-lg"
                 align="end"
                 dir="rtl"
               >
                 <div className="flex flex-col space-y-1">
                   {/* User Info */}
-                  <div className="px-3 py-2 border-b border-neutrals-300">
-                    <p className="text-sm font-semibold text-neutrals-700 truncate">
+                  <div className="border-neutrals-300 border-b px-3 py-2">
+                    <p className="text-neutrals-700 truncate text-sm font-semibold">
                       {session.user.name || "المستخدم"}
                     </p>
-                    <p className="text-xs text-neutrals-500 truncate">
+                    <p className="text-neutrals-500 truncate text-xs">
                       {session.user.email}
                     </p>
                   </div>
@@ -120,7 +120,7 @@ export function AuthProfileButtons({
                   {/* Profile Link */}
                   <Link
                     href="/profile"
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-neutrals-600 hover:bg-neutrals-200 rounded-md transition-colors"
+                    className="text-neutrals-600 hover:bg-neutrals-200 flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors"
                     onClick={handleProfileClick}
                   >
                     <Settings className="h-4 w-4" />
@@ -128,7 +128,7 @@ export function AuthProfileButtons({
                   </Link>
                   <Link
                     href="/feedback"
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-neutrals-600 hover:bg-neutrals-200 rounded-md transition-colors"
+                    className="text-neutrals-600 hover:bg-neutrals-200 flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors"
                     onClick={handleProfileClick}
                   >
                     <Star className="h-4 w-4" />
@@ -150,34 +150,34 @@ export function AuthProfileButtons({
             <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
               <PopoverTrigger asChild>
                 <button
-                  className="focus:outline-none focus:ring-2 focus:ring-secondary-600 rounded-full"
+                  className="focus:ring-secondary-600 rounded-full focus:ring-2 focus:outline-none"
                   disabled={isPending}
                   aria-label="Open user menu"
                 >
-                  <Avatar className="h-10 w-10 md:h-12 md:w-12 cursor-pointer hover:ring-2 hover:ring-primary-400 ring-offset-1 transition-all">
+                  <Avatar className="hover:ring-primary-400 h-10 w-10 cursor-pointer ring-offset-1 transition-all hover:ring-2 md:h-12 md:w-12">
                     <AvatarImage
                       className="object-cover"
                       src={image || ""}
                       alt={session.user.name || "المستخدم"}
                     />
-                    <AvatarFallback className="border-2 border-primary-500 text-primary-500 font-semibold">
+                    <AvatarFallback className="border-primary-500 text-primary-500 border-2 font-semibold">
                       <User className="h-5 w-5 md:h-6 md:w-6" />
                     </AvatarFallback>
                   </Avatar>
                 </button>
               </PopoverTrigger>
               <PopoverContent
-                className="w-56 p-2 bg-neutrals-100 border border-neutrals-300 shadow-lg"
+                className="bg-neutrals-100 border-neutrals-300 w-56 border p-2 shadow-lg"
                 align="end"
                 dir="rtl"
               >
                 <div className="flex flex-col space-y-1">
                   {/* User Info */}
-                  <div className="px-3 py-3 border-b border-neutrals-300">
-                    <p className="text-sm font-semibold text-neutrals-700 truncate">
+                  <div className="border-neutrals-300 border-b px-3 py-3">
+                    <p className="text-neutrals-700 truncate text-sm font-semibold">
                       {session.user.name || "المستخدم"}
                     </p>
-                    <p className="text-xs text-neutrals-500 truncate">
+                    <p className="text-neutrals-500 truncate text-xs">
                       {session.user.email}
                     </p>
                   </div>
@@ -185,7 +185,7 @@ export function AuthProfileButtons({
                   {/* Profile Link */}
                   <Link
                     href="/profile"
-                    className="flex items-center gap-3 px-3 py-2 text-sm text-neutrals-600 hover:bg-neutrals-200 rounded-md transition-colors"
+                    className="text-neutrals-600 hover:bg-neutrals-200 flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors"
                     onClick={handleProfileClick}
                   >
                     <Settings className="h-4 w-4" />
@@ -193,7 +193,7 @@ export function AuthProfileButtons({
                   </Link>
                   <Link
                     href="/feedback"
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-neutrals-600 hover:bg-neutrals-200 rounded-md transition-colors"
+                    className="text-neutrals-600 hover:bg-neutrals-200 flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors"
                     onClick={handleProfileClick}
                   >
                     <Star className="h-4 w-4" />
@@ -218,7 +218,7 @@ export function AuthProfileButtons({
   return (
     <>
       {isMobile ? (
-        <div className="flex flex-col flex-1/3 gap-3">
+        <div className="flex flex-1/3 flex-col gap-3">
           <SignUpButton onMenuAction={onMenuAction} />
           <SignInButton onMenuAction={onMenuAction} />
         </div>

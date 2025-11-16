@@ -18,8 +18,8 @@ export default function Step2Qualifications() {
 
   return (
     <div className="space-y-6" dir="rtl">
-      <div className="text-right mb-8">
-        <h2 className="text-primary-sm font-bold text-primary-500 mb-2">
+      <div className="mb-8 text-right">
+        <h2 className="text-primary-sm text-primary-500 mb-2 font-bold">
           2. الخلفية التعليمية والمهنية
         </h2>
       </div>

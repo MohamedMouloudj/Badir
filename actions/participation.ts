@@ -10,10 +10,10 @@ import DOMPurify from "isomorphic-dompurify";
 import { FormResponseType, JoinInitiativeParams } from "@/schemas";
 import { ParticipationService } from "@/services/participations";
 import { InitiativeService } from "@/services/initiatives";
-import { assertManager } from "./helpers";
+import { assertManager } from "./helpers-sf";
 
 export async function joinInitiativeAction(
-  params: JoinInitiativeParams
+  params: JoinInitiativeParams,
 ): Promise<ActionResponse<JoinInitiativeParams, { participationId: string }>> {
   try {
     const session = await auth.api.getSession({
@@ -64,7 +64,7 @@ export async function joinInitiativeAction(
     // Check if user is already participating
     const existingParticipation = await ParticipationService.getByIds(
       params.initiativeId,
-      session.user.id
+      session.user.id,
     );
 
     if (existingParticipation) {
@@ -81,7 +81,7 @@ export async function joinInitiativeAction(
         const value = params.formResponses![key];
         if (Array.isArray(value)) {
           sanitizedFormResponses[key] = value.map((item) =>
-            DOMPurify.sanitize(item)
+            DOMPurify.sanitize(item),
           );
         } else {
           sanitizedFormResponses[key] = DOMPurify.sanitize(value);
@@ -96,7 +96,7 @@ export async function joinInitiativeAction(
       initiative.isOpenParticipation
         ? ParticipationStatus.approved
         : ParticipationStatus.registered,
-      sanitizedFormResponses
+      sanitizedFormResponses,
     );
 
     if (initiative.isOpenParticipation) {
@@ -163,7 +163,7 @@ export async function listPendingRequestsAction(initiativeId: string) {
 
 export async function approveParticipationAction(
   id: string,
-  initiativeId: string
+  initiativeId: string,
 ) {
   await assertManager(initiativeId);
   const participant = await prisma.initiativeParticipant.findUnique({
@@ -189,7 +189,7 @@ export async function approveParticipationAction(
 
 export async function rejectParticipationAction(
   id: string,
-  initiativeId: string
+  initiativeId: string,
 ) {
   await assertManager(initiativeId);
   await prisma.initiativeParticipant.update({

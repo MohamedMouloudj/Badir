@@ -15,6 +15,20 @@ import {
   User,
   UserType,
 } from "@prisma/client";
+import countries from "i18n-iso-countries";
+import enLocale from "i18n-iso-countries/langs/en.json";
+import arLocale from "i18n-iso-countries/langs/ar.json";
+
+countries.registerLocale(enLocale);
+countries.registerLocale(arLocale);
+
+export const countryList = Object.entries(countries.getNames("ar")).map(
+  ([code, name]) => ({
+    value: code, // "DZ", "US"..
+    label: name,
+    labelEn: countries.getName(code, "en")!,
+  }),
+);
 
 const heroCarouselItems: CarouselImage[] = [
   {
@@ -37,8 +51,18 @@ const heroCarouselItems: CarouselImage[] = [
 const aboutInfo: AboutInfo[] = [
   {
     title: "من نحن؟",
-    description: `أول منصة رقمية تطوعية جزائرية متكاملة، تجمع بين المتطوّع، والمحتاج، والجهات الخيرية في منظومة واحدة منسّقة تُسهِّل العطاء وتُفعّل الأثر.
-يُشرف عليها مشروع بُنيان التطوعي، الذي يضمّ نخبة من الشباب من مختلف البلدان، يجمعهم هدفٌ واحد: أن يكونوا لبنة في بناء الأمة.`,
+    description: (
+      <ul className="list-inside list-none space-y-2 text-center">
+        <li>
+          أول منصة رقمية تطوعية جزائرية متكاملة، تجمع بين المتطوّع، والمحتاج،
+          والجهات الخيرية في منظومة واحدة منسّقة تُسهِّل العطاء وتُفعّل الأثر.
+        </li>
+        <li>
+          يُشرف عليها مشروع بُنيان التطوعي، الذي يضمّ نخبة من الشباب من مختلف
+          البلدان، يجمعهم هدفٌ واحد: أن يكونوا لبنة في بناء الأمة.
+        </li>
+      </ul>
+    ),
   },
   {
     title: "رؤيتنـا",
@@ -53,7 +77,7 @@ const aboutInfo: AboutInfo[] = [
   {
     title: "رسالتنا",
     description:
-      "تنظيم العمل التطوعي، وتفعيله عبر مبادرات نوعية تُخرج طاقات الشباب للتأثير والبناء.",
+      "أن نُنظّم العمل التطوعي ونُفعّله عبر مبادرات نوعية تُطلق طاقات الشباب ليكونوا رُسلَ تأثيرٍ وبُناةَ نهضة.",
   },
   {
     title: "الفئة المستهدفة",

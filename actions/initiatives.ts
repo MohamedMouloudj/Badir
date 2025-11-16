@@ -13,7 +13,7 @@ import { InitiativeStatus, OrganizerType, UserType } from "@prisma/client";
 import { OrganizationService } from "@/services/organizations";
 import { ActionResponse } from "@/types/Statics";
 import { InitiativeService } from "@/services/initiatives";
-import { getPublicStorageUrl } from "./helpers";
+import { getPublicStorageUrl } from "./helpers-sf";
 
 export async function createInitiativeAction(
   data: NewInitiativeFormData,

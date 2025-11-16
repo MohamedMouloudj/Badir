@@ -10,7 +10,7 @@ import DOMPurify from "isomorphic-dompurify";
 import { FormResponseType, JoinInitiativeParams } from "@/schemas";
 import { ParticipationService } from "@/services/participations";
 import { InitiativeService } from "@/services/initiatives";
-import { assertManager } from "./helpers";
+import { assertManager } from "./helpers-sf";
 
 export async function joinInitiativeAction(
   params: JoinInitiativeParams,

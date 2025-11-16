@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useForm, Controller } from "react-hook-form";
 import FormInput from "@/components/FormInput";
-import country from "country-list-js";
 import { UserProfile } from "@/schemas/userProfileSchema";
 import { handleFileUpload, mimeTypeToExtension } from "@/lib/utils";
 import { BUCKET_MIME_TYPES, BUCKET_SIZE_LIMITS } from "@/types/Statics";
@@ -22,6 +21,7 @@ import AppButton from "@/components/AppButton";
 import { getUserImage, updateUserProfileAction } from "@/actions/user-profile";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { isEqual } from "lodash";
+import { countryList } from "@/data/statics";
 
 interface UserProfileFormProps {
   defaultValues: Partial<UserProfile> & { createdAt?: Date | string };
@@ -95,10 +95,9 @@ export default function UserProfileForm({
   };
 
   const COUNTRIES = useMemo(() => {
-    const countries = country.names();
-    return countries.sort().map((countryName) => ({
-      value: countryName,
-      label: countryName,
+    return countryList.sort().map((country) => ({
+      value: country.labelEn,
+      label: country.label,
     }));
   }, []);
 
@@ -283,7 +282,7 @@ export default function UserProfileForm({
               )}
             />
             {/* Phone */}
-            <div className="flex gap-4">
+            <div className="flex w-full gap-4">
               <Controller
                 name="phoneCountryCode"
                 control={control}
@@ -301,7 +300,7 @@ export default function UserProfileForm({
                       name="phone"
                       label="رقم الهاتف"
                       placeholder="5xxxxxxxx"
-                      value={value}
+                      value={value || ""}
                       onChange={onChange}
                       onBlur={onBlur}
                       error={errors.phone?.message}
@@ -310,6 +309,7 @@ export default function UserProfileForm({
                         setValue("phoneCountryCode", code)
                       }
                       disabled={disabled}
+                      className="w-full"
                     />
                   );
                 }}

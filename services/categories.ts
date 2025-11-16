@@ -104,7 +104,7 @@ export class CategoryService {
 
   // Create a new category
   static async create(
-    data: Prisma.InitiativeCategoryCreateInput
+    data: Prisma.InitiativeCategoryCreateInput,
   ): Promise<InitiativeCategory> {
     try {
       const category = await prisma.initiativeCategory.create({
@@ -120,7 +120,7 @@ export class CategoryService {
   // Update category
   static async update(
     id: string,
-    data: Prisma.InitiativeCategoryUpdateInput
+    data: Prisma.InitiativeCategoryUpdateInput,
   ): Promise<InitiativeCategory> {
     try {
       const category = await prisma.initiativeCategory.update({

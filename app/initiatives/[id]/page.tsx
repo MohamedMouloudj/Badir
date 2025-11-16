@@ -120,13 +120,13 @@ export default async function InitiativeDetailsPage({
       session?.user.userType === "user"
     ) {
       return (
-        <div className="min-h-screen bg-neutrals-100 p-6" dir="rtl">
+        <div className="bg-neutrals-100 min-h-screen p-6" dir="rtl">
           <div className="mb-4 flex justify-end">
             <BackButton />
           </div>
 
-          <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-sm border-2 border-neutrals-300 text-center">
-            <h2 className="text-xl font-semibold text-primary-600 mb-2">
+          <div className="border-neutrals-300 mx-auto max-w-3xl rounded-lg border-2 bg-white p-6 text-center shadow-sm">
+            <h2 className="text-primary-600 mb-2 text-xl font-semibold">
               المبادرة قيد المراجعة
             </h2>
             <p className="text-neutrals-700">
@@ -134,7 +134,7 @@ export default async function InitiativeDetailsPage({
               قريبًا وقد يستغرق ظهورها للمشاركين بعض الوقت.
             </p>
           </div>
-          <div className="flex justify-end mb-4">
+          <div className="mb-4 flex justify-end">
             <AppButton
               type="primary"
               size="sm"
@@ -148,7 +148,7 @@ export default async function InitiativeDetailsPage({
       );
     }
     return (
-      <div className="min-h-screen bg-neutrals-100" dir="rtl">
+      <div className="bg-neutrals-100 min-h-screen" dir="rtl">
         <InitiativeHeader
           title={initiative.titleAr}
           shortDescription={initiative.shortDescriptionAr}
@@ -212,15 +212,15 @@ export default async function InitiativeDetailsPage({
   }
 
   return (
-    <div className="min-h-screen bg-neutrals-100 p-6" dir="rtl">
+    <div className="bg-neutrals-100 min-h-screen p-6" dir="rtl">
       <div className="mb-4 flex justify-end">
         <BackButton />
       </div>
-      <div className="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-sm border-2 border-neutrals-300">
+      <div className="border-neutrals-300 mx-auto max-w-5xl rounded-lg border-2 bg-white p-6 shadow-sm">
         {/* Initiative Header */}
         <div className="relative mb-6">
           {initiative.coverImage && (
-            <div className="w-full h-64 relative rounded-lg overflow-hidden mb-4">
+            <div className="relative mb-4 h-64 w-full overflow-hidden rounded-lg">
               <Image
                 src={initiative.coverImage || ""}
                 alt={initiative.titleAr}
@@ -231,7 +231,7 @@ export default async function InitiativeDetailsPage({
             </div>
           )}
 
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <h1 className="text-primary-600 text-3xl font-bold">
               {parse(DOMPurify.sanitize(initiative.titleAr))}
             </h1>
@@ -250,8 +250,8 @@ export default async function InitiativeDetailsPage({
             </div>
           </div>
 
-          <div className="flex items-center text-neutrals-500 text-sm mt-2">
-            <span className="font-medium ml-1">التصنيف:</span>
+          <div className="text-neutrals-500 mt-2 flex items-center text-sm">
+            <span className="ml-1 font-medium">التصنيف:</span>
             <span>{initiative.category.nameAr}</span>
           </div>
         </div>
@@ -261,8 +261,8 @@ export default async function InitiativeDetailsPage({
 
         {/* Join Form Section */}
         {canJoin && (
-          <div className="bg-neutrals-100 p-6 rounded-lg mt-8">
-            <h2 className="text-xl font-semibold text-primary-600 mb-4">
+          <div className="bg-neutrals-100 mt-8 rounded-lg p-6">
+            <h2 className="text-primary-600 mb-4 text-xl font-semibold">
               الانضمام إلى المبادرة
             </h2>
 
@@ -274,13 +274,13 @@ export default async function InitiativeDetailsPage({
                 allowedRoles={initiative.targetAudience}
               />
             ) : (
-              <div className="p-4 bg-neutrals-200 rounded-lg text-center">
+              <div className="bg-neutrals-200 rounded-lg p-4 text-center">
                 <p className="text-neutrals-700">
                   يجب تسجيل الدخول للانضمام إلى المبادرة
                 </p>
                 <Link
                   href={`/login?callbackUrl=/initiatives/${initiative.id}`}
-                  className="text-primary-600 font-semibold hover:underline mt-2 inline-block"
+                  className="text-primary-600 mt-2 inline-block font-semibold hover:underline"
                 >
                   تسجيل الدخول
                 </Link>
@@ -291,7 +291,7 @@ export default async function InitiativeDetailsPage({
 
         {/* Registration Closed Message */}
         {isAvailable && registrationClosed && (
-          <div className="bg-neutrals-100 p-6 rounded-lg mt-8 text-center">
+          <div className="bg-neutrals-100 mt-8 rounded-lg p-6 text-center">
             <p className="text-neutrals-700 font-semibold">
               انتهت فترة التسجيل لهذه المبادرة
             </p>
@@ -300,7 +300,7 @@ export default async function InitiativeDetailsPage({
 
         {/* Initiative Full Message */}
         {isAvailable && isFull && (
-          <div className="bg-neutrals-100 p-6 rounded-lg mt-8 text-center">
+          <div className="bg-neutrals-100 mt-8 rounded-lg p-6 text-center">
             <p className="text-neutrals-700 font-semibold">
               المبادرة مكتملة العدد
             </p>
@@ -309,21 +309,21 @@ export default async function InitiativeDetailsPage({
 
         {/* Already Registered Message */}
         {userParticipation && (
-          <div className="bg-neutrals-100 p-6 rounded-lg mt-8">
-            <h2 className="text-xl font-semibold text-primary-600 mb-4">
+          <div className="bg-neutrals-100 mt-8 rounded-lg p-6">
+            <h2 className="text-primary-600 mb-4 text-xl font-semibold">
               حالة مشاركتك
             </h2>
-            <div className="p-4 bg-white rounded-lg shadow-sm border border-neutrals-300">
+            <div className="border-neutrals-300 rounded-lg border bg-white p-4 shadow-sm">
               <p className="text-neutrals-700 mb-2">
                 أنت مسجل في هذه المبادرة بدور:
-                <span className="font-semibold mx-1">
+                <span className="mx-1 font-semibold">
                   {userParticipation.participantRole ===
                   ParticipantRole.participant
                     ? "مشارك"
                     : userParticipation.participantRole ===
-                      ParticipantRole.helper
-                    ? "مساعد"
-                    : "منظم"}
+                        ParticipantRole.helper
+                      ? "مساعد"
+                      : "منظم"}
                 </span>
               </p>
               <p className="text-neutrals-700">

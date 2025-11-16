@@ -13,7 +13,7 @@ import { headers } from "next/headers";
  */
 export async function getPublicStorageUrl(
   bucket: BUCKETS,
-  path: string | null
+  path: string | null,
 ): Promise<string | null> {
   if (!bucket || !path) return null;
   const storage = new StorageHelpers();
@@ -30,7 +30,7 @@ export async function assertManager(initiativeId: string) {
   if (!session?.user) throw new Error("unauthorized");
   const initiative = await InitiativeService.getById(
     initiativeId,
-    session.user.id
+    session.user.id,
   );
   const isManager =
     initiative?.organizerUserId === session?.user.id ||

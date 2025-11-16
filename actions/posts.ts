@@ -25,7 +25,7 @@ export async function createPostAction(
   content: string,
   title?: string | null,
   postType: PostType = "announcement",
-  status: PostStatus = "published"
+  status: PostStatus = "published",
 ) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) return { success: false, error: "يجب تسجيل الدخول" };
@@ -49,7 +49,7 @@ export async function createPostAction(
     status,
   });
   const uploadResults = await Promise.allSettled(
-    imageSrcs.map((src) => InitiativePostsService.addAttachment(post.id, src))
+    imageSrcs.map((src) => InitiativePostsService.addAttachment(post.id, src)),
   );
 
   const failed = uploadResults
@@ -62,7 +62,7 @@ export async function createPostAction(
       failed.map((f) => ({
         src: f.src,
         reason: (f.res as PromiseRejectedResult).reason,
-      }))
+      })),
     );
   }
 
@@ -95,7 +95,7 @@ export async function updatePostAction(
   title?: string | null,
   postType?: PostType,
   status?: PostStatus,
-  removedImageUrls?: string[]
+  removedImageUrls?: string[],
 ) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) return { success: false, error: "يجب تسجيل الدخول" };
@@ -123,7 +123,9 @@ export async function updatePostAction(
   await InitiativePostsService.update(postId, session.user.id, updateData);
 
   const uploadResults = await Promise.allSettled(
-    newImageUrls.map((src) => InitiativePostsService.addAttachment(postId, src))
+    newImageUrls.map((src) =>
+      InitiativePostsService.addAttachment(postId, src),
+    ),
   );
 
   const failed = uploadResults
@@ -135,7 +137,7 @@ export async function updatePostAction(
       failed.map((f) => ({
         src: f.src,
         reason: (f.res as PromiseRejectedResult).reason,
-      }))
+      })),
     );
   }
 
@@ -170,7 +172,7 @@ export async function updatePostAction(
         console.error(
           "Failed to remove attachment or storage file for",
           imageUrl,
-          err
+          err,
         );
       }
     }
@@ -192,7 +194,7 @@ export async function deletePostAction(postId: string, initiativeId: string) {
 
   const initiative = await InitiativeService.getById(
     initiativeId,
-    session.user.id
+    session.user.id,
   );
   const isManager =
     initiative?.organizerUserId === session.user.id ||
@@ -212,14 +214,14 @@ export async function deletePostAction(postId: string, initiativeId: string) {
 export async function pinPostAction(
   postId: string,
   initiativeId: string,
-  pin: boolean
+  pin: boolean,
 ) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) return { success: false, error: "يجب تسجيل الدخول" };
 
   const initiative = await InitiativeService.getById(
     initiativeId,
-    session.user.id
+    session.user.id,
   );
   const isManager =
     initiative?.organizerUserId === session.user.id ||
@@ -244,7 +246,7 @@ export async function uploadPostImageAction(
   initiativeId: string,
   base64: string,
   name: string,
-  type: string
+  type: string,
 ) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) return { success: false, error: "يجب تسجيل الدخول" };
@@ -295,7 +297,7 @@ export async function deletePostImageAction(imageUrl: string) {
 export async function listPostsAction(
   initiativeId: string,
   onlyUserId?: string,
-  status?: PostStatus
+  status?: PostStatus,
 ) {
   const posts = await InitiativePostsService.list(initiativeId, {
     onlyUserId,
@@ -357,14 +359,14 @@ export async function getPostAction(postId: string) {
 export async function updatePostStatusAction(
   postId: string,
   initiativeId: string,
-  status: PostStatus
+  status: PostStatus,
 ) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) return { success: false, error: "يجب تسجيل الدخول" };
 
   const initiative = await InitiativeService.getById(
     initiativeId,
-    session.user.id
+    session.user.id,
   );
   const isManager =
     initiative?.organizerUserId === session.user.id ||
@@ -374,7 +376,7 @@ export async function updatePostStatusAction(
     postId,
     session.user.id,
     { status },
-    !!isManager
+    !!isManager,
   );
   revalidatePath(`/initiatives/${initiativeId}`);
 

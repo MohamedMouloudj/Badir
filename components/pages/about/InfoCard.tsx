@@ -17,19 +17,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
 }) => {
   return (
     <div
-      className={`
-      bg-neutrals-200
-      backdrop-blur-sm 
-      border
-      border-neutrals-400
-      rounded-2xl 
-      shadow-sm
-      p-6 
-      w-full
-      mx-auto
-      relative
-      ${className}
-    `}
+      className={`bg-neutrals-200 border-neutrals-400 relative mx-auto w-full rounded-2xl border p-6 shadow-sm backdrop-blur-sm ${className} `}
       dir="rtl"
       style={
         {
@@ -43,23 +31,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
         style={{ top: "calc(-1 * var(--badge-height) / 2)" }}
       >
         <span
-          className={`
-          px-6 
-          py-2 
-          rounded-full 
-          text-primary-sm
-          max-sm:text-secondary-lg
-          font-bold
-          bg-neutrals-200
-          border-2
-          border-neutrals-400 
-          text-primary-500
-          font-ibm-plex-sans-arabic
-          shadow-sm
-          block
-          whitespace-nowrap
-          ${titleClassName}
-        `}
+          className={`text-primary-sm max-sm:text-secondary-lg bg-neutrals-200 border-neutrals-400 text-primary-500 font-ibm-plex-sans-arabic block rounded-full border-2 px-6 py-2 font-bold whitespace-nowrap shadow-sm ${titleClassName} `}
         >
           {title}
         </span>
@@ -74,33 +46,13 @@ const InfoCard: React.FC<InfoCardProps> = ({
       >
         {typeof description === "string" ? (
           <p
-            className={`
-          text-base 
-          leading-relaxed 
-          text-neutrals-700
-          text-secondary-md
-          max-sm:text-secondary-sm
-          font-semibold
-          font-ibm-plex-sans-arabic
-          ${descriptionClassName}
-        `}
+            className={`text-neutrals-700 text-secondary-md max-sm:text-secondary-sm font-ibm-plex-sans-arabic text-base leading-relaxed font-semibold ${descriptionClassName} `}
           >
             {description}
           </p>
         ) : (
           <div
-            className={`
-          text-base 
-          leading-relaxed 
-          text-neutrals-700
-          text-secondary-md
-          max-sm:text-secondary-sm
-          font-semibold
-          font-ibm-plex-sans-arabic
-          text-right
-          md:px-8
-          ${descriptionClassName}
-        `}
+            className={`text-neutrals-700 text-secondary-md max-sm:text-secondary-sm font-ibm-plex-sans-arabic text-right text-base leading-relaxed font-semibold md:px-8 ${descriptionClassName} `}
           >
             {description}
           </div>

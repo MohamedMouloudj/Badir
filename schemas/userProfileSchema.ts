@@ -48,7 +48,7 @@ const UserProfileSchema = z.object({
       .optional()
       .refine(
         (currentJob) => !currentJob || currentJob.length <= 100,
-        "الوظيفة الحالية يجب ألا تتجاوز 100 حرف"
+        "الوظيفة الحالية يجب ألا تتجاوز 100 حرف",
       ),
   }),
   bio: z
@@ -56,7 +56,7 @@ const UserProfileSchema = z.object({
     .optional()
     .refine(
       (bio) => !bio || bio.length <= 1000,
-      "النبذة الشخصية يجب أن تكون أقل من 1000 حرف"
+      "النبذة الشخصية يجب أن تكون أقل من 1000 حرف",
     )
     .nullable(),
 

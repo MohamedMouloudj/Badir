@@ -9,8 +9,8 @@ export default function Step5PersonalContact() {
 
   return (
     <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-primary-500 mb-2">
+      <div className="mb-8 text-center">
+        <h2 className="text-primary-500 mb-2 text-2xl font-bold">
           5. معلومات ممثل المنظمة في منصة بادر
         </h2>
       </div>

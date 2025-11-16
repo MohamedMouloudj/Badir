@@ -8,15 +8,14 @@ export async function GET(request: NextRequest) {
       const allParticipations = await ParticipationService.getAll();
       return NextResponse.json({ success: true, data: allParticipations });
     }
-    const userParticipations = await ParticipationService.getUserParticipations(
-      userId
-    );
+    const userParticipations =
+      await ParticipationService.getUserParticipations(userId);
     return NextResponse.json({ success: true, data: userParticipations });
   } catch (error) {
     console.error("Error fetching participations:", error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch participations" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -7,7 +7,7 @@ export default async function Partners() {
   let fivePartners: Partner[] = [];
   const initialData = await OrganizationService.getMany(
     {},
-    { page: 1, limit: 4 }
+    { page: 1, limit: 4 },
   );
 
   const fetched =
@@ -35,7 +35,7 @@ export default async function Partners() {
   }
 
   return (
-    <section className="flex flex-col items-center w-full px-0" dir="rtl">
+    <section className="flex w-full flex-col items-center px-0" dir="rtl">
       <h2 className="section-title mb-8">شُـــركـــــــاؤنـــــا</h2>
       <PartnerMarquee partners={fivePartners} />
     </section>

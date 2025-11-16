@@ -55,7 +55,7 @@ export default function InitiativesList({
 
   const fetchInitiatives = async (
     newFilters: InitiativeFilters,
-    page: number = 1
+    page: number = 1,
   ) => {
     try {
       setLoading(true);
@@ -76,7 +76,7 @@ export default function InitiativesList({
       params.append("limit", "12");
 
       const response = await api.get(
-        `${InitiativeService.API_PATH}?${params.toString()}`
+        `${InitiativeService.API_PATH}?${params.toString()}`,
       );
       const data = response.data;
 
@@ -128,20 +128,20 @@ export default function InitiativesList({
   };
 
   return (
-    <div className="min-h-screen bg-neutrals-100" dir="rtl">
+    <div className="bg-neutrals-100 min-h-screen" dir="rtl">
       <div className="container mx-auto px-4 py-8 md:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-primary-md font-bold text-neutrals-700 mb-4">
+        <div className="mb-8 text-center">
+          <h1 className="text-primary-md text-neutrals-700 mb-4 font-bold">
             مبادراتنا الحالية
           </h1>
         </div>
 
         {/* Filters Section */}
-        <Card className="mb-8 bg-transparent shadow-none border-none">
+        <Card className="mb-8 border-none bg-transparent shadow-none">
           <CardContent className="p-4">
             {/* Search */}
-            <div className="max-w-full mb-4 flex-center sm:justify-center gap-4 max-sm:flex-wrap">
+            <div className="flex-center mb-4 max-w-full gap-4 max-sm:flex-wrap sm:justify-center">
               <SearchInput
                 value={filters.search || ""}
                 onChange={handleSearch}
@@ -152,14 +152,14 @@ export default function InitiativesList({
                 <AppButton
                   type="primary"
                   url="/initiatives/new"
-                  icon={<Plus className="w-4 h-4" />}
+                  icon={<Plus className="h-4 w-4" />}
                   size="sm"
                 >
                   مبادرة جديدة
                 </AppButton>
               )}
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
               {/* Category Filter */}
               <FilterSelect
                 value={filters.categoryId?.toString() || "all"}
@@ -197,7 +197,7 @@ export default function InitiativesList({
 
             {/* Additional Filters */}
             <div className="mt-4 flex flex-wrap gap-4">
-              <label className="flex items-center gap-2 cursor-pointer">
+              <label className="flex cursor-pointer items-center gap-2">
                 <Checkbox
                   id="hasAvailableSpots"
                   name="hasAvailableSpots"
@@ -205,19 +205,19 @@ export default function InitiativesList({
                   onCheckedChange={(checked) =>
                     handleFilterChange(
                       "hasAvailableSpots",
-                      checked ? "true" : ""
+                      checked ? "true" : "",
                     )
                   }
                   className="data-[state=checked]:bg-secondary-500 data-[state=checked]:border-secondary-500 border-neutrals-500"
                 />
-                <span className="text-sm text-neutrals-600">متاح للانضمام</span>
+                <span className="text-neutrals-600 text-sm">متاح للانضمام</span>
               </label>
             </div>
           </CardContent>
         </Card>
 
         {/* Results Info */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="mb-6 flex items-center justify-between">
           <div className="text-neutrals-600">
             <span className="font-medium">{initiatives.pagination.total}</span>{" "}
             {initiatives.data.length > 1 ? "مبادرات" : "مبادرة"}
@@ -229,15 +229,15 @@ export default function InitiativesList({
           </div>
 
           {loading && (
-            <div className="flex items-center gap-2 text-neutrals-500">
-              <Loader2 className="w-4 h-4 animate-spin" />
+            <div className="text-neutrals-500 flex items-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin" />
               <span>جاري التحميل...</span>
             </div>
           )}
         </div>
 
         {/* Initiatives Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {initiatives.data.map((initiative) => (
             <div key={initiative.id} className="h-full">
               <InitiativeCard initiative={initiative} userId={userId} />
@@ -247,13 +247,13 @@ export default function InitiativesList({
 
         {/* Empty State */}
         {initiatives.data.length === 0 && !loading && (
-          <div className="text-center py-12">
+          <div className="py-12 text-center">
             <div className="mb-4">
-              <div className="w-24 h-24 bg-neutrals-200 rounded-full mx-auto flex items-center justify-center">
+              <div className="bg-neutrals-200 mx-auto flex h-24 w-24 items-center justify-center rounded-full">
                 <span className="text-neutrals-400 text-2xl">🔍</span>
               </div>
             </div>
-            <h3 className="text-xl font-semibold text-neutrals-600 mb-2">
+            <h3 className="text-neutrals-600 mb-2 text-xl font-semibold">
               لا توجد مبادرات
             </h3>
             <p className="text-neutrals-500">

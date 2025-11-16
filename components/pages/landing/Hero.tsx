@@ -39,21 +39,21 @@ export default function Hero() {
   }, []);
   return (
     <section
-      className="flex-center-column xl:flex-center justify-evenly items-stretch"
+      className="flex-center-column xl:flex-center items-stretch justify-evenly"
       dir="rtl"
     >
-      <div className="flex-center-column max-xl:text-center gap-10 justify-center items-center h-full flex-1/2 xl:pr-8">
-        <div className="flex-center-column gap-10 justify-center h-full">
-          <h1 className="hero-title text-neutrals-700 font-bold mb-4 text-hero-md lg:text-hero-lg">
+      <div className="flex-center-column h-full flex-1/2 items-center justify-center gap-10 max-xl:text-center xl:pr-8">
+        <div className="flex-center-column h-full justify-center gap-10">
+          <h1 className="hero-title text-neutrals-700 text-hero-md lg:text-hero-lg mb-4 font-bold">
             <span className="text-primary-500 max-xl:block max-xl:w-full">
               بــادِر
             </span>{" "}
             .. بصُنع الأثر
           </h1>
-          <p className="hero-description font-bold text-primary-sm">
+          <p className="hero-description text-primary-sm font-bold">
             نُقرّب المسافة بين من يريد العطاء ومن يحتاجه، ليكبر الأثر معًا.
           </p>
-          <div className="flex-center max-xl:justify-center max-sm:items-end gap-4 py-6">
+          <div className="flex-center gap-4 py-6 max-xl:justify-center max-sm:items-end">
             <AppButton
               type="outline"
               border="rounded"
@@ -64,7 +64,7 @@ export default function Hero() {
             </AppButton>
             <AppButton
               type="primary"
-              icon={<ArrowUpLeft className="w-4 h-4 sm:w-6 sm:h-6" />}
+              icon={<ArrowUpLeft className="h-4 w-4 sm:h-6 sm:w-6" />}
               border="rounded"
               size="lg"
               url="/signup/organization"
@@ -74,7 +74,7 @@ export default function Hero() {
           </div>
         </div>
       </div>
-      <div className="flex-1/2 w-full flex justify-center items-center p-4">
+      <div className="flex w-full flex-1/2 items-center justify-center p-4">
         <HeroCarousel />
       </div>
     </section>

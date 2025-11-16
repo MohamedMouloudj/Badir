@@ -32,7 +32,7 @@ export default async function middleware(request: NextRequest) {
     isExactPublicRoute || isPublicOrgProfile || isPublicInitiativeDetail;
 
   const isAuthRoute = forMiddleware.authRoutes.some(
-    (route) => pathname === route || pathname.startsWith(route + "/")
+    (route) => pathname === route || pathname.startsWith(route + "/"),
   );
 
   const isApiRoute = new RegExp(
@@ -41,7 +41,7 @@ export default async function middleware(request: NextRequest) {
       forMiddleware.api.organizationPrefix,
       forMiddleware.api.initiativePrefix,
       forMiddleware.api.participantPrefix,
-    ].join("|")})`
+    ].join("|")})`,
   ).test(pathname);
 
   if (isApiRoute) return null;
@@ -52,7 +52,7 @@ export default async function middleware(request: NextRequest) {
     // } ---> Moved it to component level validation
     if (sessionCookie) {
       return NextResponse.redirect(
-        new URL(AUTHORIZED_REDIRECTION, request.url)
+        new URL(AUTHORIZED_REDIRECTION, request.url),
       );
     }
     return null;

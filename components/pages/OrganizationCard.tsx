@@ -10,8 +10,8 @@ export default function OrganizationCard({
   org: OrganizationCardType;
 }) {
   return (
-    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-4 bg-neutrals-100 rounded-lg shadow border hover:border-primary-300 transition-colors">
-      <div className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 relative overflow-hidden rounded-full border bg-neutrals-100 mx-auto sm:mx-0">
+    <div className="bg-neutrals-100 hover:border-primary-300 flex flex-col items-start gap-3 rounded-lg border p-4 shadow transition-colors sm:flex-row sm:items-center">
+      <div className="bg-neutrals-100 relative mx-auto h-14 w-14 flex-shrink-0 overflow-hidden rounded-full border sm:mx-0 sm:h-16 sm:w-16">
         {org.logo ? (
           <Image
             src={org.logo}
@@ -21,28 +21,28 @@ export default function OrganizationCard({
             className="object-cover"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <Building className="w-8 h-8 text-neutrals-500" />
+          <div className="flex h-full w-full items-center justify-center">
+            <Building className="text-neutrals-500 h-8 w-8" />
           </div>
         )}
       </div>
 
-      <div className="flex-1 w-full">
+      <div className="w-full flex-1">
         <Link href={`/organizations/${org.id}`}>
-          <h3 className="font-bold text-lg text-primary-700 hover:underline hover:text-primary-500 text-center sm:text-right truncate">
+          <h3 className="text-primary-700 hover:text-primary-500 truncate text-center text-lg font-bold hover:underline sm:text-right">
             {org.shortName || org.name}
           </h3>
         </Link>
         {/* Description - Hide on very small screens */}
         {org.description && (
-          <p className="text-label text-neutrals-500 line-clamp-1 hidden xs:block">
+          <p className="text-label text-neutrals-500 xs:block line-clamp-1 hidden">
             {org.description}
           </p>
         )}
 
-        <div className="grid grid-cols-1 gap-y-1 mt-2 text-xs text-neutrals-600">
+        <div className="text-neutrals-600 mt-2 grid grid-cols-1 gap-y-1 text-xs">
           {org.membersCount && (
-            <div className="flex items-center gap-1 justify-center sm:justify-start">
+            <div className="flex items-center justify-center gap-1 sm:justify-start">
               <Users className="h-3 w-3 flex-shrink-0" />
               <span className="text-caption">
                 <span className="font-semibold">عدد الأعضاء:</span>{" "}
@@ -52,7 +52,7 @@ export default function OrganizationCard({
           )}
 
           {(org.headquarters || org.city || org.country) && (
-            <div className="flex items-center gap-1 justify-center sm:justify-start">
+            <div className="flex items-center justify-center gap-1 sm:justify-start">
               <MapPin className="h-3 w-3 flex-shrink-0" />
               <span className="text-caption truncate">
                 {[
@@ -69,10 +69,10 @@ export default function OrganizationCard({
           {org.foundingDate && (
             <div
               className={cn(
-                "flex items-center gap-1 justify-center sm:justify-start",
+                "flex items-center justify-center gap-1 sm:justify-start",
                 org.headquarters || org.city || org.country
                   ? "col-span-1"
-                  : "col-span-2"
+                  : "col-span-2",
               )}
             >
               <Calendar className="h-3 w-3 flex-shrink-0" />

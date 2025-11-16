@@ -101,8 +101,8 @@ export default function FormFieldCreator({
 
   return (
     <div className="space-y-6">
-      <div className="bg-neutrals-100 p-6 rounded-lg border border-neutrals-300">
-        <h3 className="text-lg font-semibold text-neutrals-700 mb-4">
+      <div className="bg-neutrals-100 border-neutrals-300 rounded-lg border p-6">
+        <h3 className="text-neutrals-700 mb-4 text-lg font-semibold">
           إضافة سؤال جديد
         </h3>
 
@@ -150,7 +150,7 @@ export default function FormFieldCreator({
 
           {(newField.type === "radio" || newField.type === "checkbox") && (
             <div className="space-y-3">
-              <h4 className="text-sm font-medium text-neutrals-600">
+              <h4 className="text-neutrals-600 text-sm font-medium">
                 الخيارات
               </h4>
 
@@ -179,14 +179,14 @@ export default function FormFieldCreator({
                 {newField.options?.map((option, index) => (
                   <div
                     key={index}
-                    className="flex justify-between items-center bg-neutrals-100 p-2 rounded-md"
+                    className="bg-neutrals-100 flex items-center justify-between rounded-md p-2"
                   >
                     <span>{option}</span>
                     <Button
                       variant="ghost"
                       size="icon"
                       onClick={() => removeOption(index)}
-                      className="h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50"
+                      className="h-8 w-8 text-red-500 hover:bg-red-50 hover:text-red-600"
                     >
                       <X className="h-4 w-4" />
                     </Button>
@@ -210,8 +210,8 @@ export default function FormFieldCreator({
 
       {/* Display existing fields */}
       {fields.length > 0 && (
-        <div className="bg-neutrals-100 p-6 rounded-lg border border-neutrals-300">
-          <h3 className="text-lg font-semibold text-neutrals-700 mb-4">
+        <div className="bg-neutrals-100 border-neutrals-300 rounded-lg border p-6">
+          <h3 className="text-neutrals-700 mb-4 text-lg font-semibold">
             الأسئلة المضافة ({fields.length})
           </h3>
 
@@ -220,38 +220,38 @@ export default function FormFieldCreator({
               <div
                 key={field.id}
                 className={cn(
-                  "bg-white p-4 rounded-lg border border-neutrals-200 relative flex-center justify-between items-start",
-                  field.required && "border-r-4 border-r-secondary-500"
+                  "border-neutrals-200 flex-center relative items-start justify-between rounded-lg border bg-white p-4",
+                  field.required && "border-r-secondary-500 border-r-4",
                 )}
               >
                 <div className="pr-4">
-                  <h4 className="font-medium text-lg text-neutrals-700 mb-1 flex items-center">
+                  <h4 className="text-neutrals-700 mb-1 flex items-center text-lg font-medium">
                     {field.question}
                     {field.required && (
                       <span className="text-state-error mr-1 text-sm">*</span>
                     )}
                   </h4>
 
-                  <div className="text-sm text-neutrals-500 mb-3">
+                  <div className="text-neutrals-500 mb-3 text-sm">
                     نوع الحقل:{" "}
                     {field.type === "text"
                       ? "نص"
                       : field.type === "radio"
-                      ? "اختيار واحد"
-                      : "اختيارات متعددة"}
+                        ? "اختيار واحد"
+                        : "اختيارات متعددة"}
                   </div>
 
                   {(field.type === "radio" || field.type === "checkbox") &&
                     field.options && (
                       <div className="mt-2 space-y-2">
-                        <div className="text-sm font-medium text-neutrals-600">
+                        <div className="text-neutrals-600 text-sm font-medium">
                           الخيارات:
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {field.options.map((option, idx) => (
                             <div
                               key={idx}
-                              className="bg-neutrals-100 px-3 py-1 rounded-full text-sm"
+                              className="bg-neutrals-100 rounded-full px-3 py-1 text-sm"
                             >
                               {option}
                             </div>
@@ -265,7 +265,7 @@ export default function FormFieldCreator({
                   variant="ghost"
                   size="icon"
                   onClick={() => removeField(field.id)}
-                  className="h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50"
+                  className="h-8 w-8 text-red-500 hover:bg-red-50 hover:text-red-600"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>

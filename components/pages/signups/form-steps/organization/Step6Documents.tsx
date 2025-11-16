@@ -10,8 +10,8 @@ export default function Step6Documents() {
 
   return (
     <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-primary-500 mb-2">
+      <div className="mb-8 text-center">
+        <h2 className="text-primary-500 mb-2 text-2xl font-bold">
           6. الوثائق والمرفقات
         </h2>
       </div>
@@ -33,7 +33,7 @@ export default function Step6Documents() {
             fileMaxSize={BUCKET_SIZE_LIMITS.documents / 1024 / 1024}
             onFileChange={(file, onChange) =>
               handleFileUpload(file, BUCKET_SIZE_LIMITS.documents, (value) =>
-                onChange(JSON.stringify(value))
+                onChange(JSON.stringify(value)),
               )
             }
           />
@@ -57,7 +57,7 @@ export default function Step6Documents() {
             fileMaxSize={BUCKET_SIZE_LIMITS.avatars / 1024 / 1024}
             onFileChange={(file, onChange) =>
               handleFileUpload(file, BUCKET_SIZE_LIMITS.avatars, (value) =>
-                onChange(JSON.stringify(value))
+                onChange(JSON.stringify(value)),
               )
             }
           />
@@ -82,7 +82,7 @@ export default function Step6Documents() {
             fileMaxSize={BUCKET_SIZE_LIMITS.documents / 1024 / 1024}
             onFileChange={(file, onChange) =>
               handleFileUpload(file, BUCKET_SIZE_LIMITS.documents, (value) =>
-                onChange(JSON.stringify(value))
+                onChange(JSON.stringify(value)),
               )
             }
           />

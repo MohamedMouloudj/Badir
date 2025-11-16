@@ -14,7 +14,7 @@ export default function GuideItem({
   if (isBullet) {
     return (
       <div className="flex items-start">
-        <div className="flex-1 flex">
+        <div className="flex flex-1">
           <span className="text-primary-500 ml-3">•</span>
           <span className="text-neutrals-700">{content}</span>
         </div>
@@ -25,7 +25,7 @@ export default function GuideItem({
   return (
     <div className="flex items-start">
       <div className="flex-1">
-        <h3 className="text-primary-500 font-bold text-secondary-sm inline-block ml-2">
+        <h3 className="text-primary-500 text-secondary-sm ml-2 inline-block font-bold">
           {title}:
         </h3>{" "}
         <span className="text-neutrals-700">{content}</span>

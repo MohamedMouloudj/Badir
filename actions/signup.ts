@@ -15,7 +15,7 @@ export type SignupState = {
 
 export async function signupAction(
   _prevState: SignupState | null,
-  formData: FormData
+  formData: FormData,
 ): Promise<SignupState> {
   let completeRoute = "";
   try {

@@ -22,8 +22,8 @@ export default async function NewInitiativePage() {
   }));
 
   return (
-    <div className="container py-8 max-w-4xl mx-auto" dir="rtl">
-      <h1 className="text-3xl font-bold text-primary-600 mb-6 text-center">
+    <div className="container mx-auto max-w-4xl py-8" dir="rtl">
+      <h1 className="text-primary-600 mb-6 text-center text-3xl font-bold">
         إنشاء مبادرة جديدة
       </h1>
 

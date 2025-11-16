@@ -34,7 +34,7 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
 
   if (!initiative) {
     return (
-      <div className="p-6 max-w-6xl mx-auto" dir="rtl">
+      <div className="mx-auto max-w-6xl p-6" dir="rtl">
         <Alert variant="destructive">
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>المبادرة غير موجودة</AlertDescription>
@@ -53,12 +53,12 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
       startTransition(async () => {
         const result = await updateInitiativeStatusAction(
           initiative.id,
-          status
+          status,
         );
 
         if (result.success) {
           toast.success(
-            `تم ${status === "published" ? "نشر" : "إلغاء"} المبادرة بنجاح`
+            `تم ${status === "published" ? "نشر" : "إلغاء"} المبادرة بنجاح`,
           );
         } else {
           toast.error(result.error || "حدث خطأ أثناء تحديث الحالة");
@@ -73,9 +73,9 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto" dir="rtl">
+    <div className="mx-auto max-w-6xl p-6" dir="rtl">
       {/* Header */}
-      <div className="flex items-center gap-4 mb-6">
+      <div className="mb-6 flex items-center gap-4">
         <div className="flex-1">
           <h1 className="text-2xl font-bold text-gray-900">
             {initiative.titleAr}
@@ -85,18 +85,18 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
         <AdminInitiativeStatusBadge status={initiative.status} />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Main Details */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="space-y-6 lg:col-span-2">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <FileText className="w-5 h-5" />
+                <FileText className="h-5 w-5" />
                 معلومات المبادرة
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
                   <Label className="text-sm font-medium text-gray-700">
                     عنوان المبادرة
@@ -173,7 +173,7 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
                   <Label className="text-sm font-medium text-gray-700">
                     الوصف المختصر
                   </Label>
-                  <p className="mt-1 text-gray-900 bg-gray-50 p-3 rounded-lg">
+                  <p className="mt-1 rounded-lg bg-gray-50 p-3 text-gray-900">
                     {initiative.shortDescriptionAr}
                   </p>
                 </div>
@@ -184,7 +184,7 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
                   <Label className="text-sm font-medium text-gray-700">
                     وصف المبادرة
                   </Label>
-                  <div className="mt-1 text-gray-900 bg-gray-50 p-3 rounded-lg max-h-48 overflow-y-auto">
+                  <div className="mt-1 max-h-48 overflow-y-auto rounded-lg bg-gray-50 p-3 text-gray-900">
                     {initiative.descriptionAr}
                   </div>
                 </div>
@@ -198,9 +198,9 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
               <CardTitle>معلومات المنظم</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+              <div className="space-y-3 rounded-lg bg-gray-50 p-4">
                 <div className="flex items-center gap-3">
-                  <Users className="w-5 h-5 text-gray-500" />
+                  <Users className="h-5 w-5 text-gray-500" />
                   <div>
                     <Label className="text-sm font-medium text-gray-700">
                       الاسم
@@ -212,7 +212,7 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-gray-500" />
+                  <Mail className="h-5 w-5 text-gray-500" />
                   <div>
                     <Label className="text-sm font-medium text-gray-700">
                       البريد الإلكتروني
@@ -225,7 +225,7 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
 
                 {initiative.organizerUser?.phone && (
                   <div className="flex items-center gap-3">
-                    <Phone className="w-5 h-5 text-gray-500" />
+                    <Phone className="h-5 w-5 text-gray-500" />
                     <div>
                       <Label className="text-sm font-medium text-gray-700">
                         رقم الهاتف
@@ -238,7 +238,7 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
                 )}
 
                 <div className="flex items-center gap-3">
-                  <Calendar className="w-5 h-5 text-gray-500" />
+                  <Calendar className="h-5 w-5 text-gray-500" />
                   <div>
                     <Label className="text-sm font-medium text-gray-700">
                       تاريخ انضمام المنظم
@@ -302,7 +302,7 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
                       disabled={isPending}
                       className="w-full bg-green-600 hover:bg-green-700"
                     >
-                      <CheckCircle className="w-4 h-4 ml-1" />
+                      <CheckCircle className="ml-1 h-4 w-4" />
                       نشر المبادرة
                     </Button>
                     <Button
@@ -311,7 +311,7 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
                       variant="destructive"
                       className="w-full"
                     >
-                      <XCircle className="w-4 ml-1" />
+                      <XCircle className="ml-1 w-4" />
                       إلغاء المبادرة
                     </Button>
                   </>
@@ -366,13 +366,13 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
                       <p className="text-sm font-medium text-gray-900">
                         {participant.user.name}
                       </p>
-                      <div className="flex items-center justify-between mt-1">
+                      <div className="mt-1 flex items-center justify-between">
                         <Badge variant="outline" className="text-xs">
                           {participant.status === "approved"
                             ? "مقبول"
                             : participant.status === "registered"
-                            ? "مسجل"
-                            : "مرفوض"}
+                              ? "مسجل"
+                              : "مرفوض"}
                         </Badge>
                         <span className="text-xs text-gray-500">
                           {formatDate(participant.createdAt)}
@@ -382,7 +382,7 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-500 text-center py-4">
+                <p className="py-4 text-center text-gray-500">
                   لا توجد مشاركات
                 </p>
               )}
@@ -392,7 +392,7 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
       </div>
 
       {isPending && (
-        <Alert className="fixed bottom-4 right-4 w-auto">
+        <Alert className="fixed right-4 bottom-4 w-auto">
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>جاري تحديث حالة المبادرة...</AlertDescription>
         </Alert>

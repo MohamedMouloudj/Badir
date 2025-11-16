@@ -72,12 +72,12 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
     initialStats || {
       organizations: { pending: 0, approved: 0, rejected: 0, total: 0 },
       initiatives: { draft: 0, published: 0, cancelled: 0, total: 0 },
-    }
+    },
   );
 
   // Organizations state
   const [organizations, setOrganizations] = useState<AdminOrganizationCard[]>(
-    []
+    [],
   );
   const [orgFilters, setOrgFilters] = useState({
     status: "all",
@@ -85,7 +85,7 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
     organizationType: "all",
   });
   const [selectedOrg, setSelectedOrg] = useState<AdminOrganizationCard | null>(
-    null
+    null,
   );
 
   // Initiatives state
@@ -106,12 +106,12 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
         setIsLoading(true);
         const organizationsData = await getOrganizationsAction();
         setOrganizations(
-          organizationsData.data ? organizationsData.data.data.slice(0, 3) : []
+          organizationsData.data ? organizationsData.data.data.slice(0, 3) : [],
         );
 
         const initiativesData = await getUserInitiativesAction();
         setInitiatives(
-          initiativesData.data ? initiativesData.data.data.slice(0, 3) : []
+          initiativesData.data ? initiativesData.data.data.slice(0, 3) : [],
         );
       } catch (error) {
         toast.error("حدث خطأ أثناء جلب البيانات");
@@ -126,7 +126,7 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
   const handleStatusUpdate = async (
     id: string,
     status: string,
-    type: "organization" | "initiative"
+    type: "organization" | "initiative",
   ) => {
     setIsLoading(true);
     try {
@@ -137,16 +137,16 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
           prev.map((org) =>
             org.id === id
               ? { ...org, isVerified: status as "approved" | "rejected" }
-              : org
-          )
+              : org,
+          ),
         );
       } else {
         setInitiatives((prev) =>
           prev.map((init) =>
             init.id === id
               ? { ...init, status: status as "published" | "cancelled" }
-              : init
-          )
+              : init,
+          ),
         );
       }
     } catch (error) {
@@ -157,9 +157,9 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto" dir="rtl">
+    <div className="mx-auto max-w-7xl p-6" dir="rtl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="mb-2 text-3xl font-bold text-gray-900">
           لوحة تحكم المسؤول
         </h1>
         <p className="text-gray-600">إدارة المنظمات والمبادرات</p>
@@ -180,13 +180,13 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                 <CardTitle className="text-sm font-medium">
                   المنظمات قيد المراجعة
                 </CardTitle>
-                <Clock className="h-4 w-4 text-muted-foreground" />
+                <Clock className="text-muted-foreground h-4 w-4" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-orange-600">
                   {stats.organizations.pending}
                 </div>
-                <p className="text-xs text-muted-foreground">تحتاج لمراجعة</p>
+                <p className="text-muted-foreground text-xs">تحتاج لمراجعة</p>
               </CardContent>
             </Card>
 
@@ -195,13 +195,13 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                 <CardTitle className="text-sm font-medium">
                   المنظمات المقبولة
                 </CardTitle>
-                <CheckCircle className="h-4 w-4 text-muted-foreground" />
+                <CheckCircle className="text-muted-foreground h-4 w-4" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-green-600">
                   {stats.organizations.approved}
                 </div>
-                <p className="text-xs text-muted-foreground">تم قبولها</p>
+                <p className="text-muted-foreground text-xs">تم قبولها</p>
               </CardContent>
             </Card>
 
@@ -210,13 +210,13 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                 <CardTitle className="text-sm font-medium">
                   المبادرات قيد المراجعة
                 </CardTitle>
-                <FileText className="h-4 w-4 text-muted-foreground" />
+                <FileText className="text-muted-foreground h-4 w-4" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-blue-600">
                   {stats.initiatives.draft}
                 </div>
-                <p className="text-xs text-muted-foreground">تحتاج لمراجعة</p>
+                <p className="text-muted-foreground text-xs">تحتاج لمراجعة</p>
               </CardContent>
             </Card>
 
@@ -225,13 +225,13 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                 <CardTitle className="text-sm font-medium">
                   المبادرات المنشورة
                 </CardTitle>
-                <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                <TrendingUp className="text-muted-foreground h-4 w-4" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-green-600">
                   {stats.initiatives.published}
                 </div>
-                <p className="text-xs text-muted-foreground">تم نشرها</p>
+                <p className="text-muted-foreground text-xs">تم نشرها</p>
               </CardContent>
             </Card>
           </div>
@@ -315,8 +315,8 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
 
         {/* Organizations Tab */}
         <TabsContent value="organizations" className="space-y-6" dir="rtl">
-          <div className="flex-center-column sm:justify-between gap-4 mb-6 flex-wrap mt-6">
-            <div className="max-w-full flex-center sm:justify-center gap-4 max-sm:flex-wrap">
+          <div className="flex-center-column mt-6 mb-6 flex-wrap gap-4 sm:justify-between">
+            <div className="flex-center max-w-full gap-4 max-sm:flex-wrap sm:justify-center">
               <SearchInput
                 value={orgFilters.search}
                 onChange={(value) =>
@@ -331,7 +331,7 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
             </div>
             {/* Filters */}
             <div
-              className="grid grid-cols-1 md:grid-cols-2 gap-4 w-fit"
+              className="grid w-fit grid-cols-1 gap-4 md:grid-cols-2"
               dir="rtl"
             >
               <FilterSelect
@@ -370,20 +370,20 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
           {/* Organizations List */}
           <div className="space-y-4">
             {isLoading ? (
-              <Loader2 className="w-6 h-6 animate-spin mx-auto text-gray-500" />
+              <Loader2 className="mx-auto h-6 w-6 animate-spin text-gray-500" />
             ) : organizations.length > 0 ? (
               <>
                 {organizations.map((org) => (
                   <Card key={org.id} className="border-l-4 border-l-blue-500">
                     <CardContent className="p-6">
-                      <div className="flex justify-between items-start mb-4">
+                      <div className="mb-4 flex items-start justify-between">
                         <div className="flex-1">
                           <Link
                             href={`/admin/organizations/${org.id}`}
                             target="_blank"
                             className="flex items-center"
                           >
-                            <ArrowUpRight className="h-4 w-4 inline-block ml-1 text-gray-500" />
+                            <ArrowUpRight className="ml-1 inline-block h-4 w-4 text-gray-500" />
                             <h3 className="text-lg font-semibold text-gray-900 hover:underline">
                               {org.name}
                             </h3>
@@ -391,7 +391,7 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                           <p className="text-sm text-gray-600">
                             {org.shortName}
                           </p>
-                          <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
+                          <div className="mt-2 flex items-center gap-4 text-sm text-gray-500">
                             <span className="flex items-center gap-1">
                               <Mail className="h-4 w-4" />
                               {org.contactEmail}
@@ -432,11 +432,11 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                                 size="sm"
                                 onClick={() => setSelectedOrg(org)}
                               >
-                                <Eye className="h-4 w-4 ml-1" />
+                                <Eye className="ml-1 h-4 w-4" />
                                 عرض التفاصيل
                               </Button>
                             </DialogTrigger>
-                            <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                            <DialogContent className="max-h-[80vh] max-w-2xl overflow-y-auto">
                               <DialogHeader>
                                 <DialogTitle>تفاصيل المنظمة</DialogTitle>
                               </DialogHeader>
@@ -493,7 +493,7 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                                     <label className="font-medium">
                                       معلومات المالك:
                                     </label>
-                                    <div className="bg-gray-50 p-3 rounded mt-1">
+                                    <div className="mt-1 rounded bg-gray-50 p-3">
                                       <p>
                                         <strong>الاسم:</strong>{" "}
                                         {selectedOrg.owner.name}
@@ -513,13 +513,13 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                                             handleStatusUpdate(
                                               selectedOrg.id,
                                               "approved",
-                                              "organization"
+                                              "organization",
                                             )
                                           }
                                           disabled={isLoading}
                                           className="bg-green-600 hover:bg-green-700"
                                         >
-                                          <CheckCircle className="h-4 w-4 ml-1" />
+                                          <CheckCircle className="ml-1 h-4 w-4" />
                                           قبول المنظمة
                                         </Button>
                                         <Button
@@ -527,13 +527,13 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                                             handleStatusUpdate(
                                               selectedOrg.id,
                                               "rejected",
-                                              "organization"
+                                              "organization",
                                             )
                                           }
                                           disabled={isLoading}
                                           variant="destructive"
                                         >
-                                          <XCircle className="h-4 w-4 ml-1" />
+                                          <XCircle className="ml-1 h-4 w-4" />
                                           رفض المنظمة
                                         </Button>
                                       </>
@@ -552,11 +552,11 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                                   handleStatusUpdate(
                                     org.id,
                                     "approved",
-                                    "organization"
+                                    "organization",
                                   )
                                 }
                                 disabled={isLoading}
-                                className="bg-green-600 hover:bg-green-700 text-xs px-2"
+                                className="bg-green-600 px-2 text-xs hover:bg-green-700"
                               >
                                 قبول
                               </Button>
@@ -567,11 +567,11 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                                   handleStatusUpdate(
                                     org.id,
                                     "rejected",
-                                    "organization"
+                                    "organization",
                                   )
                                 }
                                 disabled={isLoading}
-                                className="text-xs px-2"
+                                className="px-2 text-xs"
                               >
                                 رفض
                               </Button>
@@ -588,7 +588,7 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                     url="/admin/organizations"
                     className="mx-auto"
                     border="default"
-                    icon={<ArrowUpLeft className="h-4 w-4 ml-1" />}
+                    icon={<ArrowUpLeft className="ml-1 h-4 w-4" />}
                   >
                     عرض المزيد
                   </AppButton>
@@ -611,8 +611,8 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
           </Alert>
 
           {/* Filters */}
-          <div className="flex-center-column sm:justify-between gap-4 mb-6 flex-wrap mt-6">
-            <div className="max-w-full flex-center sm:justify-center gap-4 max-sm:flex-wrap">
+          <div className="flex-center-column mt-6 mb-6 flex-wrap gap-4 sm:justify-between">
+            <div className="flex-center max-w-full gap-4 max-sm:flex-wrap sm:justify-center">
               <SearchInput
                 value={initiativeFilters.search}
                 onChange={(value) =>
@@ -644,7 +644,7 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
           {/* Initiatives List */}
           <div className="space-y-4">
             {isLoading ? (
-              <Loader2 className="w-6 h-6 animate-spin mx-auto text-gray-500" />
+              <Loader2 className="mx-auto h-6 w-6 animate-spin text-gray-500" />
             ) : organizations.length > 0 ? (
               <>
                 {initiatives.map((initiative) => (
@@ -653,14 +653,14 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                     className="border-l-4 border-l-green-500"
                   >
                     <CardContent className="p-6">
-                      <div className="flex justify-between items-start mb-4">
+                      <div className="mb-4 flex items-start justify-between">
                         <div className="flex-1">
                           <Link
                             href={`/admin/initiatives/${initiative.id}`}
                             target="_blank"
                             className="flex items-center"
                           >
-                            <ArrowUpRight className="h-4 w-4 inline-block ml-1 text-gray-500" />
+                            <ArrowUpRight className="ml-1 inline-block h-4 w-4 text-gray-500" />
                             <h3 className="text-lg font-semibold text-gray-900 hover:underline">
                               {initiative.titleAr}
                             </h3>
@@ -670,7 +670,7 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                               {initiative.titleEn}
                             </p>
                           )}
-                          <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
+                          <div className="mt-2 flex items-center gap-4 text-sm text-gray-500">
                             <span className="flex items-center gap-1">
                               <MapPin className="h-4 w-4" />
                               {initiative.city}
@@ -678,11 +678,11 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                             <span className="flex items-center gap-1">
                               <Calendar className="h-4 w-4" />
                               {new Date(
-                                initiative.startDate
+                                initiative.startDate,
                               ).toLocaleDateString("ar")}{" "}
                               -{" "}
                               {new Date(initiative.endDate).toLocaleDateString(
-                                "ar"
+                                "ar",
                               )}
                             </span>
                             <span className="flex items-center gap-1">
@@ -718,11 +718,11 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                                   setSelectedInitiative(initiative)
                                 }
                               >
-                                <Eye className="h-4 w-4 ml-1" />
+                                <Eye className="ml-1 h-4 w-4" />
                                 عرض التفاصيل
                               </Button>
                             </DialogTrigger>
-                            <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                            <DialogContent className="max-h-[80vh] max-w-2xl overflow-y-auto">
                               <DialogHeader>
                                 <DialogTitle>تفاصيل المبادرة</DialogTitle>
                               </DialogHeader>
@@ -764,7 +764,7 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                                       </label>
                                       <p>
                                         {new Date(
-                                          selectedInitiative.startDate
+                                          selectedInitiative.startDate,
                                         ).toLocaleDateString("ar")}
                                       </p>
                                     </div>
@@ -774,7 +774,7 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                                       </label>
                                       <p>
                                         {new Date(
-                                          selectedInitiative.endDate
+                                          selectedInitiative.endDate,
                                         ).toLocaleDateString("ar")}
                                       </p>
                                     </div>
@@ -784,7 +784,7 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                                     <label className="font-medium">
                                       معلومات المنظم:
                                     </label>
-                                    <div className="bg-gray-50 p-3 rounded mt-1">
+                                    <div className="mt-1 rounded bg-gray-50 p-3">
                                       <p>
                                         <strong>الاسم:</strong>{" "}
                                         {selectedInitiative.organizerUser
@@ -806,13 +806,13 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                                             handleStatusUpdate(
                                               selectedInitiative.id,
                                               "published",
-                                              "initiative"
+                                              "initiative",
                                             )
                                           }
                                           disabled={isLoading}
                                           className="bg-green-600 hover:bg-green-700"
                                         >
-                                          <CheckCircle className="h-4 w-4 ml-1" />
+                                          <CheckCircle className="ml-1 h-4 w-4" />
                                           نشر المبادرة
                                         </Button>
                                         <Button
@@ -820,13 +820,13 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                                             handleStatusUpdate(
                                               selectedInitiative.id,
                                               "cancelled",
-                                              "initiative"
+                                              "initiative",
                                             )
                                           }
                                           disabled={isLoading}
                                           variant="destructive"
                                         >
-                                          <XCircle className="h-4 w-4 ml-1" />
+                                          <XCircle className="ml-1 h-4 w-4" />
                                           إلغاء المبادرة
                                         </Button>
                                       </>
@@ -845,11 +845,11 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                                   handleStatusUpdate(
                                     initiative.id,
                                     "published",
-                                    "initiative"
+                                    "initiative",
                                   )
                                 }
                                 disabled={isLoading}
-                                className="bg-green-600 hover:bg-green-700 text-xs px-2"
+                                className="bg-green-600 px-2 text-xs hover:bg-green-700"
                               >
                                 نشر
                               </Button>
@@ -860,11 +860,11 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                                   handleStatusUpdate(
                                     initiative.id,
                                     "cancelled",
-                                    "initiative"
+                                    "initiative",
                                   )
                                 }
                                 disabled={isLoading}
-                                className="text-xs px-2"
+                                className="px-2 text-xs"
                               >
                                 إلغاء
                               </Button>
@@ -881,7 +881,7 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                     url="/admin/initiatives"
                     className="mx-auto"
                     border="default"
-                    icon={<ArrowUpLeft className="h-4 w-4 ml-1" />}
+                    icon={<ArrowUpLeft className="ml-1 h-4 w-4" />}
                   >
                     عرض المزيد
                   </AppButton>

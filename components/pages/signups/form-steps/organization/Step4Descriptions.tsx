@@ -8,8 +8,8 @@ export default function Step4Description() {
 
   return (
     <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-primary-500 mb-2">
+      <div className="mb-8 text-center">
+        <h2 className="text-primary-500 mb-2 text-2xl font-bold">
           4. نبذة عن المنظمة
         </h2>
       </div>

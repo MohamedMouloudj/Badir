@@ -7,8 +7,8 @@ export default function Step2SocialLinks() {
 
   return (
     <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-primary-500 mb-2">
+      <div className="mb-8 text-center">
+        <h2 className="text-primary-500 mb-2 text-2xl font-bold">
           حسابات التواصل الاجتماعي
         </h2>
         <p className="text-neutrals-500">
@@ -124,7 +124,7 @@ export default function Step2SocialLinks() {
         )}
       />
 
-      <div className="bg-primary-50 border border-primary-200 rounded-md p-4 mt-6">
+      <div className="bg-primary-50 border-primary-200 mt-6 rounded-md border p-4">
         <p className="text-neutrals-600 text-sm">
           ملاحظة: تأكد من إدخال الروابط كاملة مع بدايتها بـ https:// للحصول على
           روابط صحيحة

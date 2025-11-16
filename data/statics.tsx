@@ -58,7 +58,7 @@ const aboutInfo: AboutInfo[] = [
   {
     title: "الفئة المستهدفة",
     description: (
-      <ul className="list-disc list-inside space-y-2">
+      <ul className="list-inside list-disc space-y-2">
         <li>الشباب المسلم المؤمن برسالته.</li>
         <li>الجهات والمبادرات المجتمعية التي تحمل همّ الإصلاح والبذل.</li>
         <li>كلّ فئةٍ محتاجة تنتظر يدًا تمتدّ بالعون.</li>

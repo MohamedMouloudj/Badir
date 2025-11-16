@@ -77,7 +77,7 @@ export class InitiativeService {
    */
   static async getMany(
     filters: InitiativeFilters = {},
-    pagination: PaginationParams = { page: 1, limit: 12 }
+    pagination: PaginationParams = { page: 1, limit: 12 },
   ): Promise<PaginatedResponse<InitiativeCard>> {
     try {
       const { page, limit } = pagination;
@@ -239,8 +239,8 @@ export class InitiativeService {
           id: initiative.organizerUserId
             ? initiative.organizerUserId
             : initiative.organizerOrgId
-            ? initiative.organizerOrgId
-            : "unknown",
+              ? initiative.organizerOrgId
+              : "unknown",
           type: initiative.organizerType,
           name:
             initiative.organizerUser?.name ||
@@ -330,7 +330,7 @@ export class InitiativeService {
    * @returns List of initiatives with average ratings
    */
   static async getOrgInitiativesWithAvgRating(
-    orgId: string
+    orgId: string,
   ): Promise<InitiativeWithAvgRating[]> {
     try {
       const initiatives = await prisma.initiative.findMany({
@@ -370,7 +370,7 @@ export class InitiativeService {
 
       const initiativesWithAvgRating = initiatives.map((initiative) => {
         const ratingData = ratingAverages.find(
-          (r) => r.initiativeId === initiative.id
+          (r) => r.initiativeId === initiative.id,
         );
         return {
           ...initiative,
@@ -393,7 +393,7 @@ export class InitiativeService {
    */
   static async updateById(
     id: string,
-    data: Partial<Prisma.InitiativeUpdateInput>
+    data: Partial<Prisma.InitiativeUpdateInput>,
   ) {
     try {
       const updated = await prisma.initiative.update({

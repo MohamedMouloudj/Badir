@@ -6,13 +6,13 @@ export default function HowItWorksPage() {
   return (
     <section className="container mx-auto px-4 py-12" dir="rtl">
       {/* Main Title */}
-      <h2 className="section-title font-bold text-primary-500 text-center mb-10">
+      <h2 className="section-title text-primary-500 mb-10 text-center font-bold">
         كيف تعمل
       </h2>
 
       {/* Guide Card */}
-      <Card className="bg-neutrals-200 border border-neutrals-300 rounded-3xl shadow-sm max-w-4xl mx-auto p-0">
-        <CardContent className="p-8 space-y-6 text-right">
+      <Card className="bg-neutrals-200 border-neutrals-300 mx-auto max-w-4xl rounded-3xl border p-0 shadow-sm">
+        <CardContent className="space-y-6 p-8 text-right">
           {/* Introduction */}
           <p className="text-neutrals-700 text-lg leading-relaxed">
             في &quot;بادر&quot;، نحن لا نكتفي بربط الأفكار بالأيدي… بل نربطها
@@ -24,7 +24,7 @@ export default function HowItWorksPage() {
           </p>
 
           {/* Steps */}
-          <div className="space-y-2 mt-6">
+          <div className="mt-6 space-y-2">
             <GuideItem
               title="ابدأ التسجيل"
               content="اختر حسابك كمتطوع أو كمنظمة، واملأ بياناتك بدقة."
@@ -63,7 +63,7 @@ export default function HowItWorksPage() {
           </div>
 
           {/* Closing Statement */}
-          <p className="text-primary-500 font-semibold text-paragraph-lg pt-4 text-center">
+          <p className="text-primary-500 text-paragraph-lg pt-4 text-center font-semibold">
             في بادر، الأثر لا يُقاس فقط بما أنجزته… بل بالنية التي انطلقت بها،
             وبالخير الذي أبقيته بعدك.
           </p>

@@ -37,7 +37,7 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
 
   if (!organization) {
     return (
-      <div className="p-6 max-w-6xl mx-auto" dir="rtl">
+      <div className="mx-auto max-w-6xl p-6" dir="rtl">
         <Alert variant="destructive">
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>المنظمة غير موجودة</AlertDescription>
@@ -58,7 +58,7 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
         const result = await updateOrganizationStatusAction(
           organization.id,
           status,
-          status === "rejected" ? rejectionReason : undefined
+          status === "rejected" ? rejectionReason : undefined,
         );
 
         if (result.success) {
@@ -76,11 +76,11 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto" dir="rtl">
+    <div className="mx-auto max-w-6xl p-6" dir="rtl">
       {/* Header */}
-      <div className="flex items-center gap-4 mb-6">
+      <div className="mb-6 flex items-center gap-4">
         <Button variant="ghost" size="sm" className="p-2">
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="h-4 w-4" />
         </Button>
         <div className="flex-1">
           <h1 className="text-2xl font-bold text-gray-900">
@@ -91,18 +91,18 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
         <AdminOrganizationStatusBadge status={organization.isVerified} />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Main Details */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="space-y-6 lg:col-span-2">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Building2 className="w-5 h-5" />
+                <Building2 className="h-5 w-5" />
                 معلومات المنظمة
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
                   <Label className="text-sm font-medium text-gray-700">
                     اسم المنظمة
@@ -161,7 +161,7 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
                   <Label className="text-sm font-medium text-gray-700">
                     وصف المنظمة
                   </Label>
-                  <p className="mt-1 text-gray-900 bg-gray-50 p-3 rounded-lg">
+                  <p className="mt-1 rounded-lg bg-gray-50 p-3 text-gray-900">
                     {organization.description}
                   </p>
                 </div>
@@ -188,9 +188,9 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
               <CardTitle>معلومات التواصل</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-gray-500" />
+                  <Mail className="h-5 w-5 text-gray-500" />
                   <div>
                     <Label className="text-sm font-medium text-gray-700">
                       البريد الإلكتروني
@@ -201,7 +201,7 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
 
                 {organization.contactPhone && (
                   <div className="flex items-center gap-3">
-                    <Phone className="w-5 h-5 text-gray-500" />
+                    <Phone className="h-5 w-5 text-gray-500" />
                     <div>
                       <Label className="text-sm font-medium text-gray-700">
                         رقم الهاتف
@@ -214,7 +214,7 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
                 )}
 
                 <div className="flex items-center gap-3">
-                  <MapPin className="w-5 h-5 text-gray-500" />
+                  <MapPin className="h-5 w-5 text-gray-500" />
                   <div>
                     <Label className="text-sm font-medium text-gray-700">
                       الموقع
@@ -228,7 +228,7 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
 
                 {organization.website && (
                   <div className="flex items-center gap-3">
-                    <ExternalLink className="w-5 h-5 text-gray-500" />
+                    <ExternalLink className="h-5 w-5 text-gray-500" />
                     <div>
                       <Label className="text-sm font-medium text-gray-700">
                         الموقع الإلكتروني
@@ -254,9 +254,9 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
               <CardTitle>معلومات المالك</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+              <div className="space-y-3 rounded-lg bg-gray-50 p-4">
                 <div className="flex items-center gap-3">
-                  <Users className="w-5 h-5 text-gray-500" />
+                  <Users className="h-5 w-5 text-gray-500" />
                   <div>
                     <Label className="text-sm font-medium text-gray-700">
                       الاسم
@@ -266,7 +266,7 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-gray-500" />
+                  <Mail className="h-5 w-5 text-gray-500" />
                   <div>
                     <Label className="text-sm font-medium text-gray-700">
                       البريد الإلكتروني
@@ -277,7 +277,7 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
 
                 {organization.owner.phone && (
                   <div className="flex items-center gap-3">
-                    <Phone className="w-5 h-5 text-gray-500" />
+                    <Phone className="h-5 w-5 text-gray-500" />
                     <div>
                       <Label className="text-sm font-medium text-gray-700">
                         رقم الهاتف
@@ -290,7 +290,7 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
                 )}
 
                 <div className="flex items-center gap-3">
-                  <Calendar className="w-5 h-5 text-gray-500" />
+                  <Calendar className="h-5 w-5 text-gray-500" />
                   <div>
                     <Label className="text-sm font-medium text-gray-700">
                       تاريخ التسجيل
@@ -352,7 +352,7 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
                       disabled={isPending}
                       className="w-full bg-green-600 hover:bg-green-700"
                     >
-                      <CheckCircle className="w-4 h-4 ml-1" />
+                      <CheckCircle className="ml-1 h-4 w-4" />
                       قبول المنظمة
                     </Button>
                     <Button
@@ -361,7 +361,7 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
                       variant="destructive"
                       className="w-full"
                     >
-                      <XCircle className="w-4 h-4 ml-1" />
+                      <XCircle className="ml-1 h-4 w-4" />
                       رفض المنظمة
                     </Button>
                   </>
@@ -408,13 +408,13 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
                       <p className="text-sm font-medium text-gray-900">
                         {initiative.titleAr}
                       </p>
-                      <div className="flex items-center justify-between mt-1">
+                      <div className="mt-1 flex items-center justify-between">
                         <Badge variant="outline" className="text-xs">
                           {initiative.status === "published"
                             ? "منشورة"
                             : initiative.status === "draft"
-                            ? "مسودة"
-                            : "ملغية"}
+                              ? "مسودة"
+                              : "ملغية"}
                         </Badge>
                         <span className="text-xs text-gray-500">
                           {formatDate(initiative.createdAt)}
@@ -424,7 +424,7 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-500 text-center py-4">
+                <p className="py-4 text-center text-gray-500">
                   لا توجد مبادرات
                 </p>
               )}
@@ -434,7 +434,7 @@ const OrganizationDetails = ({ organization }: OrganizationDetailsProps) => {
       </div>
 
       {isPending && (
-        <Alert className="fixed bottom-4 right-4 w-auto">
+        <Alert className="fixed right-4 bottom-4 w-auto">
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>جاري تحديث حالة المنظمة...</AlertDescription>
         </Alert>

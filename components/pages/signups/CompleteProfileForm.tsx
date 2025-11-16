@@ -124,8 +124,8 @@ export default function CompleteProfileForm() {
   const CurrentStepComponent = stepConfig[currentStep - 1].component;
 
   return (
-    <div className="w-full max-w-7xl flex flex-col lg:flex-row bg-neutrals-100 rounded-xl shadow-2xl overflow-hidden min-h-[600px]">
-      <div className="flex-1 relative h-64 lg:h-auto">
+    <div className="bg-neutrals-100 flex min-h-[600px] w-full max-w-7xl flex-col overflow-hidden rounded-xl shadow-2xl lg:flex-row">
+      <div className="relative h-64 flex-1 lg:h-auto">
         <Image
           src={currentStep % 2 === 0 ? asideImage2 : asideImage1}
           alt="Volunteer"
@@ -138,9 +138,9 @@ export default function CompleteProfileForm() {
         />
       </div>
 
-      <div className="flex-1 flex items-center justify-center p-8">
-        <div className="w-full max-w-4xl mx-auto md:p-6" dir="rtl">
-          <Card className="bg-transparent shadow-none border-0 ">
+      <div className="flex flex-1 items-center justify-center p-8">
+        <div className="mx-auto w-full max-w-4xl md:p-6" dir="rtl">
+          <Card className="border-0 bg-transparent shadow-none">
             <CardContent className="px-0 py-0">
               <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -149,7 +149,7 @@ export default function CompleteProfileForm() {
                   </div>
 
                   {/* Navigation Buttons */}
-                  <div className="flex justify-between items-center pt-4 md:pt-6 border-t border-neutrals-200 w-full">
+                  <div className="border-neutrals-200 flex w-full items-center justify-between border-t pt-4 md:pt-6">
                     <AppButton
                       type="outline"
                       size="md"
@@ -157,14 +157,14 @@ export default function CompleteProfileForm() {
                       disabled={currentStep === 1}
                       className="flex items-center gap-2"
                       border="rounded"
-                      icon={<ChevronRight className="w-4 h-4 md:w-6 md:h-6" />}
+                      icon={<ChevronRight className="h-4 w-4 md:h-6 md:w-6" />}
                       dir="rtl"
                     >
                       السابق
                     </AppButton>
 
                     <div className="text-center">
-                      <span className="text-sm text-neutrals-500">
+                      <span className="text-neutrals-500 text-sm">
                         الخطوة {currentStep} من {TOTAL_STEPS}
                       </span>
                     </div>
@@ -176,7 +176,7 @@ export default function CompleteProfileForm() {
                         onClick={handleNext}
                         className="flex items-center gap-2"
                         border="rounded"
-                        icon={<ChevronLeft className="w-4 h-4 md:w-6 md:h-6" />}
+                        icon={<ChevronLeft className="h-4 w-4 md:h-6 md:w-6" />}
                       >
                         التالي
                       </AppButton>
@@ -189,7 +189,7 @@ export default function CompleteProfileForm() {
                         border="rounded"
                         icon={
                           isSubmitting ? (
-                            <Loader2 className="w-4 h-4 md:w-6 md:h-6" />
+                            <Loader2 className="h-4 w-4 md:h-6 md:w-6" />
                           ) : (
                             ""
                           )

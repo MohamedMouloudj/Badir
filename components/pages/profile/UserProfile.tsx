@@ -129,22 +129,22 @@ export default function UserProfileForm({
 
   if (isPending)
     return (
-      <div className="flex-center justify-center min-h-screen w-full">
-        <Loader2 className="w-8 h-8 animate-spin text-primary-500" />
+      <div className="flex-center min-h-screen w-full justify-center">
+        <Loader2 className="text-primary-500 h-8 w-8 animate-spin" />
       </div>
     );
 
   return (
     <>
-      <div className="flex-center gap-4 mb-4">
+      <div className="flex-center mb-4 gap-4">
         <Avatar className="h-24 w-24">
           <AvatarImage src={userImage || ""} alt={"المستخدم"} />
-          <AvatarFallback className="border-2 border-primary-500 text-primary-500 font-semibold">
+          <AvatarFallback className="border-primary-500 text-primary-500 border-2 font-semibold">
             <User className="h-5 w-5" />
           </AvatarFallback>
         </Avatar>
         <div className="flex-center-column items-start gap-2">
-          <h2 className="text-2xl font-bold text-neutrals-700">
+          <h2 className="text-neutrals-700 text-2xl font-bold">
             {defaultValues.firstName || "المستخدم"}{" "}
             {defaultValues.lastName || ""}
           </h2>
@@ -156,10 +156,10 @@ export default function UserProfileForm({
 
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
         {" "}
-        <div className="flex-center justify-between mb-6 flex-wrap gap-4">
-          <div className="flex-center justify-baseline gap-4 flex-wrap flex-1">
+        <div className="flex-center mb-6 flex-wrap justify-between gap-4">
+          <div className="flex-center flex-1 flex-wrap justify-baseline gap-4">
             <span className="text-caption text-neutrals-500">
-              <Calendar className="inline mx-1 mb-0.5 size-5" />
+              <Calendar className="mx-1 mb-0.5 inline size-5" />
               انضم في:{" "}
               {defaultValues.createdAt
                 ? typeof defaultValues.createdAt === "string"
@@ -176,11 +176,11 @@ export default function UserProfileForm({
                 : ""}
             </span>
             <span className="text-caption text-neutrals-500">
-              <MapPin className="inline mx-1 mb-0.5 size-5" />
+              <MapPin className="mx-1 mb-0.5 inline size-5" />
               {defaultValues.country + " - " + defaultValues.state}
             </span>
             <span className="text-caption text-neutrals-500">
-              <Mail className="inline mx-1 mb-0.5 size-5" />
+              <Mail className="mx-1 mb-0.5 inline size-5" />
               {defaultValues.email || ""}
             </span>
           </div>
@@ -199,9 +199,9 @@ export default function UserProfileForm({
                   type="submit"
                   icon={
                     isPending ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
-                      <Save className="w-4 h-4" />
+                      <Save className="h-4 w-4" />
                     )
                   }
                 >
@@ -212,7 +212,7 @@ export default function UserProfileForm({
               <AppButton
                 size="sm"
                 type="outline"
-                icon={<Edit2Icon className="w-4 h-4" />}
+                icon={<Edit2Icon className="h-4 w-4" />}
                 onClick={() => setIsUpdating(!isUpdating)}
               >
                 تعديل
@@ -221,12 +221,12 @@ export default function UserProfileForm({
           </div>
         </div>
         {/* Personal Information Section */}
-        <div className="bg-neutrals-100 p-6 rounded-lg">
-          <h3 className="text-lg font-semibold text-neutrals-700 mb-4">
+        <div className="bg-neutrals-100 rounded-lg p-6">
+          <h3 className="text-neutrals-700 mb-4 text-lg font-semibold">
             المعلومات الأساسية
           </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {/* First Name */}
             <Controller
               name="firstName"
@@ -340,12 +340,12 @@ export default function UserProfileForm({
           </div>
         </div>
         {/* Location Information */}
-        <div className="bg-neutrals-100 p-6 rounded-lg">
-          <h3 className="text-lg font-semibold text-neutrals-700 mb-4">
+        <div className="bg-neutrals-100 rounded-lg p-6">
+          <h3 className="text-neutrals-700 mb-4 text-lg font-semibold">
             معلومات السكن
           </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {/* Country */}
             <Controller
               name="country"
@@ -407,12 +407,12 @@ export default function UserProfileForm({
           </div>
         </div>
         {/* Educational Information */}
-        <div className="bg-neutrals-100 p-6 rounded-lg">
-          <h3 className="text-lg font-semibold text-neutrals-700 mb-4">
+        <div className="bg-neutrals-100 rounded-lg p-6">
+          <h3 className="text-neutrals-700 mb-4 text-lg font-semibold">
             المعلومات التعليمية والمهنية
           </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {/* Educational Level */}
             <Controller
               name="qualifications.educationalLevel"
@@ -473,7 +473,7 @@ export default function UserProfileForm({
           </div>
         </div>
         {/* Profile Image and Bio */}
-        <div className="bg-neutrals-100 p-6 rounded-lg">
+        <div className="bg-neutrals-100 rounded-lg p-6">
           <div className="space-y-4">
             {/* Profile Image */}
             <Controller
@@ -490,14 +490,14 @@ export default function UserProfileForm({
                   onChange={field.onChange}
                   rtl={true}
                   fileAccept={BUCKET_MIME_TYPES.avatars.map(
-                    mimeTypeToExtension
+                    mimeTypeToExtension,
                   )}
                   fileMaxSize={BUCKET_SIZE_LIMITS.avatars / 1024 / 1024}
                   onFileChange={(file, onChange) =>
                     handleFileUpload(
                       file,
                       BUCKET_SIZE_LIMITS.avatars,
-                      (value) => onChange(JSON.stringify(value))
+                      (value) => onChange(JSON.stringify(value)),
                     )
                   }
                   isOptional

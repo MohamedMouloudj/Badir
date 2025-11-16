@@ -6,16 +6,16 @@ import Link from "next/link";
 
 export default function Policies() {
   return (
-    <div className="container mx-auto py-8 px-4 md:px-8 max-w-5xl" dir="rtl">
+    <div className="container mx-auto max-w-5xl px-4 py-8 md:px-8" dir="rtl">
       {/* Header */}
-      <div className="flex flex-col items-center justify-center mb-8">
-        <div className="bg-primary-500 p-4 rounded-full mb-4">
-          <ShieldUser className="w-8 h-8 text-white" />
+      <div className="mb-8 flex flex-col items-center justify-center">
+        <div className="bg-primary-500 mb-4 rounded-full p-4">
+          <ShieldUser className="h-8 w-8 text-white" />
         </div>
-        <h2 className="text-primary-500 section-title font-bold mb-2">
+        <h2 className="text-primary-500 section-title mb-2 font-bold">
           سياسة الخصوصية
         </h2>
-        <p className="text-neutrals-600 text-center text-secondary-sm font-semibold max-w-2xl">
+        <p className="text-neutrals-600 text-secondary-sm max-w-2xl text-center font-semibold">
           نحن ملتزمون بحماية خصوصيتك وبياناتك الشخصية. تحدد هذه السياسة كيفية
           جمع واستخدام وحماية معلوماتك
         </p>
@@ -75,15 +75,15 @@ export default function Policies() {
       </FooterPageSection>
 
       {/* Contact Section */}
-      <div className="text-center mt-10 mb-6">
-        <h2 className="text-primary-500 font-bold text-primary-sm mb-4">
+      <div className="mt-10 mb-6 text-center">
+        <h2 className="text-primary-500 text-primary-sm mb-4 font-bold">
           تواصل معنا
         </h2>
-        <p className="text-neutrals-600 text-paragraph-lg font-medium mb-6">
+        <p className="text-neutrals-600 text-paragraph-lg mb-6 font-medium">
           إذا كانت لديك أسئلة حول سياسة الخصوصية هذه أو ممارساتنا، إذا كنت ترغب
           في ممارسة أي من حقوقك، يرجى{" "}
           <Link
-            className="text-primary-500 underline hover:text-primary-400"
+            className="text-primary-500 hover:text-primary-400 underline"
             href="/contact"
           >
             التواصل معنا

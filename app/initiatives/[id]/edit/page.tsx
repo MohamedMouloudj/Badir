@@ -31,11 +31,11 @@ export default async function EditInitiativePage({
   }));
 
   return (
-    <div className="container py-8 max-w-full mx-auto px-2 sm:px-6" dir="rtl">
+    <div className="container mx-auto max-w-full px-2 py-8 sm:px-6" dir="rtl">
       <div className="mb-4 flex justify-end">
         <BackButton />
       </div>
-      <h1 className="text-3xl font-bold text-primary-600 mb-6 text-center">
+      <h1 className="text-primary-600 mb-6 text-center text-3xl font-bold">
         تعديل المبادرة
       </h1>
       <InitiativeForm

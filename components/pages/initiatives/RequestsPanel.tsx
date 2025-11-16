@@ -48,7 +48,7 @@ export default function RequestsPanel({
 
   return loading ? (
     <div className="flex-center justify-center gap-2" dir="rtl">
-      <Loader2 className="w-4 h-4 animate-spin" />
+      <Loader2 className="h-4 w-4 animate-spin" />
       <span>جاري التحميل...</span>
     </div>
   ) : items.length === 0 ? (
@@ -60,13 +60,13 @@ export default function RequestsPanel({
       {items.map((r) => (
         <div
           key={r.id}
-          className="flex items-center justify-between p-3 border border-neutrals-300 rounded-lg bg-white"
+          className="border-neutrals-300 flex items-center justify-between rounded-lg border bg-white p-3"
         >
           <div>
             <Link href={`/profile/${r.user.id}`} className="hover:underline">
               <p className="font-medium">{r.user.name}</p>
             </Link>
-            <p className="text-sm text-neutrals-500">{r.participantRole}</p>
+            <p className="text-neutrals-500 text-sm">{r.participantRole}</p>
           </div>
           <div className="flex gap-2">
             <Button variant="outline" onClick={() => approve(r.id)}>

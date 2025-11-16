@@ -6,13 +6,13 @@ export default function OrganizationGuidePage() {
   return (
     <section className="container mx-auto px-4 py-12" dir="rtl">
       {/* Main Title */}
-      <h2 className="text-3xl md:text-4xl font-bold text-primary-500 text-center mb-10">
+      <h2 className="text-primary-500 mb-10 text-center text-3xl font-bold md:text-4xl">
         دليل المنظمة
       </h2>
 
       {/* Guide Card */}
-      <Card className="bg-neutrals-200 border border-neutrals-300 rounded-3xl shadow-sm max-w-4xl mx-auto p-0">
-        <CardContent className="p-8 space-y-6 text-right">
+      <Card className="bg-neutrals-200 border-neutrals-300 mx-auto max-w-4xl rounded-3xl border p-0 shadow-sm">
+        <CardContent className="space-y-6 p-8 text-right">
           {/* Introduction */}
           <p className="text-neutrals-700 text-lg leading-relaxed">
             في &quot;بادر&quot;، وجودكم كمنظمة يعني أننا شركاء في صناعة الخير،
@@ -20,7 +20,7 @@ export default function OrganizationGuidePage() {
           </p>
 
           {/* Guide Items */}
-          <div className="space-y-5 mt-6">
+          <div className="mt-6 space-y-5">
             <GuideItem
               title="التسجيل للتوثيق"
               content="أدخل بيانات منظمتك عبر نموذج الانضمام، مع التأكد من صحة المعلومات."

@@ -250,7 +250,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
       onFileChange,
       ...props
     },
-    ref
+    ref,
   ) => {
     const [open, setOpen] = React.useState(false);
     const [searchValue, setSearchValue] = React.useState("");
@@ -269,11 +269,11 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
       "disabled:opacity-50 disabled:cursor-not-allowed",
       error
         ? "border-state-error focus:border-state-error focus:ring-state-error"
-        : "focus:ring-secondary-600"
+        : "focus:ring-secondary-600",
     );
 
     const renderLabel = () => (
-      <div className="flex-center gap-2 mb-2 text-label" dir="rtl">
+      <div className="flex-center text-label mb-2 gap-2" dir="rtl">
         <label htmlFor={name} className="text-neutrals-600 font-medium">
           {label}
           {!isOptional && <span className="text-state-error ml-1">*</span>}
@@ -286,7 +286,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
 
     const renderError = () => {
       if (error) {
-        return <p className="text-state-error text-sm mt-1">{error}</p>;
+        return <p className="text-state-error mt-1 text-sm">{error}</p>;
       }
       return null;
     };
@@ -326,7 +326,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         case "tel": {
           const selectedCountry =
             countryOptions!.find(
-              (country) => country.code === (countryCode || "DZ")
+              (country) => country.code === (countryCode || "DZ"),
             ) || countryOptions![0];
 
           return (
@@ -358,11 +358,11 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
               >
                 <SelectTrigger
                   className={cn(
-                    "w-32 border border-neutrals-300 rounded-full px-3 py-2 bg-neutrals-100",
-                    "focus:border-secondary-600 focus:ring-1 focus:ring-secondary-600 focus:outline-none",
+                    "border-neutrals-300 bg-neutrals-100 w-32 rounded-full border px-3 py-2",
+                    "focus:border-secondary-600 focus:ring-secondary-600 focus:ring-1 focus:outline-none",
                     error &&
                       "border-state-error focus:border-state-error focus:ring-state-error",
-                    disabled && "bg-neutrals-200 cursor-not-allowed"
+                    disabled && "bg-neutrals-200 cursor-not-allowed",
                   )}
                 >
                   <SelectValue>
@@ -378,7 +378,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
                         <span className="text-sm font-medium">
                           {country.callingCode}
                         </span>
-                        <span className="text-xs text-neutrals-500">
+                        <span className="text-neutrals-500 text-xs">
                           {country.name}
                         </span>
                       </div>
@@ -411,8 +411,8 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
               rows={rows}
               className={cn(
                 baseInputClasses,
-                "resize-none scrollbar-rtl",
-                className
+                "scrollbar-rtl resize-none",
+                className,
               )}
               style={{
                 direction: rtl ? "rtl" : "ltr",
@@ -443,7 +443,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
           );
         case "checkbox-group":
           return (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {options.map((option, index) => {
                 const isChecked =
                   Array.isArray(value) && value.includes(option.value);
@@ -471,7 +471,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
                         } else {
                           // Remove value if present
                           onChange?.(
-                            currentValues.filter((val) => val !== option.value)
+                            currentValues.filter((val) => val !== option.value),
                           );
                         }
                       }}
@@ -512,7 +512,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
               value={(value as string) || ""}
               onValueChange={onChange}
               disabled={disabled}
-              className="flex-center gap-4 justify-center w-full flex-wrap"
+              className="flex-center w-full flex-wrap justify-center gap-4"
             >
               {options.map((option, index) => (
                 <div
@@ -522,7 +522,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
                   <RadioGroupItem
                     value={option.value}
                     id={`${name}-${option.value}`}
-                    className="border-2 border-neutrals-300 bg-transparent data-[state=checked]:border-secondary-500 data-[state=focus]:ring-2 data-[state=focus]:ring-secondary-600 data-[state=focus]:ring-offset-2 data-[state=focus]:bg-transparent"
+                    className="border-neutrals-300 data-[state=checked]:border-secondary-500 data-[state=focus]:ring-secondary-600 border-2 bg-transparent data-[state=focus]:bg-transparent data-[state=focus]:ring-2 data-[state=focus]:ring-offset-2"
                   />
                   <label
                     htmlFor={`${name}-${option.value}`}
@@ -545,12 +545,12 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
             >
               <SelectTrigger
                 className={cn(
-                  "w-full border border-neutrals-300 rounded-full px-3 py-2 placeholder:text-neutrals-300 text-neutrals-700 focus:ring-1 focus:ring-secondary-600 focus:outline-none bg-neutrals-100",
+                  "border-neutrals-300 placeholder:text-neutrals-300 text-neutrals-700 focus:ring-secondary-600 bg-neutrals-100 w-full rounded-full border px-3 py-2 focus:ring-1 focus:outline-none",
                   error
                     ? "border-state-error focus:border-state-error focus:ring-state-error"
                     : "focus:border-secondary-600",
                   disabled && "bg-neutrals-200 cursor-not-allowed",
-                  className
+                  className,
                 )}
               >
                 <SelectValue placeholder={placeholder || `اختر ${label}`} />
@@ -596,7 +596,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
             : (value as string) || "";
 
           const filteredOptions = options.filter((option) =>
-            option.label.toLowerCase().includes(searchValue.toLowerCase())
+            option.label.toLowerCase().includes(searchValue.toLowerCase()),
           );
 
           const handleSelect = (selectedValue: string) => {
@@ -617,7 +617,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
             if (isMultiple) {
               const valuesArray = (currentValues as string[]) || [];
               const selected = options.filter((opt) =>
-                valuesArray.includes(opt.value)
+                valuesArray.includes(opt.value),
               );
               return selected.length > 0
                 ? `${selected.length} عنصر محدد`
@@ -667,7 +667,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
                             <Check
                               className={cn(
                                 "mr-2 h-4 w-4",
-                                isSelected ? "opacity-100" : "opacity-0"
+                                isSelected ? "opacity-100" : "opacity-0",
                               )}
                             />
                             {option.label}
@@ -712,7 +712,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
                   Array.isArray(fileAccept) ? fileAccept.join(",") : fileAccept
                 }
                 disabled={disabled}
-                className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
+                className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
                 onChange={(e) => {
                   const file = e.target.files?.[0] || null;
                   onFileChange?.(file, (val: string) => onChange?.(val));
@@ -721,36 +721,36 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
               />
               <div
                 className={cn(
-                  "flex items-center justify-center w-full h-32 px-4 py-2 border-2 border-dashed rounded-lg",
-                  "bg-neutrals-100 hover:bg-neutrals-200 transition-colors cursor-pointer",
+                  "flex h-32 w-full items-center justify-center rounded-lg border-2 border-dashed px-4 py-2",
+                  "bg-neutrals-100 hover:bg-neutrals-200 cursor-pointer transition-colors",
                   hasFile ? "border-green-500" : "border-neutrals-300",
                   error && "border-state-error",
-                  disabled && "opacity-50 cursor-not-allowed"
+                  disabled && "cursor-not-allowed opacity-50",
                 )}
               >
                 <div className="text-center">
                   {/* File status indicator */}
                   {hasFile ? (
                     <div className="flex flex-col items-center">
-                      <div className="bg-green-100 rounded-full p-2 mb-2">
+                      <div className="mb-2 rounded-full bg-green-100 p-2">
                         <CheckIcon className="h-6 w-6 text-green-600" />
                       </div>
                       <p className="text-sm font-medium text-green-600">
                         تم اختيار: {selectedFileName}
                       </p>
-                      <p className="text-xs text-neutrals-500 mt-1">
+                      <p className="text-neutrals-500 mt-1 text-xs">
                         انقر لاختيار ملف آخر
                       </p>
                     </div>
                   ) : (
                     <>
-                      <div className="flex justify-center mb-2">
-                        <Upload className="h-6 w-6 text-neutrals-400" />
+                      <div className="mb-2 flex justify-center">
+                        <Upload className="text-neutrals-400 h-6 w-6" />
                       </div>
                       <p className="text-sm font-medium">
                         {`انقر لاختيار ${placeholder || "ملف"}`}
                       </p>
-                      <p className="mt-1 text-xs text-neutrals-400">
+                      <p className="text-neutrals-400 mt-1 text-xs">
                         {normalizedFileAccept.join(", ")}
                         {normalizedFileAccept.length
                           ? ` حتى ${fileMaxSize || 10}MB`
@@ -777,7 +777,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         {renderError()}
       </div>
     );
-  }
+  },
 );
 
 FormInput.displayName = "FormInput";

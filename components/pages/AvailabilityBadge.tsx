@@ -74,7 +74,7 @@ export default function AvailabilityBadge({
 
   return (
     <Badge
-      className={cn("rounded-full text-sm font-medium py-1 px-3", className)}
+      className={cn("rounded-full px-3 py-1 text-sm font-medium", className)}
     >
       {label}
     </Badge>

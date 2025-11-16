@@ -7,10 +7,10 @@ import { Suspense } from "react";
 
 export default function LoginPage() {
   return (
-    <section className="min-h-screen w-full flex items-center justify-center bg-primary-600 p-4">
-      <div className="w-full max-w-7xl flex flex-col sm:flex-row bg-neutrals-100 rounded-xl shadow-2xl overflow-hidden min-h-[600px]">
+    <section className="bg-primary-600 flex min-h-screen w-full items-center justify-center p-4">
+      <div className="bg-neutrals-100 flex min-h-[600px] w-full max-w-7xl flex-col overflow-hidden rounded-xl shadow-2xl sm:flex-row">
         {/* Image Section */}
-        <div className="flex-1 relative h-64 sm:h-auto">
+        <div className="relative h-64 flex-1 sm:h-auto">
           <Image
             src="/images/auth-form-aside.png"
             alt="Volunteer"
@@ -25,34 +25,34 @@ export default function LoginPage() {
 
         {/* Form Section */}
         <div
-          className="flex-1 flex flex-col justify-center max-md:justify-start items-start p-6 md:p-8 md:px-10"
+          className="flex flex-1 flex-col items-start justify-center p-6 max-md:justify-start md:p-8 md:px-10"
           dir="rtl"
         >
-          <div className="w-full max-w-md flex-center-column gap-6 md:gap-10 h-full">
+          <div className="flex-center-column h-full w-full max-w-md gap-6 md:gap-10">
             {/* Logo */}
-            <div className="flex justify-start mb-4 md:mb-8 self-start max-md:hidden">
+            <div className="mb-4 flex justify-start self-start max-md:hidden md:mb-8">
               <Image
                 src="/images/logos/logo.svg"
                 alt="Badir Logo"
                 width={120}
                 height={46}
                 quality={80}
-                className="w-auto h-12"
+                className="h-12 w-auto"
               />
             </div>
 
             {/* Title */}
-            <h2 className="text-primary-sm text-primary-600 font-bold text-center md:text-right">
+            <h2 className="text-primary-sm text-primary-600 text-center font-bold md:text-right">
               تسجيل الدخول
             </h2>
 
             {/* Form */}
-            <Suspense fallback={<Loader2 className="w-4 h-4 animate-spin" />}>
+            <Suspense fallback={<Loader2 className="h-4 w-4 animate-spin" />}>
               <LoginForm />
             </Suspense>
 
             {/* Sign up link */}
-            <div className="text-center mt-2 pt-4">
+            <div className="mt-2 pt-4 text-center">
               <p className="text-neutrals-600 text-sm">
                 ليس لديك حساب؟{" "}
                 <Link

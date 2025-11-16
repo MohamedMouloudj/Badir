@@ -6,13 +6,13 @@ export default function FAQPage() {
   return (
     <section className="container mx-auto px-4 py-12" dir="rtl">
       {/* Main Title */}
-      <h1 className="section-title font-bold text-primary-500 text-center mb-10">
+      <h1 className="section-title text-primary-500 mb-10 text-center font-bold">
         الأسئلة الشائعة
       </h1>
 
       {/* FAQ Card */}
-      <Card className="bg-neutrals-200 border border-neutrals-300 rounded-3xl shadow-sm max-w-3xl mx-auto p-0">
-        <CardContent className="p-8 space-y-8 text-right">
+      <Card className="bg-neutrals-200 border-neutrals-300 mx-auto max-w-3xl rounded-3xl border p-0 shadow-sm">
+        <CardContent className="space-y-8 p-8 text-right">
           {/* FAQ Items */}
           <FAQItem
             number={1}

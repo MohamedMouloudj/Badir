@@ -8,11 +8,11 @@ export default function Contact() {
       <p className="section-description text-center">
         ضع هنا كل فكرة، تحسين ترجو أن يكون في هذه المنصة
       </p>
-      <div className="flex items-center bg-neutrals-100 rounded-full overflow-hidden border-3 border-primary-400">
+      <div className="bg-neutrals-100 border-primary-400 flex items-center overflow-hidden rounded-full border-3">
         <input
           type="email"
           placeholder="فكرتك"
-          className="flex-1 min-w-0 h-10 sm:h-12 px-3 sm:px-4 bg-transparent text-neutrals-700 placeholder-neutrals-400 focus:outline-none text-sm sm:text-base"
+          className="text-neutrals-700 placeholder-neutrals-400 h-10 min-w-0 flex-1 bg-transparent px-3 text-sm focus:outline-none sm:h-12 sm:px-4 sm:text-base"
           dir="rtl"
         />
         <div className="flex-shrink-0 p-1">
@@ -20,7 +20,7 @@ export default function Contact() {
             type="primary"
             border="rounded"
             size="sm"
-            className="whitespace-nowrap px-3 sm:px-4 h-8 sm:h-10"
+            className="h-8 px-3 whitespace-nowrap sm:h-10 sm:px-4"
           >
             أرسلها
           </AppButton>

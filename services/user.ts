@@ -3,7 +3,7 @@ import { Prisma, User, UserQualification } from "@prisma/client";
 
 export class UserService {
   static async getUser(
-    userId: string
+    userId: string,
   ): Promise<(User & { qualifications: UserQualification[] }) | null> {
     return await prisma.user.findUnique({
       where: { id: userId },

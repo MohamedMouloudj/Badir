@@ -48,10 +48,10 @@ const OrganizationsManagement = ({
   initialData,
 }: OrganizationsManagementProps) => {
   const [organizations, setOrganizations] = useState<AdminOrganizationCard[]>(
-    initialData.data
+    initialData.data,
   );
   const [pagination, setPagination] = useState<PaginationData>(
-    initialData.pagination
+    initialData.pagination,
   );
   const [filters, setFilters] = useState({
     status: "all",
@@ -59,7 +59,7 @@ const OrganizationsManagement = ({
     organizationType: "all",
   });
   const [selectedOrg, setSelectedOrg] = useState<AdminOrganizationCard | null>(
-    null
+    null,
   );
   const [isPending, startTransition] = useTransition();
   const [rejectionReason, setRejectionReason] = useState("");
@@ -68,7 +68,7 @@ const OrganizationsManagement = ({
 
   const handleStatusUpdate = async (
     id: string,
-    status: "approved" | "rejected"
+    status: "approved" | "rejected",
   ) => {
     if (status === "rejected" && !rejectionReason.trim()) {
       toast.error("يرجى إدخال سبب الرفض");
@@ -80,18 +80,18 @@ const OrganizationsManagement = ({
         const result = await updateOrganizationStatusAction(
           id,
           status,
-          status === "rejected" ? rejectionReason : undefined
+          status === "rejected" ? rejectionReason : undefined,
         );
 
         if (result.success) {
           setOrganizations((prev) =>
             prev.map((org) =>
-              org.id === id ? { ...org, isVerified: status } : org
-            )
+              org.id === id ? { ...org, isVerified: status } : org,
+            ),
           );
           toast.success("تم تحديث حالة المنظمة بنجاح");
           setSelectedOrg((prev) =>
-            prev && prev.id === id ? { ...prev, isVerified: status } : prev
+            prev && prev.id === id ? { ...prev, isVerified: status } : prev,
           );
           setShowRejectionDialog(false);
           setShowDetailsDialog(false);
@@ -111,15 +111,15 @@ const OrganizationsManagement = ({
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto" dir="rtl">
+    <div className="mx-auto max-w-7xl p-6" dir="rtl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="mb-2 text-3xl font-bold text-gray-900">
           إدارة المنظمات
         </h1>
         <p className="text-gray-600">مراجعة وموافقة على طلبات المنظمات</p>
       </div>
 
-      <Card className="bg-transparent shadow-none border-none gap-2 pt-0">
+      <Card className="gap-2 border-none bg-transparent pt-0 shadow-none">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Building2 className="h-5 w-5" />
@@ -128,8 +128,8 @@ const OrganizationsManagement = ({
         </CardHeader>
         <CardContent>
           {/* Filters */}
-          <div className="flex-center-column sm:justify-between gap-4 mb-6 flex-wrap mt-6">
-            <div className="max-w-full flex-center sm:justify-center gap-4 max-sm:flex-wrap">
+          <div className="flex-center-column mt-6 mb-6 flex-wrap gap-4 sm:justify-between">
+            <div className="flex-center max-w-full gap-4 max-sm:flex-wrap sm:justify-center">
               <SearchInput
                 value={filters.search}
                 onChange={(value) =>
@@ -144,7 +144,7 @@ const OrganizationsManagement = ({
             </div>
             {/* Filters */}
             <div
-              className="grid grid-cols-1 md:grid-cols-2 gap-4 w-fit"
+              className="grid w-fit grid-cols-1 gap-4 md:grid-cols-2"
               dir="rtl"
             >
               <FilterSelect
@@ -183,9 +183,9 @@ const OrganizationsManagement = ({
           {/* Organizations List */}
           <div className="space-y-4">
             {organizations.length === 0 ? (
-              <div className="text-center py-12">
-                <Building2 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+              <div className="py-12 text-center">
+                <Building2 className="mx-auto mb-4 h-12 w-12 text-gray-400" />
+                <h3 className="mb-2 text-lg font-medium text-gray-900">
                   لا توجد منظمات
                 </h3>
                 <p className="text-gray-500">
@@ -196,14 +196,14 @@ const OrganizationsManagement = ({
               organizations.map((org) => (
                 <Card key={org.id} className="border-l-4 border-l-blue-500">
                   <CardContent className="p-6">
-                    <div className="flex justify-between items-start mb-4">
+                    <div className="mb-4 flex items-start justify-between">
                       <div className="flex-1">
                         <Link
                           href={`/admin/organizations/${org.id}`}
                           target="_blank"
                           className="flex items-center"
                         >
-                          <ArrowUpRight className="h-4 w-4 inline-block ml-1 text-gray-500" />
+                          <ArrowUpRight className="ml-1 inline-block h-4 w-4 text-gray-500" />
                           <h3 className="text-lg font-semibold text-gray-900 hover:underline">
                             {org.name}
                           </h3>
@@ -214,11 +214,11 @@ const OrganizationsManagement = ({
                           </p>
                         )}
                         {org.description && (
-                          <p className="text-sm text-gray-700 mt-1 line-clamp-2">
+                          <p className="mt-1 line-clamp-2 text-sm text-gray-700">
                             {org.description}
                           </p>
                         )}
-                        <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
+                        <div className="mt-2 flex items-center gap-4 text-sm text-gray-500">
                           <span className="flex items-center gap-1">
                             <Mail className="h-4 w-4" />
                             {org.contactEmail}
@@ -254,7 +254,7 @@ const OrganizationsManagement = ({
                           {" "}
                           ({org.owner.email})
                         </span>
-                        <div className="text-xs text-gray-500 mt-1">
+                        <div className="mt-1 text-xs text-gray-500">
                           انضم في {formatDate(org.createdAt)}
                         </div>
                       </div>
@@ -271,12 +271,12 @@ const OrganizationsManagement = ({
                               size="sm"
                               onClick={() => setSelectedOrg(org)}
                             >
-                              <Eye className="h-4 w-4 ml-1" />
+                              <Eye className="ml-1 h-4 w-4" />
                               عرض التفاصيل
                             </Button>
                           </DialogTrigger>
                           <DialogContent
-                            className="max-w-3xl max-h-[80vh] overflow-y-auto"
+                            className="max-h-[80vh] max-w-3xl overflow-y-auto"
                             onOpenAutoFocus={(e) => {
                               e.preventDefault();
                             }}
@@ -349,7 +349,7 @@ const OrganizationsManagement = ({
                                     <Label className="font-medium text-gray-700">
                                       وصف المنظمة:
                                     </Label>
-                                    <p className="mt-1 bg-gray-50 p-3 rounded-lg">
+                                    <p className="mt-1 rounded-lg bg-gray-50 p-3">
                                       {selectedOrg.description}
                                     </p>
                                   </div>
@@ -366,14 +366,14 @@ const OrganizationsManagement = ({
                                         <Badge key={index} variant="outline">
                                           {area}
                                         </Badge>
-                                      )
+                                      ),
                                     )}
                                   </div>
                                 </div>
 
                                 {/* Contact Information */}
-                                <div className="bg-gray-50 p-4 rounded-lg">
-                                  <Label className="font-medium text-gray-700 mb-3 block">
+                                <div className="rounded-lg bg-gray-50 p-4">
+                                  <Label className="mb-3 block font-medium text-gray-700">
                                     معلومات التواصل:
                                   </Label>
                                   <div className="grid grid-cols-2 gap-4">
@@ -415,8 +415,8 @@ const OrganizationsManagement = ({
                                 </div>
 
                                 {/* Owner Information */}
-                                <div className="bg-blue-50 p-4 rounded-lg">
-                                  <Label className="font-medium text-gray-700 mb-3 block">
+                                <div className="rounded-lg bg-blue-50 p-4">
+                                  <Label className="mb-3 block font-medium text-gray-700">
                                     معلومات المالك:
                                   </Label>
                                   <div className="space-y-2">
@@ -447,18 +447,18 @@ const OrganizationsManagement = ({
 
                                 {/* Action Buttons */}
                                 {selectedOrg.isVerified === "pending" && (
-                                  <div className="flex justify-center gap-4 pt-4 border-t">
+                                  <div className="flex justify-center gap-4 border-t pt-4">
                                     <Button
                                       onClick={() =>
                                         handleStatusUpdate(
                                           selectedOrg.id,
-                                          "approved"
+                                          "approved",
                                         )
                                       }
                                       disabled={isPending}
                                       className="bg-green-600 hover:bg-green-700"
                                     >
-                                      <CheckCircle className="h-4 w-4 ml-1" />
+                                      <CheckCircle className="ml-1 h-4 w-4" />
                                       قبول المنظمة
                                     </Button>
                                     <Button
@@ -469,7 +469,7 @@ const OrganizationsManagement = ({
                                       disabled={isPending}
                                       variant="destructive"
                                     >
-                                      <XCircle className="h-4 w-4 ml-1" />
+                                      <XCircle className="ml-1 h-4 w-4" />
                                       رفض المنظمة
                                     </Button>
                                   </div>
@@ -477,7 +477,7 @@ const OrganizationsManagement = ({
 
                                 {/* Status Info */}
                                 {selectedOrg.isVerified !== "pending" && (
-                                  <div className="text-center py-4 border-t">
+                                  <div className="border-t py-4 text-center">
                                     <div className="flex items-center justify-center gap-2">
                                       <AdminOrganizationStatusBadge
                                         status={selectedOrg.isVerified}
@@ -502,7 +502,7 @@ const OrganizationsManagement = ({
                                 handleStatusUpdate(org.id, "approved")
                               }
                               disabled={isPending}
-                              className="bg-green-600 hover:bg-green-700 text-xs px-2"
+                              className="bg-green-600 px-2 text-xs hover:bg-green-700"
                             >
                               قبول
                             </Button>
@@ -514,7 +514,7 @@ const OrganizationsManagement = ({
                                 setShowRejectionDialog(true);
                               }}
                               disabled={isPending}
-                              className="text-xs px-2"
+                              className="px-2 text-xs"
                             >
                               رفض
                             </Button>
@@ -562,7 +562,7 @@ const OrganizationsManagement = ({
                 className="resize-none"
               />
             </div>
-            <div className="flex gap-2 justify-end">
+            <div className="flex justify-end gap-2">
               <Button
                 onClick={() => {
                   setShowRejectionDialog(false);

@@ -6,20 +6,20 @@ export default function AssistancePage() {
   return (
     <section className="container mx-auto px-4 py-12" dir="rtl">
       {/* Main Title */}
-      <h2 className="section-title font-bold text-primary-500 text-center mb-10">
+      <h2 className="section-title text-primary-500 mb-10 text-center font-bold">
         ابحث عن مساعدات
       </h2>
 
       {/* Guide Card */}
-      <Card className="bg-neutrals-200 border border-neutrals-300 rounded-3xl shadow-sm max-w-4xl mx-auto p-0">
-        <CardContent className="p-8 space-y-6 text-right">
+      <Card className="bg-neutrals-200 border-neutrals-300 mx-auto max-w-4xl rounded-3xl border p-0 shadow-sm">
+        <CardContent className="space-y-6 p-8 text-right">
           {/* Introduction */}
           <p className="text-neutrals-700 text-lg leading-relaxed">
             إذا كنت بحاجة إلى دعم لمبادرتك، أنت في المكان المناسب:
           </p>
 
           {/* Steps */}
-          <div className="space-y-2 mt-4">
+          <div className="mt-4 space-y-2">
             <GuideItem
               title=""
               content="حدّد نوع المساعدة التي تحتاجها (مالية، تقنية، لوجستية، تدريبية…)."
@@ -40,7 +40,7 @@ export default function AssistancePage() {
           </div>
 
           {/* Closing Statement */}
-          <p className="text-primary-500 font-semibold text-paragraph-lg pt-4 text-center">
+          <p className="text-primary-500 text-paragraph-lg pt-4 text-center font-semibold">
             مع بادر… الدعم أقرب مما تتصور.
           </p>
         </CardContent>

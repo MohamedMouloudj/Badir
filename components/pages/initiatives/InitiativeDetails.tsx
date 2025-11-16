@@ -67,7 +67,7 @@ export default function InitiativeDetails({
     <>
       {/* Description */}
       <div className="mb-6">
-        <h2 className="text-xl font-semibold text-neutrals-700 mb-2">
+        <h2 className="text-neutrals-700 mb-2 text-xl font-semibold">
           وصف المبادرة
         </h2>
         <div className="text-neutrals-600 prose max-w-none">
@@ -78,16 +78,16 @@ export default function InitiativeDetails({
             initiative.descriptionAr.length > 300 && (
               <button
                 onClick={() => setShowFullDescription(!showFullDescription)}
-                className="text-primary-600 font-medium flex items-center mt-2"
+                className="text-primary-600 mt-2 flex items-center font-medium"
               >
                 {showFullDescription ? (
                   <>
-                    <ChevronUp className="h-4 w-4 ml-1" />
+                    <ChevronUp className="ml-1 h-4 w-4" />
                     عرض أقل
                   </>
                 ) : (
                   <>
-                    <ChevronDown className="h-4 w-4 ml-1" />
+                    <ChevronDown className="ml-1 h-4 w-4" />
                     عرض المزيد
                   </>
                 )}
@@ -97,18 +97,18 @@ export default function InitiativeDetails({
       </div>
 
       {/* Initiative Meta */}
-      <div className="bg-neutrals-100 p-6 rounded-lg mb-6">
-        <h2 className="text-lg font-semibold text-neutrals-700 mb-4">
+      <div className="bg-neutrals-100 mb-6 rounded-lg p-6">
+        <h2 className="text-neutrals-700 mb-4 text-lg font-semibold">
           معلومات المبادرة
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {/* Date and Time */}
           <div className="flex gap-3">
-            <CalendarDays className="h-5 w-5 text-primary-600" />
+            <CalendarDays className="text-primary-600 h-5 w-5" />
             <div>
-              <p className="text-sm text-neutrals-500">التاريخ</p>
-              <p className="font-medium text-neutrals-700">
+              <p className="text-neutrals-500 text-sm">التاريخ</p>
+              <p className="text-neutrals-700 font-medium">
                 {formatDate(initiative.startDate)} -{" "}
                 {formatDate(initiative.endDate)}
               </p>
@@ -118,10 +118,10 @@ export default function InitiativeDetails({
           {/* Registration Deadline */}
           {initiative.registrationDeadline && (
             <div className="flex gap-3">
-              <Clock className="h-5 w-5 text-primary-600" />
+              <Clock className="text-primary-600 h-5 w-5" />
               <div>
-                <p className="text-sm text-neutrals-500">آخر موعد للتسجيل</p>
-                <p className="font-medium text-neutrals-700">
+                <p className="text-neutrals-500 text-sm">آخر موعد للتسجيل</p>
+                <p className="text-neutrals-700 font-medium">
                   {formatDate(initiative.registrationDeadline)}
                 </p>
               </div>
@@ -130,10 +130,10 @@ export default function InitiativeDetails({
 
           {/* Location */}
           <div className="flex gap-3">
-            <MapPin className="h-5 w-5 text-primary-600" />
+            <MapPin className="text-primary-600 h-5 w-5" />
             <div>
-              <p className="text-sm text-neutrals-500">الموقع</p>
-              <p className="font-medium text-neutrals-700">
+              <p className="text-neutrals-500 text-sm">الموقع</p>
+              <p className="text-neutrals-700 font-medium">
                 {initiative.location}, {initiative.city}
                 {initiative.state && `, ${initiative.state}`}
                 {initiative.country && `, ${initiative.country}`}
@@ -143,10 +143,10 @@ export default function InitiativeDetails({
 
           {/* Participant Count */}
           <div className="flex gap-3">
-            <Users className="h-5 w-5 text-primary-600" />
+            <Users className="text-primary-600 h-5 w-5" />
             <div>
-              <p className="text-sm text-neutrals-500">المشاركون</p>
-              <p className="font-medium text-neutrals-700">
+              <p className="text-neutrals-500 text-sm">المشاركون</p>
+              <p className="text-neutrals-700 font-medium">
                 {initiative.currentParticipants}
                 {initiative.maxParticipants
                   ? ` / ${initiative.maxParticipants}`
@@ -158,14 +158,14 @@ export default function InitiativeDetails({
       </div>
 
       {/* Organizer Info */}
-      <div className="bg-neutrals-100 p-6 rounded-lg mb-6">
-        <h2 className="text-lg font-semibold text-neutrals-700 mb-4">
+      <div className="bg-neutrals-100 mb-6 rounded-lg p-6">
+        <h2 className="text-neutrals-700 mb-4 text-lg font-semibold">
           منظم المبادرة
         </h2>
 
         <Link href={organizerProfileLink}>
-          <div className="flex items-center gap-4 hover:bg-neutrals-200 p-3 rounded-lg transition-colors">
-            <div className="relative w-12 h-12 rounded-full overflow-hidden border border-neutrals-300">
+          <div className="hover:bg-neutrals-200 flex items-center gap-4 rounded-lg p-3 transition-colors">
+            <div className="border-neutrals-300 relative h-12 w-12 overflow-hidden rounded-full border">
               {organizerImage ? (
                 <Image
                   src={organizerImage}
@@ -174,15 +174,15 @@ export default function InitiativeDetails({
                   className="object-cover"
                 />
               ) : initiative.organizerType === "user" ? (
-                <User className="w-full h-full p-2 text-neutrals-500" />
+                <User className="text-neutrals-500 h-full w-full p-2" />
               ) : (
-                <Building className="w-full h-full p-2 text-neutrals-500" />
+                <Building className="text-neutrals-500 h-full w-full p-2" />
               )}
             </div>
 
             <div>
-              <p className="font-medium text-neutrals-700">{organizerName}</p>
-              <p className="text-sm text-neutrals-500">
+              <p className="text-neutrals-700 font-medium">{organizerName}</p>
+              <p className="text-neutrals-500 text-sm">
                 {initiative.organizerType === "user" ? "فرد" : "منظمة"}
               </p>
             </div>

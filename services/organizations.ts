@@ -47,7 +47,7 @@ export class OrganizationService {
 
   static async updateOrganization(
     id: string,
-    data: Prisma.OrganizationUpdateInput
+    data: Prisma.OrganizationUpdateInput,
   ) {
     return await prisma.organization.update({
       where: { id },
@@ -63,7 +63,7 @@ export class OrganizationService {
 
   static async getMany(
     filters: OrganizationFilters = {},
-    pagination: PaginationParams = { page: 1, limit: 12 }
+    pagination: PaginationParams = { page: 1, limit: 12 },
   ): Promise<PaginatedResponse<OrganizationCard>> {
     const { page, limit } = pagination;
     const skip = (page - 1) * limit;
@@ -98,7 +98,7 @@ export class OrganizationService {
         foundingDate: org.foundingDate,
         membersCount: org.membersCount,
         isApproved: org.isVerified,
-      }))
+      })),
     );
 
     const totalPages = Math.ceil(total / limit);
@@ -117,7 +117,7 @@ export class OrganizationService {
   }
 
   static async getOrganizationByUserId(
-    userId: string
+    userId: string,
   ): Promise<Organization | null> {
     return await prisma.organization.findFirst({
       where: {
@@ -132,7 +132,7 @@ export class OrganizationService {
    * @returns List of organizations
    */
   static async getUserOrganizations(
-    userId: string
+    userId: string,
   ): Promise<OrganizationCard[]> {
     try {
       const organizations = await prisma.organization.findMany({

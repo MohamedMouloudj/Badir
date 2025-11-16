@@ -24,7 +24,7 @@ async function getStats(): Promise<{
 export default async function Stats() {
   const stats = await getStats();
   return (
-    <section className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-6">
+    <section className="grid grid-cols-1 gap-6 p-6 sm:grid-cols-3">
       {statistics.map((stat) => (
         <Stat key={stat.id} config={stat} stat={stats} />
       ))}

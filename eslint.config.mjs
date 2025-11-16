@@ -20,15 +20,7 @@ const eslintConfig = [
     },
     rules: {
       "@typescript-eslint/no-empty-object-type": "off",
-      "prettier/prettier": [
-        "error",
-        {
-          singleQuote: false,
-          endOfLine: "auto",
-          tabWidth: 2,
-          plugins: ["prettier-plugin-tailwindcss"],
-        },
-      ],
+      "prettier/prettier": "error",
     },
   },
   {

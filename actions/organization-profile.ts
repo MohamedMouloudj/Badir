@@ -18,7 +18,7 @@ import { OrganizationService } from "@/services/organizations";
 import { getCallingCodeFromCountry, mimeTypeToExtension } from "@/lib/utils";
 import path from "path";
 import { OrganizationProfile, validateOrganizationProfile } from "@/schemas";
-import { getPublicStorageUrl } from "./helpers";
+import { getPublicStorageUrl } from "./helpers-sf";
 
 type FileField = "officialLicense" | "logo" | "identificationCard";
 

@@ -43,7 +43,6 @@ export function toPlainUser(user: User, qualifications?: UserQualification) {
     phoneCountryCode: user.phone
       ? getCountryFromCallingCode(user.phone.split(" ")[0].replace("+", ""))
       : "DZ",
-    phone: user.phone ? user.phone.split(" ")[1] : "",
     latitude: user.latitude ? Number(user.latitude) : undefined,
     longitude: user.longitude ? Number(user.longitude) : undefined,
   };

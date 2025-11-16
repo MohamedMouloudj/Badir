@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useForm, Controller } from "react-hook-form";
 import FormInput from "@/components/FormInput";
-import country from "country-list-js";
 import { OrganizationProfile } from "@/schemas/organizatioProfieSchema";
 import { handleFileUpload, mimeTypeToExtension } from "@/lib/utils";
 import { BUCKET_MIME_TYPES, BUCKET_SIZE_LIMITS } from "@/types/Statics";
@@ -24,6 +23,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { updateOrganizationProfileAction } from "@/actions/organization-profile";
 import { organizationTypeOptions, workAreaOptions } from "@/types/Profile";
 import { isEqual } from "lodash";
+import { countryList } from "@/data/statics";
 
 interface OrganizationProfileFormProps {
   defaultValues: Partial<OrganizationProfile> & { createdAt?: Date | string };
@@ -97,10 +97,9 @@ export default function OrganizationProfileForm({
   };
 
   const COUNTRIES = useMemo(() => {
-    const countries = country.names();
-    return countries.sort().map((countryName) => ({
-      value: countryName,
-      label: countryName,
+    return countryList.sort().map((country) => ({
+      value: country.labelEn,
+      label: country.label,
     }));
   }, []);
 

@@ -17,7 +17,7 @@ import path from "path";
 import { UserProfile, validateUserProfile } from "@/schemas";
 import { UserService } from "@/services/user";
 import { ActionResponse } from "@/types/Statics";
-import { getPublicStorageUrl } from "./helpers";
+import { getPublicStorageUrl } from "./helpers-sf";
 import { AUTHORIZED_REDIRECTION } from "@/data/routes";
 
 export async function updateUserProfileAction(

@@ -22,7 +22,7 @@ export default function Footer() {
             className="h-auto w-auto object-contain"
           />
         </a>
-        <div className="bg-neutrals-100 h-16 w-0.5" />
+        <div className="bg-neutrals-100 h-10 w-0.5" />
         <Image
           src="/images/logos/logo-white.png"
           alt="Badir and Bunian logos"
@@ -80,7 +80,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/assistance"
+                  href="/initiatives"
                   className="text-neutrals-200 text-sm transition-colors duration-200 hover:text-white"
                 >
                   ابحث عن مبادرات

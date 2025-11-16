@@ -19,8 +19,7 @@ import { toast } from "sonner";
 import { InitiativeStatus, TargetAudience } from "@prisma/client";
 import { Loader2, Save, Info, Check } from "lucide-react";
 import AppButton from "@/components/AppButton";
-import { targetAudienceOptions } from "@/data/statics";
-import country from "country-list-js";
+import { countryList, targetAudienceOptions } from "@/data/statics";
 import { BUCKET_MIME_TYPES, BUCKET_SIZE_LIMITS } from "@/types/Statics";
 import { handleFileUpload, mimeTypeToExtension } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -176,10 +175,9 @@ export default function InitiativeForm({
     }
   });
   const COUNTRIES = useMemo(() => {
-    const countries = country.names();
-    return countries.sort().map((countryName) => ({
-      value: countryName,
-      label: countryName,
+    return countryList.sort().map((country) => ({
+      value: country.labelEn,
+      label: country.label,
     }));
   }, []);
 

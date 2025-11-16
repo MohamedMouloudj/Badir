@@ -4,8 +4,8 @@ import { Controller, useFormContext } from "react-hook-form";
 import FormInput from "@/components/FormInput";
 import { sexOptions, Step1FormData } from "@/schemas/signupUserSchema";
 import { useEffect, useMemo } from "react";
-import country from "country-list-js";
 import { toast } from "sonner";
+import { countryList } from "@/data/statics";
 
 export default function Step1PersonalInfo() {
   const {
@@ -37,10 +37,9 @@ export default function Step1PersonalInfo() {
   }, [setValue]);
 
   const COUNTRIES = useMemo(() => {
-    const countries = country.names();
-    return countries.sort().map((countryName) => ({
-      value: countryName,
-      label: countryName,
+    return countryList.sort().map((country) => ({
+      value: country.labelEn,
+      label: country.label,
     }));
   }, []);
 

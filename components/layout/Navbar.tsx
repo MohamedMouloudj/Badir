@@ -13,7 +13,12 @@ export default function Navbar() {
   const pathname = usePathname();
   const navRef = useRef<HTMLElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1023 });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const updateNavbarHeight = () => {
@@ -82,7 +87,7 @@ export default function Navbar() {
       <div className="hidden flex-1 items-center gap-6 md:flex">
         <ul>
           {landingRoute.map((navRoute) => {
-            if (isTablet && navRoute.url === "/") {
+            if (mounted && isTablet && navRoute.url === "/") {
               return null;
             }
             return (

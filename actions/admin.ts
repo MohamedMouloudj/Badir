@@ -8,7 +8,7 @@ import {
 import { OrganizationStatus, InitiativeStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { ActionResponse } from "@/types/Statics";
-import { checkAdminPermission } from "./helpers";
+import { checkAdminPermission } from "./helpers-sf";
 
 /**
  * Get paginated organizations for admin review

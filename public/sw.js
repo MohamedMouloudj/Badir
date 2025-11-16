@@ -15,7 +15,6 @@ self.addEventListener("install", (event) => {
     caches
       .open(CACHE_NAME)
       .then((cache) => {
-        console.log("Opened cache");
         return cache.addAll(PRECACHE_URLS);
       })
       .then(() => self.skipWaiting())
@@ -33,7 +32,6 @@ self.addEventListener("activate", (event) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
             if (!cacheWhitelist.includes(cacheName)) {
-              console.log("Deleting old cache:", cacheName);
               return caches.delete(cacheName);
             }
           })
@@ -84,7 +82,6 @@ self.addEventListener("fetch", (event) => {
           return response;
         })
         .catch(() => {
-          // Return offline page if available
           return caches.match("/offline.html");
         });
     })

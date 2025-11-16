@@ -25,7 +25,10 @@
     "lint-staged": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": "eslint --fix --quiet",
+    "*.{js,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix --quiet"
+    ],
     "*.{json,md,yaml,yml}": "prettier --write"
   },
   "overrides": {
@@ -119,6 +122,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "lint-staged": "^16.2.6",
+    "prettier": "^3.6.2",
     "prisma": "^6.16.2",
     "tailwindcss": "^4",
     "tsx": "^4.20.5",

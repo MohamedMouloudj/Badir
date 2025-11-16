@@ -25,7 +25,8 @@
     "lint-staged": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": "eslint --fix --quiet"
+    "*.{js,ts,tsx}": "eslint --fix --quiet",
+    "*.{json,md,yaml,yml}": "prettier --write"
   },
   "overrides": {
     "dompurify": "^3.3.0",

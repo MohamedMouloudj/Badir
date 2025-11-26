@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import FormInput from "@/components/FormInput";
-import { Button } from "@/components/ui/button";
 import { joinInitiativeAction } from "@/actions/participation";
 import { FormFieldType } from "@/schemas";
 import AppButton from "@/components/AppButton";

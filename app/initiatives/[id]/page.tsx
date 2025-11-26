@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import parse from "html-react-parser";
-import DOMPurify from "isomorphic-dompurify";
+// import DOMPurify from "isomorphic-dompurify";
 import {
   InitiativeStatus,
   ParticipantRole,
@@ -23,6 +23,7 @@ import RequestsPanel from "@/components/pages/initiatives/RequestsPanel";
 import InitiativeHeader from "@/components/pages/InitiativeHeader";
 import AppButton from "@/components/AppButton";
 import Link from "next/link";
+import { sanitize } from "@/lib/santitize-server";
 
 export async function generateMetadata({
   params,
@@ -106,10 +107,10 @@ export default async function InitiativeDetailsPage({
     ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (initiative.participationQstForm as any[]).map((q) => ({
         id: q.id,
-        question: DOMPurify.sanitize(q.question),
+        question: sanitize(q.question),
         type: q.type,
         required: q.required,
-        options: q.options?.map(DOMPurify.sanitize) || [],
+        options: q.options?.map(sanitize) || [],
       }))
     : [];
 
@@ -233,7 +234,7 @@ export default async function InitiativeDetailsPage({
 
           <div className="flex items-center justify-between">
             <h1 className="text-primary-600 text-3xl font-bold">
-              {parse(DOMPurify.sanitize(initiative.titleAr))}
+              {parse(sanitize(initiative.titleAr))}
             </h1>
 
             <div className="flex gap-2">

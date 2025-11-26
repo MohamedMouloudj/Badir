@@ -18,8 +18,6 @@ import { getPublicStorageUrl } from "./helpers-sf";
 export async function createInitiativeAction(
   data: NewInitiativeFormData,
 ): Promise<ActionResponse<NewInitiativeFormData, { initiativeId?: string }>> {
-  console.log("createInitiativeAction data:", data);
-
   try {
     const session = await auth.api.getSession({
       headers: await headers(),

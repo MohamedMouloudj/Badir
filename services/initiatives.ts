@@ -148,8 +148,9 @@ export class InitiativeService {
       if (filters.hasAvailableSpots) {
         const initiativesWithSpots = await prisma.$queryRaw<{ id: string }[]>`
           SELECT id FROM "initiatives" 
-          WHERE "max_participants" IS NULL 
-          OR "current_participants" < "max_participants"
+          WHERE ("max_participants" IS NULL 
+          OR "current_participants" < "max_participants")
+          AND "end_date" >= NOW()
         `;
 
         const availableIds = initiativesWithSpots.map((item) => item.id);

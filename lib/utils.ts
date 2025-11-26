@@ -176,7 +176,7 @@ export function extractImageSrcsFromHtmlBrowser(html: string): string[] {
 }
 
 /**
- * Optional: normalize/validate src (allow only http(s) or data URIs).
+ * normalize/validate src (allow only http(s) or data URIs).
  * Returns null for invalid src.
  */
 export function validateImageSrc(src: string): string | null {

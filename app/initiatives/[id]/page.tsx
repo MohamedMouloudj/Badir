@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import parse from "html-react-parser";
-import DOMPurify from "isomorphic-dompurify";
 import {
   InitiativeStatus,
   ParticipantRole,
@@ -106,10 +105,10 @@ export default async function InitiativeDetailsPage({
     ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (initiative.participationQstForm as any[]).map((q) => ({
         id: q.id,
-        question: DOMPurify.sanitize(q.question),
+        question: q.question,
         type: q.type,
         required: q.required,
-        options: q.options?.map(DOMPurify.sanitize) || [],
+        options: q.options || [],
       }))
     : [];
 
@@ -233,7 +232,7 @@ export default async function InitiativeDetailsPage({
 
           <div className="flex items-center justify-between">
             <h1 className="text-primary-600 text-3xl font-bold">
-              {parse(DOMPurify.sanitize(initiative.titleAr))}
+              {parse(initiative.titleAr)}
             </h1>
 
             <div className="flex gap-2">

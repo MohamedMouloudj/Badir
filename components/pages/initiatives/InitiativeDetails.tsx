@@ -14,9 +14,9 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import parse from "html-react-parser";
-import DOMPurify from "isomorphic-dompurify";
 import { formatDate } from "@/lib/utils";
 import { InitiativeService } from "@/services/initiatives";
+import { sanitize } from "@/lib/santitize-client";
 
 interface InitiativeDetailsProps {
   initiative: NonNullable<
@@ -53,7 +53,11 @@ export default function InitiativeDetails({
     return () => {
       setOrganizerImage(null);
     };
-  }, []);
+  }, [
+    initiative.organizerOrg,
+    initiative.organizerType,
+    initiative.organizerUser,
+  ]);
 
   const organizerProfileLink =
     initiative.organizerType === "user"
@@ -72,7 +76,7 @@ export default function InitiativeDetails({
         </h2>
         <div className="text-neutrals-600 prose max-w-none">
           <div className={showFullDescription ? "" : "line-clamp-4"}>
-            {parse(DOMPurify.sanitize(initiative.descriptionAr))}
+            {parse(sanitize(initiative.descriptionAr))}
           </div>
           {initiative.descriptionAr &&
             initiative.descriptionAr.length > 300 && (

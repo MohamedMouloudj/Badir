@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   InitiativeCard as InitiativeCardType,
   InitiativeFilters,

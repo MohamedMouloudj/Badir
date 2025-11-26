@@ -164,7 +164,7 @@ export async function updatePostAction(
             if (parts[1]) {
               await storage.deleteFile("post-images", parts[1]);
             }
-          } catch (e) {
+          } catch {
             console.warn("Could not derive storage path for:", imageUrl);
           }
         }
@@ -269,7 +269,7 @@ export async function uploadPostImageAction(
     const res = await storage.uploadFile("post-images", path, buffer, type);
     const publicUrl = await storage.getPublicUrl("post-images", res.path);
     return { success: true, url: publicUrl };
-  } catch (e) {
+  } catch {
     return { success: false, error: "فشل رفع الصورة" };
   }
 }
@@ -281,7 +281,7 @@ export async function deletePostImageAction(imageUrl: string) {
     const storage = new StorageHelpers();
     await storage.deleteFile("post-images", imageUrl);
     return { success: true };
-  } catch (e) {
+  } catch {
     return { success: false, error: "فشل حذف الصورة" };
   }
 }
@@ -344,7 +344,7 @@ export async function getPostAction(postId: string) {
         createdAt: post.createdAt,
       },
     };
-  } catch (e) {
+  } catch {
     return { success: false, error: "فشل في جلب المنشور" };
   }
 }

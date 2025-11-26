@@ -1,13 +1,12 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import GuideItem from "@/components/pages/GuideItem";
 
 export default function HowItWorksPage() {
   return (
     <section className="container mx-auto px-4 py-12" dir="rtl">
       {/* Main Title */}
       <h2 className="section-title text-primary-500 mb-10 text-center font-bold">
-        كيف تعمل
+        كيف تعمل منصّتُنا؟
       </h2>
 
       {/* Guide Card */}
@@ -24,43 +23,38 @@ export default function HowItWorksPage() {
           </p>
 
           {/* Steps */}
-          <div className="mt-6 space-y-2">
-            <GuideItem
-              title="ابدأ التسجيل"
-              content="اختر حسابك كمتطوع أو كمنظمة، واملأ بياناتك بدقة."
-              isBullet={false}
-            />
+          <ol className="mt-6 list-inside list-decimal space-y-4 text-lg leading-relaxed">
+            <li>
+              <span className="text-primary-500 ms-1 font-bold">
+                أنشئ حسابك:
+              </span>
+              سجّل كمستخدم (متطوّع، مستفيد) أو كمنظمة (جمعية، نادي، مؤسسة…).
+            </li>
 
-            <GuideItem
-              title="اعرض أو انضم"
-              content="أضف مبادرتك الخاصة أو اختر من بين المبادرات الميدانية أو الإلكترونية المنشورة."
-              isBullet={false}
-            />
+            <li>
+              <span className="text-primary-500 text-secondary-sm ms-1 font-bold">
+                استكشف واطلب:
+              </span>
+              ابحث عن الفرص التطوعية والمبادرات المتاحة، أو قدّم طلب المساعدة
+              عبر نموذج &quot;تواصل معنا&quot;.
+            </li>
 
-            <GuideItem
-              title="التوافق القيمي"
-              content="نتأكد أن المبادرة وأسلوب العمل يتماشيان مع الضوابط الشرعية وأخلاقيات العمل التطوعي."
-              isBullet={false}
-            />
+            <li>
+              <span className="text-primary-500 text-secondary-sm ms-1 font-bold">
+                أطلق مبادرتك:
+              </span>
+              اضغط على &quot;مبادرة جديدة&quot;، ثم أدخِل معلومات مبادرتك ليقوم
+              فريقنا بدراستها والتواصل معك في أسرع وقت.
+            </li>
 
-            <GuideItem
-              title="التواصل والتنسيق"
-              content="تفاعل مع فريقك أو مع المتطوعين الذين اخترتهم، وضعوا خطة واضحة."
-              isBullet={false}
-            />
-
-            <GuideItem
-              title="العمل الميداني أو الرقمي"
-              content="أنجز المهام بروح الفريق، وبتعاون قائم على الاحترام والثقة."
-              isBullet={false}
-            />
-
-            <GuideItem
-              title="المتابعة والتقارير"
-              content="عبر لوحة التحكم، يمكنك متابعة أثر المبادرة ونتائجها بشكل شفاف."
-              isBullet={false}
-            />
-          </div>
+            <li>
+              <span className="text-primary-500 text-secondary-sm ms-1 font-bold">
+                تواصل وتعاون:
+              </span>
+              تتيح لك المنصّة التواصل مباشرة مع المتطوعين أو مع الجهات الداعمة
+              لإنجاح مبادرتك.
+            </li>
+          </ol>
 
           {/* Closing Statement */}
           <p className="text-primary-500 text-paragraph-lg pt-4 text-center font-semibold">

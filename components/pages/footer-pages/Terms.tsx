@@ -14,7 +14,7 @@ export default function Terms() {
           <Scale className="h-8 w-8 text-white" />
         </div>
         <h2 className="text-primary-500 section-title mb-2 font-bold">
-          شروط الاستخدام
+          شروط الاستخدام لمنصة بادر
         </h2>
         <p className="text-neutrals-600 text-secondary-sm max-w-2xl text-center font-semibold">
           اقرأ بعناية وتأكد من استخدام منصتنا وفقًا لشروط استخدامنا
@@ -24,71 +24,60 @@ export default function Terms() {
       {/* Introduction Section */}
       <FooterPageSection title="مقدمة">
         <p className="mb-2">
-          مرحبًا بك في &quot;منصة بادر&quot; - الفصل التطوعي. تُحكم هذه الشروط
-          والأحكام استخدامك للمنصة العربية السعودية. هدفنا هو جعلها واضحة
-          ومفهومة لتوضيح التوقعات وحماية الحقوق المتبادلة على منصتنا.
+          يخضع استخدامك لمنصة بادر لهذه الشروط والأحكام، والتي قد تتغير عند
+          الضرورة.
         </p>
-        <p>
-          نحن نحتفظ بالحق في تعديل هذه الشروط من وقت لآخر وسيتم إعلام جميع
-          المستخدمين بهذه التغييرات. من المستحسن مراجعة الشروط بانتظاذ للبقاء
-          على اطلاع بأحدث التحديث.
-        </p>
+        <p>استمرارك في الاستخدام يعني اطلاعك على التحديثات وموافقتك عليها.</p>
       </FooterPageSection>
 
       {/* Accepting Terms Section */}
       <FooterPageSection title="قبول الشروط">
-        <FooterPageItem text="بالوصول إلى منصتنا أو استخدامها، فإنك توافق على الالتزام بهذه الشروط والأحكام" />
-        <FooterPageItem text="إذا كنت لا توافق على أي جزء من هذه الشروط، فيرجى عدم استخدام المنصة" />
-        <FooterPageItem text="تحتفظ بادر بالحق في تغيير هذه الشروط في أي وقت دون إشعار مسبق" />
-        <FooterPageItem text="يعتبر استمرارك لاستخدام المنصة بعد نشر التغييرات موافقة على الشروط المحدثة" />
+        <FooterPageItem text="بدخولك المنصة، فأنت توافق على الالتزام الكامل بهذه الشروط" />
+        <FooterPageItem text="إن لم توافق، نرجو عدم استخدام المنصة" />
       </FooterPageSection>
 
       {/* Acceptable Use Section */}
       <FooterPageSection title="الاستخدام المقبول">
-        <FooterPageItem text="يجب استخدام المنصة للأغراض المشروعة فقط" />
-        <FooterPageItem text="يلتزم جميع مستخدمي بادر باحترام حقوق الآخرين" />
-        <FooterPageItem text="عدم مشاركة معلومات مضللة أو غير صحيحة أو إزعاج الغير" />
-        <FooterPageItem text="احترام خصوصية المستخدمين الآخرين وعدم التشهير بهم" />
+        <FooterPageItem text="استخدام المنصة لأغراض مشروعة فقط" />
+        <FooterPageItem text="احترام الآخرين وعدم الإساءة أو نشر المعلومات المضللة" />
+        <FooterPageItem text="عدم انتهاك خصوصية أي مستخدم أو التشهير به" />
       </FooterPageSection>
 
       {/* Content and IP Section */}
-      <FooterPageSection title="المحتوى والملكية الفكرية">
-        <FooterPageItem text="تحتفظ منصتنا بجميع حقوق الملكية الفكرية للمنصة" />
-        <FooterPageItem text="المحتوى الذي تنشره على المنصة يبقى ملكك ولكننا نحتفظ باستخدامه" />
-        <FooterPageItem text="يحظر أي انتهاك لحقوق الملكية الفكرية عند استخدام منصتنا" />
-        <FooterPageItem text="نحترم حقوق الملكية الفكرية للآخرين ونتوقع منك فعل ذلك أيضًا" />
+      <FooterPageSection title="الملكية الفكرية">
+        <FooterPageItem text="جميع حقوق المنصة محفوظة (التصميم، البرمجيات، المحتوى)" />
+        <FooterPageItem text="تبقى حقوق ما تنشره ملكًا لك، مع منح المنصة حق استخدامه لتطوير خدماتها" />
+        <FooterPageItem text="يُمنع أي خرق لحقوق الملكية الفكرية الخاصة بالمنصة أو بالغير" />
       </FooterPageSection>
 
       {/* Responsibility Section */}
-      <FooterPageSection title="المسؤولية وإخلاء المسؤولية">
-        <FooterPageItem text="تنصل المنصة مسؤوليتها إلى أقصى حد ممكن من أي ضرر يلحق بالمستخدم" />
-        <FooterPageItem text="لسنا مسؤولين عن أي أضرار مباشرة أو غير مباشرة من استخدام المنصة" />
-        <FooterPageItem text="معلوماتك الشخصية هي مسؤوليتك، فكن حذرًا دائمًا" />
-        <FooterPageItem text="يرجى الإبلاغ عن جميع المشكلات إذا لاحظت أي خرق" />
+      <FooterPageSection title="المسؤولية">
+        <FooterPageItem text="المنصة غير مسؤولة عن أي أضرار ناتجة عن سوء الاستخدام أو الأعطال الخارجة عن إرادتها" />
+        <FooterPageItem text="حماية معلوماتك الشخصية مسؤوليتك" />
+        <FooterPageItem text="يرجى الإبلاغ عن أي خروقات أو مشاكل" />
       </FooterPageSection>
 
       {/* Account Rules Section */}
       <FooterPageSection title="قواعد الحساب">
-        <FooterPageItem text="إنشاء الحساب: عليك تقديم معلومات صحيحة ودقيقة عند إنشاء حسابك" />
-        <FooterPageItem text="أمان الحساب: أنت مسؤول عن الحفاظ على سرية بيانات حسابك" />
-        <FooterPageItem text="استخدام الحساب: يجب عدم مشاركة حسابك مع أي شخص أو مؤسسة أخرى" />
-        <FooterPageItem text="إنهاء الحساب: يمكننا إنهاء حسابك أو إيقافه إذا خالفت أي من سياسات المنصة" />
+        <FooterPageItem text="تقديم معلومات صحيحة عند التسجيل" />
+        <FooterPageItem text="الحفاظ على سرية معلومات الدخول" />
+        <FooterPageItem text="عدم مشاركة الحساب مع أي شخص" />
+        <FooterPageItem text="يحق للمنصة إيقاف الحساب عند مخالفة السياسات" />
       </FooterPageSection>
 
       {/* Prohibited Activities Section */}
       <FooterPageSection title="الأنشطة المحظورة">
-        <FooterPageItem text="نشر محتوى يروج للعنف" />
-        <FooterPageItem text="محاولة اختراق أي جزء من المنصة" />
-        <FooterPageItem text="الوصول إلى بيانات شخصية" />
-        <FooterPageItem text="استخدام المنصة للأغراض التجارية دون إذن صريح بها" />
+        <FooterPageItem text="نشر محتوى مخالف للتعاليم ديننا أو يدعو للعنف أو الكراهية أو السياسة" />
+        <FooterPageItem text="محاولة اختراق المنصة أو تعطيلها" />
+        <FooterPageItem text="الوصول غير المصرح به لبيانات الآخرين" />
+        <FooterPageItem text="استخدام المنصة تجاريًا دون إذن" />
       </FooterPageSection>
 
       {/* Service Termination Section */}
       <FooterPageSection title="إنهاء الخدمة">
         <p className="mb-2">
-          نحتفظ بحق تعليق أو إنهاء وصولك واستخدامك للمنصة إذا كان هناك أي شك في
-          انتهاك شروط الاستخدام. لن نكون مسؤولين عن أي خسارة أو ضرر قد يترتب على
-          إنهاء الحساب أو توقيفه معنا بعناية.
+          يحق للمنصة تعليق أو إنهاء الحساب عند الاشتباه في مخالفة الشروط، دون
+          تحمل مسؤولية عن أي خسائر قد تنتج عن ذلك.
         </p>
       </FooterPageSection>
 

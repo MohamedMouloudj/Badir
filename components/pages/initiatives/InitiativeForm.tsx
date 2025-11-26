@@ -153,7 +153,7 @@ export default function InitiativeForm({
 
         if (result.success) {
           toast.success(result.message || "تم إنشاء المبادرة بنجاح");
-          router.push(`/initiatives/${result.data?.initiativeId}`);
+          router.replace(`/initiatives/${result.data?.initiativeId}`);
         } else {
           toast.error(result.error || "حدث خطأ أثناء إنشاء المبادرة");
         }

@@ -9,6 +9,8 @@ import {
   CountryCallingCode,
 } from "libphonenumber-js";
 import * as cheerio from "cheerio";
+// import { JSDOM } from "jsdom";
+// import createDOMPurify from "dompurify";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -176,7 +178,7 @@ export function extractImageSrcsFromHtmlBrowser(html: string): string[] {
 }
 
 /**
- * Optional: normalize/validate src (allow only http(s) or data URIs).
+ * normalize/validate src (allow only http(s) or data URIs).
  * Returns null for invalid src.
  */
 export function validateImageSrc(src: string): string | null {
@@ -191,3 +193,27 @@ export function validateImageSrc(src: string): string | null {
     return null;
   }
 }
+
+// let DOMPurify: ReturnType<typeof createDOMPurify>;
+
+/**
+ * Sanitize HTML string to prevent XSS attacks.
+ * Works both on server and client.
+ * I have created this after getting ESM coompatibility issues with isomorphic-dompurify in production (Vercel).
+ */
+// export function sanitize(dirty: string): string {
+//   if (typeof window === "undefined") {
+//     // Server-side
+//     if (!DOMPurify) {
+//       const window = new JSDOM("").window;
+//       DOMPurify = createDOMPurify(window as any);
+//     }
+//     return DOMPurify.sanitize(dirty);
+//   } else {
+//     // Client-side
+//     if (!DOMPurify) {
+//       DOMPurify = createDOMPurify(window);
+//     }
+//     return DOMPurify.sanitize(dirty);
+//   }
+// }

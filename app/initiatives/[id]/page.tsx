@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import parse from "html-react-parser";
-// import DOMPurify from "isomorphic-dompurify";
 import {
   InitiativeStatus,
   ParticipantRole,
@@ -107,10 +106,10 @@ export default async function InitiativeDetailsPage({
     ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (initiative.participationQstForm as any[]).map((q) => ({
         id: q.id,
-        question: sanitize(q.question),
+        question: q.question,
         type: q.type,
         required: q.required,
-        options: q.options?.map(sanitize) || [],
+        options: q.options || [],
       }))
     : [];
 

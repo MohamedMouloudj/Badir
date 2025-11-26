@@ -24,6 +24,7 @@ import { BUCKET_MIME_TYPES, BUCKET_SIZE_LIMITS } from "@/types/Statics";
 import { handleFileUpload, mimeTypeToExtension } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InitiativeService } from "@/services/initiatives";
+import { sanitize } from "@/lib/santitize-client";
 
 type CategoryOption = {
   value: string;
@@ -144,13 +145,37 @@ export default function InitiativeForm({
   const onSubmit = async (data: NewInitiativeFormData) => {
     try {
       startTransition(async () => {
+        const sanitizedData: NewInitiativeFormData = {
+          ...data,
+          titleAr: sanitize(data.titleAr),
+          titleEn: data.titleEn ? sanitize(data.titleEn) : undefined,
+          shortDescriptionAr: data.shortDescriptionAr
+            ? sanitize(data.shortDescriptionAr)
+            : undefined,
+          shortDescriptionEn: data.shortDescriptionEn
+            ? sanitize(data.shortDescriptionEn)
+            : undefined,
+          descriptionAr: data.descriptionAr ? sanitize(data.descriptionAr) : "",
+          descriptionEn: data.descriptionEn
+            ? sanitize(data.descriptionEn)
+            : undefined,
+          location: sanitize(data.location),
+          city: sanitize(data.city),
+          state: data.state ? sanitize(data.state) : undefined,
+          // Sanitize form questions
+          participationQstForm: data.participationQstForm?.map((field) => ({
+            ...field,
+            question: sanitize(field.question),
+            options: field.options?.map(sanitize) || [],
+          })),
+        };
+
         let result;
         if (initialData) {
-          result = await updateInitiativeAction(initialData.id, data);
+          result = await updateInitiativeAction(initialData.id, sanitizedData);
         } else {
-          result = await createInitiativeAction(data);
+          result = await createInitiativeAction(sanitizedData);
         }
-
         if (result.success) {
           toast.success(result.message || "تم إنشاء المبادرة بنجاح");
           router.replace(`/initiatives/${result.data?.initiativeId}`);

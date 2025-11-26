@@ -14,7 +14,6 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import parse from "html-react-parser";
-import DOMPurify from "isomorphic-dompurify";
 import { formatDate } from "@/lib/utils";
 import { InitiativeService } from "@/services/initiatives";
 import { sanitize } from "@/lib/santitize-client";
@@ -54,7 +53,11 @@ export default function InitiativeDetails({
     return () => {
       setOrganizerImage(null);
     };
-  }, []);
+  }, [
+    initiative.organizerOrg,
+    initiative.organizerType,
+    initiative.organizerUser,
+  ]);
 
   const organizerProfileLink =
     initiative.organizerType === "user"

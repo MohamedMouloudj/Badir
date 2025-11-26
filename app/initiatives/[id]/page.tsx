@@ -22,7 +22,6 @@ import RequestsPanel from "@/components/pages/initiatives/RequestsPanel";
 import InitiativeHeader from "@/components/pages/InitiativeHeader";
 import AppButton from "@/components/AppButton";
 import Link from "next/link";
-import { sanitize } from "@/lib/santitize-server";
 
 export async function generateMetadata({
   params,
@@ -233,7 +232,7 @@ export default async function InitiativeDetailsPage({
 
           <div className="flex items-center justify-between">
             <h1 className="text-primary-600 text-3xl font-bold">
-              {parse(sanitize(initiative.titleAr))}
+              {parse(initiative.titleAr)}
             </h1>
 
             <div className="flex gap-2">

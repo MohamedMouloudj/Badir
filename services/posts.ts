@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import { ALLOWED_INITIATIVE_IMAGES } from "@/types/Statics";
 import { PostStatus, PostType, Prisma } from "@prisma/client";
+import { unstable_cache } from "next/cache";
 
 export interface Post
   extends Prisma.InitiativePostGetPayload<{

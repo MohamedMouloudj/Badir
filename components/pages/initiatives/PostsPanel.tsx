@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   deletePostAction,
   pinPostAction,
@@ -59,11 +59,20 @@ export default function PostsPanel({
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [postToDelete, setPostToDelete] = useState<string | null>(null);
 
-  function handleSetPosts(posts: Post[]) {
-    setPosts(posts.filter((p) => p.status === "published" || canWrite));
-  }
+  const handleSetPosts = useCallback(
+    (posts: Post[]) => {
+      const postsWithDates = posts.map((p) => ({
+        ...p,
+        createdAt: new Date(p.createdAt),
+      }));
+      setPosts(
+        postsWithDates.filter((p) => p.status === "published" || canWrite),
+      );
+    },
+    [canWrite],
+  );
 
-  async function load() {
+  const load = useCallback(async () => {
     setLoading(true);
     const res = await listPostsAction(
       initiativeId,
@@ -72,11 +81,11 @@ export default function PostsPanel({
     );
     handleSetPosts((res as any)?.posts || []);
     setLoading(false);
-  }
+  }, [currentUserId, handleSetPosts, initiativeId, onlyMine]);
 
   useEffect(() => {
     load();
-  }, [initiativeId, onlyMine]);
+  }, [initiativeId, load, onlyMine]);
 
   const onDelete = async (postId: string) => {
     const res = await deletePostAction(postId, initiativeId);

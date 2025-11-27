@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 import { InitiativeService } from "@/services/initiatives";
 import { InitiativePostsService } from "@/services/posts";
 import { StorageHelpers } from "@/services/supabase-storage";
@@ -67,6 +67,7 @@ export async function createPostAction(
   }
 
   revalidatePath(`/initiatives/${initiativeId}`);
+  revalidateTag(`initiative-${initiativeId}-posts`);
   return { success: true, message: "تم نشر المنشور" };
 }
 
@@ -179,6 +180,7 @@ export async function updatePostAction(
   }
 
   revalidatePath(`/initiatives/${initiativeId}`);
+  revalidateTag(`initiative-${initiativeId}-posts`);
   return { success: true, message: "تم تحديث المنشور" };
 }
 
@@ -202,6 +204,7 @@ export async function deletePostAction(postId: string, initiativeId: string) {
 
   await InitiativePostsService.delete(postId, session.user.id, !!isManager);
   revalidatePath(`/initiatives/${initiativeId}`);
+  revalidateTag(`initiative-${initiativeId}-posts`);
   return { success: true, message: "تم حذف المنشور" };
 }
 
@@ -231,6 +234,7 @@ export async function pinPostAction(
 
   await InitiativePostsService.pin(postId, pin);
   revalidatePath(`/initiatives/${initiativeId}`);
+  revalidateTag(`initiative-${initiativeId}-posts`);
   return { success: true, message: pin ? "تم التثبيت" : "تم إلغاء التثبيت" };
 }
 
@@ -299,22 +303,37 @@ export async function listPostsAction(
   onlyUserId?: string,
   status?: PostStatus,
 ) {
-  const posts = await InitiativePostsService.list(initiativeId, {
-    onlyUserId,
-    status,
-  });
+  const getCachedPosts = unstable_cache(
+    async (initId: string, userId?: string, postStatus?: PostStatus) => {
+      const posts = await InitiativePostsService.list(initId, {
+        onlyUserId: userId,
+        status: postStatus,
+      });
+
+      return posts.map((p) => ({
+        id: p.id,
+        title: p.title,
+        content: p.content,
+        postType: p.postType,
+        status: p.status,
+        isPinned: p.isPinned,
+        author: p.author,
+        createdAt: p.createdAt.toISOString(), // Serialize dates
+        attachments: p.attachments,
+      }));
+    },
+    [`initiative-${initiativeId}-posts`, onlyUserId || "all", status || "all"],
+    {
+      revalidate: 30,
+      tags: [`initiative-${initiativeId}-posts`],
+    },
+  );
+
+  const posts = await getCachedPosts(initiativeId, onlyUserId, status);
+
   return {
     success: true,
-    posts: posts.map((p) => ({
-      id: p.id,
-      title: p.title,
-      content: p.content,
-      postType: p.postType,
-      status: p.status,
-      isPinned: p.isPinned,
-      author: p.author,
-      createdAt: p.createdAt,
-    })),
+    posts,
   };
 }
 
@@ -379,6 +398,7 @@ export async function updatePostStatusAction(
     !!isManager,
   );
   revalidatePath(`/initiatives/${initiativeId}`);
+  revalidateTag(`initiative-${initiativeId}-posts`);
 
   const statusLabels = {
     published: "منشور",

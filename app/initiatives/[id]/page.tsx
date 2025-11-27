@@ -113,12 +113,12 @@ export default async function InitiativeDetailsPage({
       }))
     : [];
 
-  if (canViewPosts) {
-    if (
-      isManager &&
-      initiative.status !== InitiativeStatus.published &&
-      session?.user.userType === "user"
-    ) {
+  if (initiative.status !== InitiativeStatus.published) {
+    if (!isManager) {
+      notFound(); // Non-creators cannot access at all
+    }
+    const isIndividualUser = session?.user.userType !== UserType.organization;
+    if (isIndividualUser) {
       return (
         <div className="bg-neutrals-100 min-h-screen p-6" dir="rtl">
           <div className="mb-4 flex justify-end">
@@ -134,7 +134,7 @@ export default async function InitiativeDetailsPage({
               قريبًا وقد يستغرق ظهورها للمشاركين بعض الوقت.
             </p>
           </div>
-          <div className="mb-4 flex justify-end">
+          <div className="mt-4 mb-4 flex justify-center">
             <AppButton
               type="primary"
               size="sm"
@@ -147,6 +147,9 @@ export default async function InitiativeDetailsPage({
         </div>
       );
     }
+  }
+
+  if (canViewPosts) {
     return (
       <div className="bg-neutrals-100 min-h-screen" dir="rtl">
         <InitiativeHeader

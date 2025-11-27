@@ -59,6 +59,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.57.4",
+    "@tailwindcss/oxide": "^4.1.17",
     "@tanstack/react-virtual": "^3.13.12",
     "@tiptap/core": "^3.5.1",
     "@tiptap/extension-bubble-menu": "^3.5.1",

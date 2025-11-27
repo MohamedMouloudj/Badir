@@ -1,6 +1,8 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import GuideItem from "@/components/pages/GuideItem";
+import Link from "next/link";
+import { ArrowUpLeft } from "lucide-react";
 
 export default function AssistancePage() {
   return (
@@ -45,6 +47,16 @@ export default function AssistancePage() {
           </p>
         </CardContent>
       </Card>
+      <div className="mt-10 mb-6 text-center">
+        <Link
+          className="text-primary-500 hover:text-primary-400 text-secondary-sm font-semibold underline"
+          href="/contact"
+        >
+          تواصل معنا
+          <ArrowUpLeft className="mr-1 inline-block h-4 w-4" />
+        </Link>
+        <p className="text-neutrals-600 text-paragraph-lg mb-6 font-medium"></p>
+      </div>
     </section>
   );
 }

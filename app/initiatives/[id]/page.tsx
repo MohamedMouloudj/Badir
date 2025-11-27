@@ -6,6 +6,7 @@ import {
   InitiativeStatus,
   ParticipantRole,
   ParticipationStatus,
+  UserType,
 } from "@prisma/client";
 import InitiativeJoinForm from "@/components/pages/initiatives/InitiativeJoinForm";
 import InitiativeDetails from "@/components/pages/initiatives/InitiativeDetails";
@@ -271,6 +272,7 @@ export default async function InitiativeDetailsPage({
                 hasForm={formQuestions.length > 0}
                 formQuestions={formQuestions}
                 allowedRoles={initiative.targetAudience}
+                userType={session?.user.userType as UserType}
               />
             ) : (
               <div className="bg-neutrals-200 rounded-lg p-4 text-center">

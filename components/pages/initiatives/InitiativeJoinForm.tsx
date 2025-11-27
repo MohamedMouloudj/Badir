@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { ParticipantRole, TargetAudience } from "@prisma/client";
+import { ParticipantRole, TargetAudience, UserType } from "@prisma/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
@@ -16,6 +16,7 @@ interface InitiativeJoinFormProps {
   hasForm: boolean;
   formQuestions: FormFieldType[];
   allowedRoles: TargetAudience;
+  userType: UserType;
 }
 
 interface BaseFormData {
@@ -30,6 +31,7 @@ export default function InitiativeJoinForm({
   hasForm,
   formQuestions,
   allowedRoles,
+  userType,
 }: InitiativeJoinFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -52,17 +54,46 @@ export default function InitiativeJoinForm({
   });
 
   const getAvailableRoles = () => {
-    switch (allowedRoles) {
-      case TargetAudience.helpers:
-        return [{ value: ParticipantRole.helper, label: "متطوع" }];
-      case TargetAudience.participants:
-        return [{ value: ParticipantRole.participant, label: "مشارك" }];
-      default:
-        return [
-          { value: ParticipantRole.participant, label: "مشارك" },
-          { value: ParticipantRole.helper, label: "متطوع" },
-        ];
+    if (userType === UserType.organization) {
+      switch (allowedRoles) {
+        case TargetAudience.helpers:
+          return [{ value: ParticipantRole.helper, label: "متطوع" }];
+        case TargetAudience.participants:
+          return [{ value: ParticipantRole.participant, label: "مشارك" }];
+        default:
+          return [
+            { value: ParticipantRole.participant, label: "مشارك" },
+            { value: ParticipantRole.helper, label: "متطوع" },
+          ];
+      }
     }
+
+    // for individual users, match userType with allowed roles
+    if (allowedRoles === TargetAudience.helpers) {
+      return userType === UserType.helper || userType === UserType.both
+        ? [{ value: ParticipantRole.helper, label: "متطوع" }]
+        : [];
+    }
+
+    if (allowedRoles === TargetAudience.participants) {
+      return userType === UserType.participant || userType === UserType.both
+        ? [{ value: ParticipantRole.participant, label: "مشارك" }]
+        : [];
+    }
+
+    // allowedRoles is TargetAudience.both
+    if (userType === UserType.helper) {
+      return [{ value: ParticipantRole.helper, label: "متطوع" }];
+    }
+
+    if (userType === UserType.participant) {
+      return [{ value: ParticipantRole.participant, label: "مشارك" }];
+    }
+
+    return [
+      { value: ParticipantRole.participant, label: "مشارك" },
+      { value: ParticipantRole.helper, label: "متطوع" },
+    ];
   };
 
   const onSubmit = async (data: any) => {
@@ -93,12 +124,12 @@ export default function InitiativeJoinForm({
           toast.error(result.error || "حدث خطأ أثناء الانضمام");
         }
       });
-    } catch (error) {
+    } catch {
       toast.error("حدث خطأ غير متوقع");
     }
   };
 
-  const onError = (errors: any) => {
+  const onError = () => {
     toast.error("يرجى التحقق من جميع الحقول المطلوبة");
   };
 

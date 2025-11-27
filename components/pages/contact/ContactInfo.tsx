@@ -54,6 +54,7 @@ export default function ContactInfo() {
               <a
                 href="tel:+213000000000"
                 className="text-neutrals-700 text-paragraph-md hover:text-primary-500 font-medium transition-colors"
+                dir="ltr"
               >
                 +213 000 00 00 00
               </a>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo, useTransition } from "react";
-import DOMPurify from "isomorphic-dompurify";
+// import DOMPurify from "isomorphic-dompurify";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -35,6 +35,7 @@ import FormInput from "./FormInput";
 import { BUCKET_MIME_TYPES, BUCKET_SIZE_LIMITS } from "@/types/Statics";
 import AppButton from "./AppButton";
 import { extractImageSrcsFromHtmlBrowser } from "@/lib/utils";
+import { sanitize } from "@/lib/santitize-client";
 
 type PostData = {
   id?: string;
@@ -147,7 +148,7 @@ export default function PostEditor({
     }
 
     try {
-      const sanitizedContent = DOMPurify.sanitize(content || "");
+      const sanitizedContent = sanitize(content || "");
 
       const newImageUrls = extractImageSrcsFromHtmlBrowser(sanitizedContent);
       const removedImageUrls = staleImageSrcs.filter(

@@ -27,7 +27,8 @@ import { Check, CheckIcon, ChevronsUpDown, Upload } from "lucide-react";
 import { Button } from "./ui/button";
 import { getCountries, getCountryCallingCode } from "libphonenumber-js";
 import parse from "html-react-parser";
-import DOMPurify from "isomorphic-dompurify";
+import { sanitize } from "@/lib/santitize-client";
+// import DOMPurify from "isomorphic-dompurify";
 
 const priorityCountries = [
   "DZ",
@@ -305,15 +306,11 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
               id={name}
               name={name}
               placeholder={
-                placeholder
-                  ? String(parse(DOMPurify.sanitize(placeholder)))
-                  : undefined
+                placeholder ? String(parse(sanitize(placeholder))) : undefined
               }
-              value={
-                value ? String(parse(DOMPurify.sanitize(String(value)))) : ""
-              }
+              value={value ? String(parse(sanitize(String(value)))) : ""}
               onChange={(e) => {
-                const sanitized = DOMPurify.sanitize(e.target.value);
+                const sanitized = sanitize(e.target.value);
                 onChange?.(sanitized);
               }}
               onBlur={onBlur}
@@ -395,15 +392,11 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
               id={name}
               name={name}
               placeholder={
-                placeholder
-                  ? String(parse(DOMPurify.sanitize(placeholder)))
-                  : undefined
+                placeholder ? String(parse(sanitize(placeholder))) : undefined
               }
-              value={
-                value ? String(parse(DOMPurify.sanitize(String(value)))) : ""
-              }
+              value={value ? String(parse(sanitize(String(value)))) : ""}
               onChange={(e) => {
-                const sanitized = DOMPurify.sanitize(e.target.value);
+                const sanitized = sanitize(e.target.value);
                 onChange?.(sanitized);
               }}
               onBlur={onBlur}

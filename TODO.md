@@ -14,7 +14,7 @@
 ### Initiative Features
 
 - [ ] Add cancel initiative functionality for users with userType: User
-- [ ] Fix allowed participation roles based on UserType and initiative organizer choices
+- [x] Fix allowed participation roles based on UserType and initiative organizer choices
 - [ ] Create rating component for users to rate joined initiatives
 - [ ] Add rating handlers and API endpoints (see [Ratings](./README.md#reusable-ui-components))
 - [ ] Recommend initiatives based on user location (latitude/longitude)

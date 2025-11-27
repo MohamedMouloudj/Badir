@@ -6,11 +6,12 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { InitiativeStatus, ParticipationStatus } from "@prisma/client";
 import { ActionResponse } from "@/types/Statics";
-import DOMPurify from "isomorphic-dompurify";
+// import DOMPurify from "isomorphic-dompurify";
 import { FormResponseType, JoinInitiativeParams } from "@/schemas";
 import { ParticipationService } from "@/services/participations";
 import { InitiativeService } from "@/services/initiatives";
 import { assertManager } from "./helpers-sf";
+import { sanitizeHTMLServer } from "@/lib/santitize-server";
 
 export async function joinInitiativeAction(
   params: JoinInitiativeParams,
@@ -81,10 +82,10 @@ export async function joinInitiativeAction(
         const value = params.formResponses![key];
         if (Array.isArray(value)) {
           sanitizedFormResponses[key] = value.map((item) =>
-            DOMPurify.sanitize(item),
+            sanitizeHTMLServer(item),
           );
         } else {
-          sanitizedFormResponses[key] = DOMPurify.sanitize(value);
+          sanitizedFormResponses[key] = sanitizeHTMLServer(value);
         }
       });
     }

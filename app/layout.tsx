@@ -8,6 +8,7 @@ import { RegisterServiceWorker } from "./register-sw";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
+import { SEOKeywords } from "@/data/statics";
 
 export const metadata: Metadata = {
   title: {
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
   },
   description:
     "تنظم الجهود وتقيم جسوراً بين من يملكون القدرة على العطاء، ومن يتطلعون إلى من يعينهم",
+  keywords: SEOKeywords,
 
   manifest: "/manifest.webmanifest",
 

@@ -30,6 +30,17 @@ export const countryList = Object.entries(countries.getNames("ar")).map(
   }),
 );
 
+export const SEOKeywords = [
+  "بادر",
+  "منصة بادر",
+  "منصة تطوعية",
+  "تطوع",
+  "فرص تطوعية",
+  "تنظيم العمل التطوعي",
+  "مساعدة المحتاجين",
+  "التطوع الإلكتروني",
+];
+
 const heroCarouselItems: CarouselImage[] = [
   {
     id: 1,

@@ -5,6 +5,8 @@ import Footer from "@/components/layout/Footer";
 import { Toaster } from "sonner";
 import { iosSplashScreens } from "@/data/iosSplashScreens";
 import { RegisterServiceWorker } from "./register-sw";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -62,7 +64,11 @@ export default async function RootLayout({
       <body className={`${IBMPlex.variable} antialiased`}>
         <RegisterServiceWorker />
         <Navbar />
-        <main>{children}</main>
+        <main>
+          {children}
+          <Analytics />
+          <SpeedInsights />
+        </main>
         <Footer />
         <Toaster
           position="bottom-right"

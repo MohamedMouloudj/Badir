@@ -131,7 +131,7 @@ export default function Navbar() {
             ))}
           </ul>
 
-          <div className="bg-secondary-200 mb-6 h-0.25 w-full" />
+          <div className="bg-secondary-200 mb-6 h-px w-full" />
           <AuthProfileButtons isMobile={true} onMenuAction={closeMenu} />
         </div>
       </div>

@@ -12,7 +12,7 @@ import SearchInput from "@/components/SearchInput";
 import FilterSelect from "@/components/FilterSelect";
 import PaginationControls from "@/components/PaginationControls";
 import { Card, CardContent } from "@/components/ui/card";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import api from "@/services/api";
 import { Checkbox } from "@/components/ui/checkbox";
 import { PaginatedResponse } from "@/types/Pagination";
@@ -22,6 +22,7 @@ import {
   statusOptions,
   targetAudienceOptions,
 } from "@/data/statics";
+import Image from "next/image";
 
 interface InitiativesListProps {
   initialData: PaginatedResponse<InitiativeCardType>;
@@ -152,7 +153,14 @@ export default function InitiativesList({
                 <AppButton
                   type="primary"
                   url="/initiatives/new"
-                  icon={<Plus className="h-4 w-4" />}
+                  icon={
+                    <Image
+                      src="/images/icons/plus.svg"
+                      alt="Plus"
+                      width={16}
+                      height={16}
+                    />
+                  }
                   size="sm"
                 >
                   مبادرة جديدة

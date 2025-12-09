@@ -1,5 +1,6 @@
 import emailConfig from "@/lib/email";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Mail, MapPin, Clock } from "lucide-react";
+import Image from "next/image";
 
 export default function ContactInfo() {
   return (
@@ -19,7 +20,7 @@ export default function ContactInfo() {
         <div className="space-y-8">
           {/* Email */}
           <div className="flex items-start gap-4">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="bg-primary-100 flex h-12 w-12 items-center justify-center rounded-full md:h-14 md:w-14">
                 <Mail className="text-primary-500 h-6 w-6 md:h-7 md:w-7" />
               </div>
@@ -42,9 +43,15 @@ export default function ContactInfo() {
 
           {/* Phone */}
           <div className="flex items-start gap-4">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="bg-primary-100 flex h-12 w-12 items-center justify-center rounded-full md:h-14 md:w-14">
-                <Phone className="text-primary-500 h-6 w-6 md:h-7 md:w-7" />
+                <Image
+                  src="/images/icons/phone.svg"
+                  alt="phone icon"
+                  width={26}
+                  height={26}
+                  className="h-7 w-7 md:h-8 md:w-8"
+                />
               </div>
             </div>
             <div className="flex-1 text-right">
@@ -66,7 +73,7 @@ export default function ContactInfo() {
 
           {/* Address */}
           <div className="flex items-start gap-4">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="bg-primary-100 flex h-12 w-12 items-center justify-center rounded-full md:h-14 md:w-14">
                 <MapPin className="text-primary-500 h-6 w-6 md:h-7 md:w-7" />
               </div>
@@ -86,7 +93,7 @@ export default function ContactInfo() {
 
           {/* Working Hours */}
           <div className="flex items-start gap-4">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="bg-primary-100 flex h-12 w-12 items-center justify-center rounded-full md:h-14 md:w-14">
                 <Clock className="text-primary-500 h-6 w-6 md:h-7 md:w-7" />
               </div>

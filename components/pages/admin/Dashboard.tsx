@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +20,6 @@ import {
   CheckCircle,
   XCircle,
   Clock,
-  Search,
   Eye,
   Mail,
   Phone,
@@ -38,10 +37,6 @@ import {
   AdminService,
 } from "@/services/admin";
 import {
-  getOrganizationsAction,
-  getUserInitiativesAction,
-} from "@/actions/admin";
-import {
   AdminInitiativeStatusBadge,
   AdminOrganizationStatusBadge,
 } from "../AdminStatusBadge";
@@ -51,6 +46,9 @@ import { organizationTypeOptions } from "@/types/Profile";
 import { toast } from "sonner";
 import Link from "next/link";
 import AppButton from "@/components/AppButton";
+import { InitiativeActions } from "./InitiativeActions";
+import { useAdminInitiatives } from "@/hooks/useAdminInitiatives";
+import { useAdminOrganizations } from "@/hooks/useAdminOrganizations";
 
 type AdminStatsType = Awaited<ReturnType<typeof AdminService.getAdminStats>>;
 
@@ -67,84 +65,49 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
     },
   );
 
-  // Organizations state
-  const [organizations, setOrganizations] = useState<AdminOrganizationCard[]>(
-    [],
-  );
-  const [orgFilters, setOrgFilters] = useState({
-    status: "all",
-    search: "",
-    organizationType: "all",
-  });
+  // Use custom hooks for organizations (limited to 3 for dashboard)
+  const {
+    organizations,
+    filters: orgFilters,
+    isLoading: orgLoading,
+    handleFilterChange: handleOrgFilterChange,
+    setOrganizations,
+  } = useAdminOrganizations();
+
   const [selectedOrg, setSelectedOrg] = useState<AdminOrganizationCard | null>(
     null,
   );
 
-  // Initiatives state
-  const [initiatives, setInitiatives] = useState<AdminInitiativeCard[]>([]);
-  const [initiativeFilters, setInitiativeFilters] = useState({
-    status: "all",
-    search: "",
-    categoryId: "",
-  });
+  // Use custom hooks for initiatives (limited to 3 for dashboard)
+  const {
+    initiatives,
+    filters: initiativeFilters,
+    isLoading: initLoading,
+    handleFilterChange: handleInitiativeFilterChange,
+    refetch: refetchInitiatives,
+  } = useAdminInitiatives();
+
   const [selectedInitiative, setSelectedInitiative] =
     useState<AdminInitiativeCard | null>(null);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const isLoading = orgLoading || initLoading;
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        setIsLoading(true);
-        const organizationsData = await getOrganizationsAction();
-        setOrganizations(
-          organizationsData.data ? organizationsData.data.data.slice(0, 3) : [],
-        );
+  // Limit to 3 items for dashboard preview
+  const displayOrganizations = organizations.slice(0, 3);
+  const displayInitiatives = initiatives.slice(0, 3);
 
-        const initiativesData = await getUserInitiativesAction();
-        setInitiatives(
-          initiativesData.data ? initiativesData.data.data.slice(0, 3) : [],
-        );
-      } catch (error) {
-        toast.error("حدث خطأ أثناء جلب البيانات");
-        console.error("Error fetching admin data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    fetchData();
-  }, []);
-
-  const handleStatusUpdate = async (
-    id: string,
-    status: string,
-    type: "organization" | "initiative",
-  ) => {
-    setIsLoading(true);
+  const handleOrganizationStatusUpdate = async (id: string, status: string) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      if (type === "organization") {
-        setOrganizations((prev) =>
-          prev.map((org) =>
-            org.id === id
-              ? { ...org, isVerified: status as "approved" | "rejected" }
-              : org,
-          ),
-        );
-      } else {
-        setInitiatives((prev) =>
-          prev.map((init) =>
-            init.id === id
-              ? { ...init, status: status as "published" | "cancelled" }
-              : init,
-          ),
-        );
-      }
+      setOrganizations((prev) =>
+        prev.map((org) =>
+          org.id === id
+            ? { ...org, isVerified: status as "approved" | "rejected" }
+            : org,
+        ),
+      );
     } catch {
       toast.error("حدث خطأ أثناء تحديث الحالة");
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -311,12 +274,7 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
             <div className="flex-center max-w-full gap-4 max-sm:flex-wrap sm:justify-center">
               <SearchInput
                 value={orgFilters.search}
-                onChange={(value) =>
-                  setOrgFilters((prev) => ({
-                    ...prev,
-                    search: value,
-                  }))
-                }
+                onChange={(value) => handleOrgFilterChange("search", value)}
                 placeholder="البحث عن منظمة..."
                 className="w-full"
               />
@@ -328,9 +286,7 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
             >
               <FilterSelect
                 value={orgFilters.status}
-                onChange={(value) =>
-                  setOrgFilters((prev) => ({ ...prev, status: value }))
-                }
+                onChange={(value) => handleOrgFilterChange("status", value)}
                 options={[
                   { value: "all", label: "جميع الحالات" },
                   { value: "pending", label: "قيد المراجعة" },
@@ -344,10 +300,7 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
               <FilterSelect
                 value={orgFilters.organizationType}
                 onChange={(value) =>
-                  setOrgFilters((prev) => ({
-                    ...prev,
-                    organizationType: value,
-                  }))
+                  handleOrgFilterChange("organizationType", value)
                 }
                 options={[
                   ...organizationTypeOptions,
@@ -363,9 +316,9 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
           <div className="space-y-4">
             {isLoading ? (
               <Loader2 className="mx-auto h-6 w-6 animate-spin text-gray-500" />
-            ) : organizations.length > 0 ? (
+            ) : displayOrganizations.length > 0 ? (
               <>
-                {organizations.map((org) => (
+                {displayOrganizations.map((org) => (
                   <Card key={org.id} className="border-l-4 border-l-blue-500">
                     <CardContent className="p-6">
                       <div className="mb-4 flex items-start justify-between">
@@ -502,10 +455,9 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                                       <>
                                         <Button
                                           onClick={() =>
-                                            handleStatusUpdate(
+                                            handleOrganizationStatusUpdate(
                                               selectedOrg.id,
                                               "approved",
-                                              "organization",
                                             )
                                           }
                                           disabled={isLoading}
@@ -516,10 +468,9 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                                         </Button>
                                         <Button
                                           onClick={() =>
-                                            handleStatusUpdate(
+                                            handleOrganizationStatusUpdate(
                                               selectedOrg.id,
                                               "rejected",
-                                              "organization",
                                             )
                                           }
                                           disabled={isLoading}
@@ -541,10 +492,9 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                               <Button
                                 size="sm"
                                 onClick={() =>
-                                  handleStatusUpdate(
+                                  handleOrganizationStatusUpdate(
                                     org.id,
                                     "approved",
-                                    "organization",
                                   )
                                 }
                                 disabled={isLoading}
@@ -556,10 +506,9 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                                 size="sm"
                                 variant="destructive"
                                 onClick={() =>
-                                  handleStatusUpdate(
+                                  handleOrganizationStatusUpdate(
                                     org.id,
                                     "rejected",
-                                    "organization",
                                   )
                                 }
                                 disabled={isLoading}
@@ -608,10 +557,7 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
               <SearchInput
                 value={initiativeFilters.search}
                 onChange={(value) =>
-                  setInitiativeFilters((prev) => ({
-                    ...prev,
-                    search: value,
-                  }))
+                  handleInitiativeFilterChange("search", value)
                 }
                 placeholder="البحث عن مبادرة..."
                 className="w-full"
@@ -620,7 +566,7 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
             <FilterSelect
               value={initiativeFilters.status}
               onChange={(value) =>
-                setInitiativeFilters((prev) => ({ ...prev, status: value }))
+                handleInitiativeFilterChange("status", value)
               }
               options={[
                 { value: "all", label: "جميع الحالات" },
@@ -637,9 +583,9 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
           <div className="space-y-4">
             {isLoading ? (
               <Loader2 className="mx-auto h-6 w-6 animate-spin text-gray-500" />
-            ) : organizations.length > 0 ? (
+            ) : displayInitiatives.length > 0 ? (
               <>
-                {initiatives.map((initiative) => (
+                {displayInitiatives.map((initiative) => (
                   <Card
                     key={initiative.id}
                     className="border-l-4 border-l-green-500"
@@ -790,78 +736,15 @@ const AdminDashboard = ({ initialStats }: AdminDashboardProps) => {
                                     </div>
                                   </div>
 
-                                  <div className="flex justify-center gap-4 pt-4">
-                                    {selectedInitiative.status === "draft" && (
-                                      <>
-                                        <Button
-                                          onClick={() =>
-                                            handleStatusUpdate(
-                                              selectedInitiative.id,
-                                              "published",
-                                              "initiative",
-                                            )
-                                          }
-                                          disabled={isLoading}
-                                          className="bg-green-600 hover:bg-green-700"
-                                        >
-                                          <CheckCircle className="ml-1 h-4 w-4" />
-                                          نشر المبادرة
-                                        </Button>
-                                        <Button
-                                          onClick={() =>
-                                            handleStatusUpdate(
-                                              selectedInitiative.id,
-                                              "cancelled",
-                                              "initiative",
-                                            )
-                                          }
-                                          disabled={isLoading}
-                                          variant="destructive"
-                                        >
-                                          <XCircle className="ml-1 h-4 w-4" />
-                                          إلغاء المبادرة
-                                        </Button>
-                                      </>
-                                    )}
-                                  </div>
+                                  <InitiativeActions
+                                    initiativeId={selectedInitiative.id}
+                                    currentStatus={selectedInitiative.status}
+                                    onStatusUpdate={refetchInitiatives}
+                                  />
                                 </div>
                               )}
                             </DialogContent>
                           </Dialog>
-
-                          {initiative.status === "draft" && (
-                            <div className="flex gap-1">
-                              <Button
-                                size="sm"
-                                onClick={() =>
-                                  handleStatusUpdate(
-                                    initiative.id,
-                                    "published",
-                                    "initiative",
-                                  )
-                                }
-                                disabled={isLoading}
-                                className="bg-green-600 px-2 text-xs hover:bg-green-700"
-                              >
-                                نشر
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="destructive"
-                                onClick={() =>
-                                  handleStatusUpdate(
-                                    initiative.id,
-                                    "cancelled",
-                                    "initiative",
-                                  )
-                                }
-                                disabled={isLoading}
-                                className="px-2 text-xs"
-                              >
-                                إلغاء
-                              </Button>
-                            </div>
-                          )}
                         </div>
                       </div>
                     </CardContent>

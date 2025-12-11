@@ -1,37 +1,26 @@
 "use client";
-import { useState, useTransition } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
-  ArrowLeft,
   Mail,
   Phone,
   Calendar,
   Users,
   FileText,
-  CheckCircle,
-  XCircle,
   AlertTriangle,
 } from "lucide-react";
 import { AdminService } from "@/services/admin";
 import { AdminInitiativeStatusBadge } from "../AdminStatusBadge";
 import { formatDate } from "@/lib/utils";
-import { updateInitiativeStatusAction } from "@/actions/admin";
-import { toast } from "sonner";
+import { InitiativeActions } from "./InitiativeActions";
 
 interface InitiativeDetailsProps {
   initiative: Awaited<ReturnType<typeof AdminService.getInitiativeById>>;
 }
 
 const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
-  const [isPending, startTransition] = useTransition();
-  const [rejectionReason, setRejectionReason] = useState("");
-  const [showRejectionForm, setShowRejectionForm] = useState(false);
-
   if (!initiative) {
     return (
       <div className="mx-auto max-w-6xl p-6" dir="rtl">
@@ -42,35 +31,6 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
       </div>
     );
   }
-
-  const handleStatusUpdate = async (status: "published" | "cancelled") => {
-    if (status === "cancelled" && !rejectionReason.trim()) {
-      setShowRejectionForm(true);
-      return;
-    }
-
-    try {
-      startTransition(async () => {
-        const result = await updateInitiativeStatusAction(
-          initiative.id,
-          status,
-        );
-
-        if (result.success) {
-          toast.success(
-            `تم ${status === "published" ? "نشر" : "إلغاء"} المبادرة بنجاح`,
-          );
-        } else {
-          toast.error(result.error || "حدث خطأ أثناء تحديث الحالة");
-        }
-      });
-    } catch (error) {
-      console.error("Error updating initiative status:", error);
-    } finally {
-      setShowRejectionForm(false);
-      setRejectionReason("");
-    }
-  };
 
   return (
     <div className="mx-auto max-w-6xl p-6" dir="rtl">
@@ -258,67 +218,10 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Status Actions */}
-          {initiative.status === "draft" && (
-            <Card>
-              <CardHeader>
-                <CardTitle>إجراءات المراجعة</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {showRejectionForm ? (
-                  <div className="space-y-3">
-                    <Label htmlFor="rejectionReason">سبب إلغاء المبادرة</Label>
-                    <Textarea
-                      id="rejectionReason"
-                      value={rejectionReason}
-                      onChange={(e) => setRejectionReason(e.target.value)}
-                      placeholder="اكتب سبب إلغاء المبادرة..."
-                      rows={3}
-                    />
-                    <div className="flex gap-2">
-                      <Button
-                        onClick={() => handleStatusUpdate("cancelled")}
-                        disabled={isPending || !rejectionReason.trim()}
-                        variant="destructive"
-                        size="sm"
-                      >
-                        تأكيد الإلغاء
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          setShowRejectionForm(false);
-                          setRejectionReason("");
-                        }}
-                        variant="outline"
-                        size="sm"
-                      >
-                        إلغاء
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <Button
-                      onClick={() => handleStatusUpdate("published")}
-                      disabled={isPending}
-                      className="w-full bg-green-600 hover:bg-green-700"
-                    >
-                      <CheckCircle className="ml-1 h-4 w-4" />
-                      نشر المبادرة
-                    </Button>
-                    <Button
-                      onClick={() => setShowRejectionForm(true)}
-                      disabled={isPending}
-                      variant="destructive"
-                      className="w-full"
-                    >
-                      <XCircle className="ml-1 w-4" />
-                      إلغاء المبادرة
-                    </Button>
-                  </>
-                )}
-              </CardContent>
-            </Card>
-          )}
+          <InitiativeActions
+            initiativeId={initiative.id}
+            currentStatus={initiative.status}
+          />
 
           {/* Statistics */}
           <Card>
@@ -390,13 +293,6 @@ const InitiativeDetails = ({ initiative }: InitiativeDetailsProps) => {
           </Card>
         </div>
       </div>
-
-      {isPending && (
-        <Alert className="fixed right-4 bottom-4 w-auto">
-          <AlertTriangle className="h-4 w-4" />
-          <AlertDescription>جاري تحديث حالة المبادرة...</AlertDescription>
-        </Alert>
-      )}
     </div>
   );
 };

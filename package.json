@@ -23,6 +23,7 @@
     "pwa:generate-icons": "npx pwa-asset-generator public/pwa/icons/icon-512.png public/pwa/icons --icon-only --maskable",
     "pwa:generate-splash": "npx pwa-asset-generator public/pwa/icons/icon-512.png public/pwa/icons --splash-only --maskable",
     "prepare": "husky || true",
+    "prettier": "prettier --write .",
     "lint-staged": "lint-staged"
   },
   "lint-staged": {

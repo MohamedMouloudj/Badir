@@ -98,7 +98,6 @@ model InitiativeCategory {
   nameEn        String?      @map("name_en") @db.VarChar(100)
   descriptionAr String?      @map("description_ar")
   descriptionEn String?      @map("description_en")
-  icon          String?      @db.VarChar(100)
   bgColor       String?      @db.VarChar(7)
   textColor     String?      @db.VarChar(7)
   isActive      Boolean      @default(true) @map("is_active")

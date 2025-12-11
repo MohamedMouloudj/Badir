@@ -24,7 +24,6 @@ export interface InitiativeCard {
   category: {
     nameAr: string;
     nameEn?: string | null;
-    icon?: string | null;
     bgColor?: string | null;
     textColor?: string | null;
   };
@@ -188,7 +187,6 @@ export class InitiativeService {
             select: {
               nameAr: true,
               nameEn: true,
-              icon: true,
               bgColor: true,
               textColor: true,
             },
@@ -231,7 +229,6 @@ export class InitiativeService {
         category: {
           nameAr: initiative.category.nameAr,
           nameEn: initiative.category.nameEn,
-          icon: initiative.category.icon,
           bgColor: initiative.category.bgColor,
           textColor: initiative.category.textColor,
         },

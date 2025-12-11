@@ -15,7 +15,7 @@ export default function Contact() {
           className="text-neutrals-700 placeholder-neutrals-400 h-10 min-w-0 flex-1 bg-transparent px-3 text-sm focus:outline-none sm:h-12 sm:px-4 sm:text-base"
           dir="rtl"
         />
-        <div className="flex-shrink-0 p-1">
+        <div className="shrink-0 p-1">
           <AppButton
             type="primary"
             border="rounded"

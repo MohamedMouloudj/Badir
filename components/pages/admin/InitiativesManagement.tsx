@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useTransition } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,92 +11,44 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import {
   Users,
   Eye,
   MapPin,
   Calendar,
-  CheckCircle,
-  XCircle,
   FileText,
   AlertCircle,
   ArrowUpRight,
+  Loader2,
 } from "lucide-react";
 import { AdminInitiativeCard, AdminService } from "@/services/admin";
-import { PaginatedResponse } from "@/types/Pagination";
 import PaginationControls from "@/components/PaginationControls";
 import { formatDate } from "@/lib/utils";
 import { AdminInitiativeStatusBadge } from "../AdminStatusBadge";
 import SearchInput from "@/components/SearchInput";
 import FilterSelect from "@/components/FilterSelect";
 import Link from "next/link";
-import { updateInitiativeStatusAction } from "@/actions/admin";
-import { toast } from "sonner";
-
-type PaginationData = PaginatedResponse<AdminInitiativeCard[]>["pagination"];
+import { useAdminInitiatives } from "@/hooks/useAdminInitiatives";
+import { InitiativeActions } from "./InitiativeActions";
+import { Label } from "@/components/ui/label";
 
 interface InitiativesManagementProps {
   initialData: Awaited<ReturnType<typeof AdminService.getUserInitiatives>>;
 }
 
 const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
-  const [initiatives, setInitiatives] = useState<AdminInitiativeCard[]>(
-    initialData.data,
-  );
-  const [pagination, setPagination] = useState<PaginationData>(
-    initialData.pagination,
-  );
-  const [filters, setFilters] = useState({
-    status: "all",
-    search: "",
-    categoryId: "",
-  });
+  const {
+    initiatives,
+    pagination,
+    filters,
+    isLoading,
+    handlePageChange,
+    handleFilterChange,
+    refetch,
+  } = useAdminInitiatives(initialData);
+
   const [selectedInitiative, setSelectedInitiative] =
     useState<AdminInitiativeCard | null>(null);
-  const [isPending, startTransition] = useTransition();
-  const [rejectionReason, setRejectionReason] = useState("");
-  const [showRejectionForm, setShowRejectionForm] = useState(false);
-
-  const handleStatusUpdate = async (
-    id: string,
-    status: "published" | "cancelled",
-  ) => {
-    if (status === "cancelled" && !rejectionReason.trim()) {
-      setShowRejectionForm(true);
-      return;
-    }
-
-    try {
-      startTransition(async () => {
-        const result = await updateInitiativeStatusAction(id, status);
-
-        if (result.success) {
-          setInitiatives((prev) =>
-            prev.map((init) => (init.id === id ? { ...init, status } : init)),
-          );
-          toast.success(
-            `تم ${status === "published" ? "نشر" : "إلغاء"} المبادرة بنجاح`,
-          );
-          setSelectedInitiative((prev) =>
-            prev && prev.id === id ? { ...prev, status } : prev,
-          );
-        } else {
-          toast.error(result.error || "حدث خطأ أثناء تحديث الحالة");
-        }
-      });
-    } catch (error) {
-      console.error("Error updating initiative status:", error);
-    } finally {
-      setShowRejectionForm(false);
-      setRejectionReason("");
-    }
-  };
-
-  const handleSearch = (searchTerm: string) => {};
-
-  const handlePageChange = (page: number) => {};
 
   return (
     <div className="mx-auto max-w-7xl p-6" dir="rtl">
@@ -132,21 +84,14 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
             <div className="flex-center max-w-full gap-4 max-sm:flex-wrap sm:justify-center">
               <SearchInput
                 value={filters.search}
-                onChange={(value) =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    search: value,
-                  }))
-                }
+                onChange={(value) => handleFilterChange("search", value)}
                 placeholder="البحث عن مبادرة..."
                 className="w-full"
               />
             </div>
             <FilterSelect
               value={filters.status}
-              onChange={(value) =>
-                setFilters((prev) => ({ ...prev, status: value }))
-              }
+              onChange={(value) => handleFilterChange("status", value)}
               options={[
                 { value: "all", label: "جميع الحالات" },
                 { value: "draft", label: "مسودة" },
@@ -160,7 +105,11 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
 
           {/* Initiatives List */}
           <div className="space-y-4">
-            {initiatives.length === 0 ? (
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+              </div>
+            ) : initiatives.length === 0 ? (
               <div className="py-12 text-center">
                 <FileText className="mx-auto mb-4 h-12 w-12 text-gray-400" />
                 <h3 className="mb-2 text-lg font-medium text-gray-900">
@@ -330,109 +279,15 @@ const InitiativesManagement = ({ initialData }: InitiativesManagementProps) => {
                                   </div>
                                 </div>
 
-                                {showRejectionForm && (
-                                  <div className="space-y-3 border-t pt-4">
-                                    <Label htmlFor="rejectionReason">
-                                      سبب إلغاء المبادرة
-                                    </Label>
-                                    <Textarea
-                                      id="rejectionReason"
-                                      value={rejectionReason}
-                                      onChange={(e) =>
-                                        setRejectionReason(e.target.value)
-                                      }
-                                      placeholder="اكتب سبب إلغاء المبادرة..."
-                                      rows={3}
-                                    />
-                                    <div className="flex gap-2">
-                                      <Button
-                                        onClick={() =>
-                                          handleStatusUpdate(
-                                            selectedInitiative.id,
-                                            "cancelled",
-                                          )
-                                        }
-                                        disabled={
-                                          isPending || !rejectionReason.trim()
-                                        }
-                                        variant="destructive"
-                                        size="sm"
-                                      >
-                                        تأكيد الإلغاء
-                                      </Button>
-                                      <Button
-                                        onClick={() => {
-                                          setShowRejectionForm(false);
-                                          setRejectionReason("");
-                                        }}
-                                        variant="outline"
-                                        size="sm"
-                                      >
-                                        إلغاء
-                                      </Button>
-                                    </div>
-                                  </div>
-                                )}
-
-                                {selectedInitiative.status === "draft" &&
-                                  !showRejectionForm && (
-                                    <div className="flex justify-center gap-4 border-t pt-4">
-                                      <Button
-                                        onClick={() =>
-                                          handleStatusUpdate(
-                                            selectedInitiative.id,
-                                            "published",
-                                          )
-                                        }
-                                        disabled={isPending}
-                                        className="bg-green-600 hover:bg-green-700"
-                                      >
-                                        <CheckCircle className="ml-1 h-4 w-4" />
-                                        نشر المبادرة
-                                      </Button>
-                                      <Button
-                                        onClick={() =>
-                                          setShowRejectionForm(true)
-                                        }
-                                        disabled={isPending}
-                                        variant="destructive"
-                                      >
-                                        <XCircle className="ml-1 h-4 w-4" />
-                                        إلغاء المبادرة
-                                      </Button>
-                                    </div>
-                                  )}
+                                <InitiativeActions
+                                  initiativeId={selectedInitiative.id}
+                                  currentStatus={selectedInitiative.status}
+                                  onStatusUpdate={refetch}
+                                />
                               </div>
                             )}
                           </DialogContent>
                         </Dialog>
-
-                        {initiative.status === "draft" && (
-                          <div className="flex gap-1">
-                            <Button
-                              size="sm"
-                              onClick={() =>
-                                handleStatusUpdate(initiative.id, "published")
-                              }
-                              disabled={isPending}
-                              className="bg-green-600 px-2 text-xs hover:bg-green-700"
-                            >
-                              نشر
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="destructive"
-                              onClick={() => {
-                                setSelectedInitiative(initiative);
-                                setShowRejectionForm(true);
-                              }}
-                              disabled={isPending}
-                              className="px-2 text-xs"
-                            >
-                              إلغاء
-                            </Button>
-                          </div>
-                        )}
                       </div>
                     </div>
                   </CardContent>

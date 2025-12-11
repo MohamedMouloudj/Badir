@@ -5,7 +5,10 @@ import Footer from "@/components/layout/Footer";
 import { Toaster } from "sonner";
 import { iosSplashScreens } from "@/data/iosSplashScreens";
 import { RegisterServiceWorker } from "./register-sw";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
+import { SEOKeywords } from "@/data/statics";
 
 export const metadata: Metadata = {
   title: {
@@ -14,6 +17,7 @@ export const metadata: Metadata = {
   },
   description:
     "تنظم الجهود وتقيم جسوراً بين من يملكون القدرة على العطاء، ومن يتطلعون إلى من يعينهم",
+  keywords: SEOKeywords,
 
   manifest: "/manifest.webmanifest",
 
@@ -62,7 +66,11 @@ export default async function RootLayout({
       <body className={`${IBMPlex.variable} antialiased`}>
         <RegisterServiceWorker />
         <Navbar />
-        <main>{children}</main>
+        <main>
+          {children}
+          <Analytics />
+          <SpeedInsights />
+        </main>
         <Footer />
         <Toaster
           position="bottom-right"

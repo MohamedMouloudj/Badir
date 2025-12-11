@@ -1,16 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  CalendarDays,
-  Clock,
-  MapPin,
-  Users,
-  User,
-  Building,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
+import { Clock, User, Building, ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import parse from "html-react-parser";
@@ -109,7 +100,13 @@ export default function InitiativeDetails({
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {/* Date and Time */}
           <div className="flex gap-3">
-            <CalendarDays className="text-primary-600 h-5 w-5" />
+            <Image
+              className="text-primary-600 h-5 w-5"
+              src="/images/icons/calendar.svg"
+              alt="التاريخ"
+              width={20}
+              height={20}
+            />
             <div>
               <p className="text-neutrals-500 text-sm">التاريخ</p>
               <p className="text-neutrals-700 font-medium">
@@ -134,7 +131,13 @@ export default function InitiativeDetails({
 
           {/* Location */}
           <div className="flex gap-3">
-            <MapPin className="text-primary-600 h-5 w-5" />
+            <Image
+              className="text-primary-600 h-5 w-5"
+              src="/images/icons/map-pin.svg"
+              alt="الموقع"
+              width={20}
+              height={20}
+            />
             <div>
               <p className="text-neutrals-500 text-sm">الموقع</p>
               <p className="text-neutrals-700 font-medium">
@@ -147,7 +150,13 @@ export default function InitiativeDetails({
 
           {/* Participant Count */}
           <div className="flex gap-3">
-            <Users className="text-primary-600 h-5 w-5" />
+            <Image
+              className="text-primary-600 h-5 w-5"
+              src="/images/icons/group-reverse.svg"
+              alt="المشاركون"
+              width={20}
+              height={20}
+            />
             <div>
               <p className="text-neutrals-500 text-sm">المشاركون</p>
               <p className="text-neutrals-700 font-medium">

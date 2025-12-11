@@ -386,6 +386,76 @@ export class AdminService {
     });
   }
 
+  static async createInitiativeCategory(data: {
+    nameAr: string;
+    nameEn?: string;
+    descriptionAr?: string;
+    descriptionEn?: string;
+    bgColor?: string;
+    textColor?: string;
+    isActive?: boolean;
+  }) {
+    return await prisma.initiativeCategory.create({
+      data: {
+        nameAr: data.nameAr,
+        nameEn: data.nameEn || null,
+        descriptionAr: data.descriptionAr || null,
+        descriptionEn: data.descriptionEn || null,
+        bgColor: data.bgColor || null,
+        textColor: data.textColor || null,
+        isActive: data.isActive ?? true,
+      },
+    });
+  }
+
+  static async listInitiativeCategories() {
+    return await prisma.initiativeCategory.findMany({
+      orderBy: { nameAr: "asc" },
+    });
+  }
+
+  static async updateInitiativeCategory(
+    categoryId: string,
+    data: {
+      nameAr: string;
+      nameEn?: string;
+      descriptionAr?: string;
+      descriptionEn?: string;
+      bgColor?: string;
+      textColor?: string;
+      isActive?: boolean;
+    },
+  ) {
+    return await prisma.initiativeCategory.update({
+      where: { id: categoryId },
+      data: {
+        nameAr: data.nameAr,
+        nameEn: data.nameEn || null,
+        descriptionAr: data.descriptionAr || null,
+        descriptionEn: data.descriptionEn || null,
+        bgColor: data.bgColor || null,
+        textColor: data.textColor || null,
+        isActive: data.isActive ?? true,
+      },
+    });
+  }
+
+  static async deleteInitiativeCategory(categoryId: string) {
+    const associatedInitiatives = await prisma.initiative.count({
+      where: { categoryId },
+    });
+
+    if (associatedInitiatives > 0) {
+      throw new Error("لا يمكن حذف هذه الفئة لأنها مرتبطة بمبادرات حالية");
+    }
+
+    await prisma.initiativeCategory.delete({
+      where: { id: categoryId },
+    });
+
+    return true;
+  }
+
   /**
    * Get admin statistics
    */

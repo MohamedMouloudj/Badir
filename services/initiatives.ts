@@ -24,7 +24,6 @@ export interface InitiativeCard {
   category: {
     nameAr: string;
     nameEn?: string | null;
-    icon?: string | null;
     bgColor?: string | null;
     textColor?: string | null;
   };
@@ -50,20 +49,19 @@ export interface InitiativeFilters {
   endDateTo?: Date;
 }
 
-export interface InitiativeWithAvgRating
-  extends Prisma.InitiativeGetPayload<{
-    include: {
-      category: true;
-      organizerOrg: {
-        select: {
-          id: true;
-          name: true;
-          logo: true;
-        };
+export interface InitiativeWithAvgRating extends Prisma.InitiativeGetPayload<{
+  include: {
+    category: true;
+    organizerOrg: {
+      select: {
+        id: true;
+        name: true;
+        logo: true;
       };
-      _count: { select: { participants: true } };
     };
-  }> {
+    _count: { select: { participants: true } };
+  };
+}> {
   avgRating: number | null;
 }
 
@@ -189,7 +187,6 @@ export class InitiativeService {
             select: {
               nameAr: true,
               nameEn: true,
-              icon: true,
               bgColor: true,
               textColor: true,
             },
@@ -232,7 +229,6 @@ export class InitiativeService {
         category: {
           nameAr: initiative.category.nameAr,
           nameEn: initiative.category.nameEn,
-          icon: initiative.category.icon,
           bgColor: initiative.category.bgColor,
           textColor: initiative.category.textColor,
         },

@@ -8,3 +8,4 @@ export * from "./platformRatingSchema";
 export * from "./contactSchema";
 export * from "./newInitiativeSchema";
 export * from "./joinInitiativeSchema";
+export * from "./categorySchema";

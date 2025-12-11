@@ -25,6 +25,7 @@ import {
   XCircle,
   Users,
   ArrowUpRight,
+  Loader2,
 } from "lucide-react";
 import { AdminOrganizationCard, AdminService } from "@/services/admin";
 import { AdminOrganizationStatusBadge } from "../AdminStatusBadge";
@@ -33,12 +34,10 @@ import FilterSelect from "@/components/FilterSelect";
 import { organizationTypeOptions } from "@/types/Profile";
 import PaginationControls from "@/components/PaginationControls";
 import { formatDate } from "@/lib/utils";
-import { PaginatedResponse } from "@/types/Pagination";
 import Link from "next/link";
 import { updateOrganizationStatusAction } from "@/actions/admin";
 import { toast } from "sonner";
-
-type PaginationData = PaginatedResponse<AdminOrganizationCard[]>["pagination"];
+import { useAdminOrganizations } from "@/hooks/useAdminOrganizations";
 
 interface OrganizationsManagementProps {
   initialData: Awaited<ReturnType<typeof AdminService.getOrganizations>>;
@@ -47,17 +46,16 @@ interface OrganizationsManagementProps {
 const OrganizationsManagement = ({
   initialData,
 }: OrganizationsManagementProps) => {
-  const [organizations, setOrganizations] = useState<AdminOrganizationCard[]>(
-    initialData.data,
-  );
-  const [pagination, setPagination] = useState<PaginationData>(
-    initialData.pagination,
-  );
-  const [filters, setFilters] = useState({
-    status: "all",
-    search: "",
-    organizationType: "all",
-  });
+  const {
+    organizations,
+    pagination,
+    filters,
+    isLoading,
+    handlePageChange,
+    handleFilterChange,
+    setOrganizations,
+  } = useAdminOrganizations(initialData);
+
   const [selectedOrg, setSelectedOrg] = useState<AdminOrganizationCard | null>(
     null,
   );
@@ -106,10 +104,6 @@ const OrganizationsManagement = ({
     }
   };
 
-  const handlePageChange = (page: number) => {
-    // Implement pagination logic here
-  };
-
   return (
     <div className="mx-auto max-w-7xl p-6" dir="rtl">
       <div className="mb-8">
@@ -132,12 +126,7 @@ const OrganizationsManagement = ({
             <div className="flex-center max-w-full gap-4 max-sm:flex-wrap sm:justify-center">
               <SearchInput
                 value={filters.search}
-                onChange={(value) =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    search: value,
-                  }))
-                }
+                onChange={(value) => handleFilterChange("search", value)}
                 placeholder="البحث عن منظمة..."
                 className="w-full"
               />
@@ -149,9 +138,7 @@ const OrganizationsManagement = ({
             >
               <FilterSelect
                 value={filters.status}
-                onChange={(value) =>
-                  setFilters((prev) => ({ ...prev, status: value }))
-                }
+                onChange={(value) => handleFilterChange("status", value)}
                 options={[
                   { value: "all", label: "جميع الحالات" },
                   { value: "pending", label: "قيد المراجعة" },
@@ -165,10 +152,7 @@ const OrganizationsManagement = ({
               <FilterSelect
                 value={filters.organizationType}
                 onChange={(value) =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    organizationType: value,
-                  }))
+                  handleFilterChange("organizationType", value)
                 }
                 options={[
                   ...organizationTypeOptions,
@@ -182,7 +166,11 @@ const OrganizationsManagement = ({
 
           {/* Organizations List */}
           <div className="space-y-4">
-            {organizations.length === 0 ? (
+            {isLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+              </div>
+            ) : organizations.length === 0 ? (
               <div className="py-12 text-center">
                 <Building2 className="mx-auto mb-4 h-12 w-12 text-gray-400" />
                 <h3 className="mb-2 text-lg font-medium text-gray-900">

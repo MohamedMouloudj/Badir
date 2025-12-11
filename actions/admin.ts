@@ -230,3 +230,129 @@ export async function getAdminStatsAction() {
     };
   }
 }
+
+/**
+ * Create a new initiative category
+ */
+export async function createInitiativeCategoryAction(data: {
+  nameAr: string;
+  nameEn?: string;
+  descriptionAr?: string;
+  descriptionEn?: string;
+  icon?: string;
+  bgColor?: string;
+  textColor?: string;
+  isActive?: boolean;
+}): Promise<ActionResponse<{}, {}>> {
+  try {
+    await checkAdminPermission();
+
+    const category = await AdminService.createInitiativeCategory(data);
+
+    revalidatePath("/admin/categories");
+
+    return {
+      success: true,
+      message: "تم إنشاء الفئة بنجاح",
+      data: category,
+    };
+  } catch (error) {
+    console.error("Error creating category:", error);
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "حدث خطأ أثناء إنشاء الفئة",
+    };
+  }
+}
+
+/**
+ * List all initiative categories
+ */
+export async function listInitiativeCategoriesAction() {
+  try {
+    await checkAdminPermission();
+
+    const categories = await AdminService.listInitiativeCategories();
+
+    return {
+      success: true,
+      data: categories,
+    };
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "حدث خطأ أثناء جلب الفئات",
+    };
+  }
+}
+
+/**
+ * Update an initiative category
+ */
+export async function updateInitiativeCategoryAction(
+  categoryId: string,
+  data: {
+    nameAr: string;
+    nameEn?: string;
+    descriptionAr?: string;
+    descriptionEn?: string;
+    icon?: string;
+    bgColor?: string;
+    textColor?: string;
+    isActive?: boolean;
+  },
+): Promise<ActionResponse<{}, {}>> {
+  try {
+    await checkAdminPermission();
+
+    const category = await AdminService.updateInitiativeCategory(
+      categoryId,
+      data,
+    );
+
+    revalidatePath("/admin/categories");
+
+    return {
+      success: true,
+      message: "تم تحديث الفئة بنجاح",
+      data: category,
+    };
+  } catch (error) {
+    console.error("Error updating category:", error);
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "حدث خطأ أثناء تحديث الفئة",
+    };
+  }
+}
+
+/**
+ * Delete an initiative category
+ */
+export async function deleteInitiativeCategoryAction(
+  categoryId: string,
+): Promise<ActionResponse<{}, {}>> {
+  try {
+    await checkAdminPermission();
+
+    await AdminService.deleteInitiativeCategory(categoryId);
+
+    revalidatePath("/admin/categories");
+
+    return {
+      success: true,
+      message: "تم حذف الفئة بنجاح",
+      data: {},
+    };
+  } catch (error) {
+    console.error("Error deleting category:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "حدث خطأ أثناء حذف الفئة",
+    };
+  }
+}

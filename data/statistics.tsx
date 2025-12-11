@@ -7,7 +7,7 @@ const statistics: StatProps[] = [
     id: 1,
     title: "منظمة",
     key: "organizations",
-    icon: <Building2 className="text-primary-500 h-18 w-18" />,
+    icon: <Building2 className="fill-primary-600 h-18 w-18 text-[#faf9f5]" />,
   },
   {
     id: 2,
@@ -20,12 +20,7 @@ const statistics: StatProps[] = [
     title: "متطوع نشط",
     key: "activeVolunteers",
     icon: (
-      <Image
-        src="/images/icons/double-users.svg"
-        alt="stats"
-        width={72}
-        height={72}
-      />
+      <Image src="/images/icons/group.svg" alt="stats" width={72} height={72} />
     ),
   },
 ];

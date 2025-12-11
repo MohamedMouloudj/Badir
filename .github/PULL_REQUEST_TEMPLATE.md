@@ -2,10 +2,6 @@
 
 <!-- Briefly describe the change and its purpose -->
 
-## Screenshots / Video (if UI related and possible)
-
-<!-- Add before/after screenshots or a short screen recording if applicable -->
-
 ## How to test
 
 1. <!-- step 1 -->

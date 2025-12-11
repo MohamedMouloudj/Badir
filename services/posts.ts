@@ -1,27 +1,25 @@
 import { prisma } from "@/lib/db";
 import { ALLOWED_INITIATIVE_IMAGES } from "@/types/Statics";
 import { PostStatus, PostType, Prisma } from "@prisma/client";
-import { unstable_cache } from "next/cache";
 
-export interface Post
-  extends Prisma.InitiativePostGetPayload<{
-    include: {
-      author: {
-        select: {
-          id: true;
-          name: true;
-          image: true;
-          participations: {
-            select: {
-              participantRole: true;
-            };
+export interface Post extends Prisma.InitiativePostGetPayload<{
+  include: {
+    author: {
+      select: {
+        id: true;
+        name: true;
+        image: true;
+        participations: {
+          select: {
+            participantRole: true;
           };
-          organization: { select: { id: true; name: true } };
         };
+        organization: { select: { id: true; name: true } };
       };
-      attachments: true;
     };
-  }> {}
+    attachments: true;
+  };
+}> {}
 
 export class InitiativePostsService {
   /**

@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowUpLeft, Clock, MapPin } from "lucide-react";
+import { ArrowUpLeft, Clock } from "lucide-react";
 import { InitiativeCard as InitiativeCardType } from "@/services/initiatives";
 import AppButton from "../AppButton";
 import AvailabilityBadge from "./AvailabilityBadge";
@@ -105,15 +105,18 @@ export default function InitiativeCard({
         {/* Location and participants */}
         <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
           <div className="text-neutrals-600 flex items-center gap-2 text-sm md:text-base">
-            <div className="flex-center bg-primary-500 size-fit rounded-full p-0.5">
-              <MapPin className="text-neutrals-100 h-5 w-5 md:h-5 md:w-5" />
-            </div>
+            <Image
+              src="/images/icons/map-pin.svg"
+              alt="عدد المشاركين"
+              width={24}
+              height={24}
+            />
             <span>{city}</span>
           </div>
 
           <div className="text-neutrals-600 flex items-center gap-2 text-sm md:text-base">
             <Image
-              src="/images/icons/group.svg"
+              src="/images/icons/group-reverse.svg"
               alt="عدد المشاركين"
               width={24}
               height={24}

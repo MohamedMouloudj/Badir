@@ -1,8 +1,8 @@
 "use client";
 
 import { useSession } from "@/lib/auth-client";
-import { useState, useTransition, useEffect, useCallback } from "react";
-import { User, Settings, Star } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Star } from "lucide-react";
 import SignInButton from "./SignInButton";
 import SignUpButton from "./SignUpButton";
 import {
@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { UserType } from "@prisma/client";
 import { getUserImage } from "@/actions/user-profile";
 import Image from "next/image";
@@ -29,8 +28,6 @@ export function AuthProfileButtons({
   const { data: session, isPending: isSessionPending } = useSession();
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [image, setImage] = useState<string | null>(null);
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
   const [hasLoadedImage, setHasLoadedImage] = useState(false);
 
   const fetchUserImage = useCallback(async () => {
@@ -67,7 +64,7 @@ export function AuthProfileButtons({
     setIsPopoverOpen(false);
   };
 
-  if (isSessionPending || isPending) {
+  if (isSessionPending) {
     return (
       <div className="flex items-center justify-center">
         <div className="bg-neutrals-200 h-10 w-10 animate-pulse rounded-full md:h-12 md:w-12" />
@@ -84,7 +81,7 @@ export function AuthProfileButtons({
               <PopoverTrigger asChild>
                 <button
                   className="focus:ring-primary-500 rounded-full focus:ring-2 focus:outline-none"
-                  disabled={isPending}
+                  disabled={isSessionPending}
                 >
                   <Avatar className="hover:ring-primary-400 aspect-square size-10 cursor-pointer ring-offset-1 transition-all hover:ring-2">
                     {image && (
@@ -96,7 +93,12 @@ export function AuthProfileButtons({
                       />
                     )}
                     <AvatarFallback className="border-primary-500 text-primary-500 border-2 font-semibold">
-                      <User className="h-5 w-5" />
+                      <Image
+                        src="/images/icons/user-reverse.svg"
+                        alt="User Icon"
+                        width={24}
+                        height={24}
+                      />
                     </AvatarFallback>
                   </Avatar>
                 </button>
@@ -123,7 +125,13 @@ export function AuthProfileButtons({
                     className="text-neutrals-600 hover:bg-neutrals-200 flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors"
                     onClick={handleProfileClick}
                   >
-                    <Settings className="h-4 w-4" />
+                    <Image
+                      src="/images/icons/settings.svg"
+                      alt="Settings Icon"
+                      width={24}
+                      height={24}
+                      className="text-neutrals-600 h-4 w-4"
+                    />
                     الملف الشخصي
                   </Link>
                   <Link
@@ -151,7 +159,7 @@ export function AuthProfileButtons({
               <PopoverTrigger asChild>
                 <button
                   className="focus:ring-secondary-600 rounded-full focus:ring-2 focus:outline-none"
-                  disabled={isPending}
+                  disabled={isSessionPending}
                   aria-label="Open user menu"
                 >
                   <Avatar className="hover:ring-primary-400 h-10 w-10 cursor-pointer ring-offset-1 transition-all hover:ring-2 md:h-12 md:w-12">
@@ -161,7 +169,12 @@ export function AuthProfileButtons({
                       alt={session.user.name || "المستخدم"}
                     />
                     <AvatarFallback className="border-primary-500 text-primary-500 border-2 font-semibold">
-                      <User className="h-5 w-5 md:h-6 md:w-6" />
+                      <Image
+                        src="/images/icons/user-reverse.svg"
+                        alt="User Icon"
+                        width={24}
+                        height={24}
+                      />
                     </AvatarFallback>
                   </Avatar>
                 </button>
@@ -188,7 +201,13 @@ export function AuthProfileButtons({
                     className="text-neutrals-600 hover:bg-neutrals-200 flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors"
                     onClick={handleProfileClick}
                   >
-                    <Settings className="h-4 w-4" />
+                    <Image
+                      src="/images/icons/settings.svg"
+                      alt="Settings Icon"
+                      width={24}
+                      height={24}
+                      className="text-neutrals-600 h-4 w-4"
+                    />
                     الملف الشخصي
                   </Link>
                   <Link

@@ -63,10 +63,12 @@ export default async function InitiativeDetailsPage({
   const isDeadlinePassed =
     initiative.registrationDeadline &&
     initiative.registrationDeadline < new Date();
+
   const isAvailable =
     initiative.status === InitiativeStatus.published &&
     (!initiative.maxParticipants ||
       initiative.currentParticipants < initiative.maxParticipants);
+
   const now = new Date();
   const isCompleted = now > initiative.endDate;
   const isOngoing = now >= initiative.startDate && now <= initiative.endDate;

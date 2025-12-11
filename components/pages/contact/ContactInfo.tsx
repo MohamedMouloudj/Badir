@@ -1,6 +1,5 @@
 import emailConfig from "@/lib/email";
 import { Mail, MapPin, Clock } from "lucide-react";
-import Image from "next/image";
 
 export default function ContactInfo() {
   return (
@@ -30,43 +29,13 @@ export default function ContactInfo() {
                 البريد الإلكتروني
               </h3>
               <a
-                href="mailto:info@badir.org"
+                href="mailto:contact@badir.space"
                 className="text-primary-500 text-paragraph-md hover:text-primary-600 font-medium underline decoration-2 underline-offset-4 transition-colors"
               >
                 {emailConfig.adminEmail}
               </a>
               <p className="text-neutrals-500 text-paragraph-md mt-1">
                 راسلنا في أي وقت
-              </p>
-            </div>
-          </div>
-
-          {/* Phone */}
-          <div className="flex items-start gap-4">
-            <div className="shrink-0">
-              <div className="bg-primary-100 flex h-12 w-12 items-center justify-center rounded-full md:h-14 md:w-14">
-                <Image
-                  src="/images/icons/phone.svg"
-                  alt="phone icon"
-                  width={26}
-                  height={26}
-                  className="h-7 w-7 md:h-8 md:w-8"
-                />
-              </div>
-            </div>
-            <div className="flex-1 text-right">
-              <h3 className="text-paragraph-lg text-neutrals-700 mb-2 font-semibold">
-                الهاتف
-              </h3>
-              <a
-                href="tel:+213000000000"
-                className="text-neutrals-700 text-paragraph-md hover:text-primary-500 font-medium transition-colors"
-                dir="ltr"
-              >
-                +213 000 00 00 00
-              </a>
-              <p className="text-neutrals-500 text-paragraph-md mt-1">
-                من السبت إلى الخميس
               </p>
             </div>
           </div>

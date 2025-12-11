@@ -50,20 +50,19 @@ export interface InitiativeFilters {
   endDateTo?: Date;
 }
 
-export interface InitiativeWithAvgRating
-  extends Prisma.InitiativeGetPayload<{
-    include: {
-      category: true;
-      organizerOrg: {
-        select: {
-          id: true;
-          name: true;
-          logo: true;
-        };
+export interface InitiativeWithAvgRating extends Prisma.InitiativeGetPayload<{
+  include: {
+    category: true;
+    organizerOrg: {
+      select: {
+        id: true;
+        name: true;
+        logo: true;
       };
-      _count: { select: { participants: true } };
     };
-  }> {
+    _count: { select: { participants: true } };
+  };
+}> {
   avgRating: number | null;
 }
 

@@ -354,7 +354,7 @@ Client Request → Server Function / Next.js API Route → Service Layer → Pri
 - Database URL (PostgreSQL)
 - Better Auth secrets
 - Supabase credentials
-- EmailJS credentials (optional)
+- Resend API key and email configuration
 
 ### Set up database
 

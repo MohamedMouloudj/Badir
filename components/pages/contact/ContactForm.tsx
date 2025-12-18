@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import emailjs from "@emailjs/browser";
 import { toast } from "sonner";
 import {
   ContactFormData,
@@ -36,27 +35,37 @@ export default function ContactForm() {
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
     try {
-      const templateParams = {
-        from_name: data.fullName,
-        from_email: data.email,
-        subject: data.title,
-        inquiry_type: data.inquiryType,
-        message: data.message,
-      };
-      emailjs.init(emailConfig.publicKey);
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: "contact",
+          to: emailConfig.contactEmail,
+          data: {
+            fullName: data.fullName,
+            email: data.email,
+            inquiryType: data.inquiryType,
+            title: data.title,
+            message: data.message,
+            timestamp: new Date().toLocaleString("ar-SA", {
+              timeZone: "Asia/Riyadh",
+            }),
+          },
+        }),
+      });
 
-      const result = await emailjs.send(
-        emailConfig.serviceId,
-        emailConfig.templates.contactUs,
-        templateParams,
-      );
+      const result = await response.json();
 
-      if (result.status === 200) {
+      if (response.ok && result.success) {
         toast.success("تم إرسال رسالتك بنجاح! سنتواصل معك قريباً");
         reset();
+      } else {
+        throw new Error(result.error || "Failed to send email");
       }
     } catch (error) {
-      console.error("EmailJS Error:", error);
+      console.error("Email sending error:", error);
       toast.error("حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة مرة أخرى");
     } finally {
       setIsSubmitting(false);

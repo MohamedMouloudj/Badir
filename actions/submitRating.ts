@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import emailConfig from "@/lib/email";
 import {
   platformRatingSchema,
   PlatformRatingFormData,
@@ -15,7 +15,6 @@ export async function submitRating(formData: PlatformRatingFormData): Promise<{
   message?: string;
   error?: string;
   errors?: Partial<Record<keyof PlatformRatingFormData, string[]>>;
-  criticalAlertSent?: Record<string, any>;
 }> {
   const validationResult = platformRatingSchema.safeParse(formData);
 
@@ -82,32 +81,49 @@ export async function submitRating(formData: PlatformRatingFormData): Promise<{
       },
     });
 
-    let criticalAlertSent: Record<string, any> | undefined;
+    // send critical feedback alert
     if (poorRatings >= 3) {
-      criticalAlertSent = {
-        userName: session.user.name || "مستخدم",
-        userEmail: session.user.email || "",
-        appRating: `${formData.appRating} / 5`,
-        easeOfUse: formData.easeOfUse,
-        informationClarity: formData.informationClarity,
-        contentDiversity: formData.contentDiversity,
-        performanceSpeed: formData.performanceSpeed,
-        generalSatisfaction: formData.generalSatisfaction,
-        difficultiesDetails: formData.difficultiesDetails || "لا توجد تفاصيل",
-        improvementSuggestions:
-          formData.improvementSuggestions || "لا توجد اقتراحات",
-        submissionDate: new Date().toLocaleDateString("ar-DZ", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        }),
-      };
+      // Send email notification to admin
+      try {
+        await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL || process.env.BETTER_AUTH_URL || "http://localhost:3000"}/api/send-email`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              type: "feedback",
+              to: emailConfig.contactEmail,
+              data: {
+                userName: session.user.name || "مستخدم",
+                userEmail: session.user.email || "",
+                easeOfUse: formData.easeOfUse,
+                informationClarity: formData.informationClarity,
+                contentDiversity: formData.contentDiversity,
+                performanceSpeed: formData.performanceSpeed,
+                generalSatisfaction: formData.generalSatisfaction,
+                encounteredDifficulties: formData.encounteredDifficulties,
+                difficultiesDetails: formData.difficultiesDetails,
+                improvementSuggestions: formData.improvementSuggestions,
+                wouldRecommend: formData.wouldRecommend,
+                appRating: formData.appRating,
+                timestamp: new Date().toLocaleString("ar-DZ", {
+                  timeZone: "Africa/Algiers",
+                }),
+              },
+            }),
+          },
+        );
+      } catch (emailError) {
+        // log error and don't fail the rating submission
+        console.error("Failed to send critical feedback email:", emailError);
+      }
     }
 
     return {
       success: true,
       message: "تم إرسال تقييمك بنجاح",
-      criticalAlertSent: criticalAlertSent,
     };
   } catch (error) {
     console.error("Error submitting rating:", error);

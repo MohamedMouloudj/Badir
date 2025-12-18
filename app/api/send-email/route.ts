@@ -4,6 +4,7 @@ import PasswordResetEmail from "@/emails/PasswordResetEmail";
 import PostNotificationEmail from "@/emails/PostNotificationEmail";
 import FeedbackReceivedEmail from "@/emails/FeedbackReceivedEmail";
 import ContactMessageEmail from "@/emails/ContactMessageEmail";
+import emailConfig from "@/lib/email";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -96,8 +97,7 @@ export async function POST(request: NextRequest) {
     }
 
     let emailResponse;
-    const fromEmail =
-      process.env.RESEND_FROM_EMAIL || "noreply@updates.badir.space";
+    const fromEmail = emailConfig.fromEmail;
 
     switch (body.type) {
       case "password-reset": {

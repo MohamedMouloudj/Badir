@@ -1,5 +1,5 @@
 const emailConfig = {
-  contactEmail: "contact@updates.badir.space",
+  contactEmail: process.env.CONTACT_EMAIL || "contact@updates.badir.space",
   fromEmail: process.env.RESEND_FROM_EMAIL || "noreply@updates.badir.space",
 };
 

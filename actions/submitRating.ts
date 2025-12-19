@@ -55,13 +55,14 @@ export async function submitRating(formData: PlatformRatingFormData): Promise<{
       };
     }
 
-    const poorRatings = [
-      formData.easeOfUse,
-      formData.informationClarity,
-      formData.contentDiversity,
-      formData.performanceSpeed,
-      formData.generalSatisfaction,
-    ].filter((rating) => rating === "ضعيف").length;
+    const isCritical =
+      [
+        formData.easeOfUse,
+        formData.informationClarity,
+        formData.contentDiversity,
+        formData.performanceSpeed,
+        formData.generalSatisfaction,
+      ].filter((rating) => rating === "ضعيف").length >= 3;
 
     // Save the rating to database
     await prisma.platformRating.create({
@@ -81,9 +82,8 @@ export async function submitRating(formData: PlatformRatingFormData): Promise<{
       },
     });
 
-    // send critical feedback alert
-    if (poorRatings >= 3) {
-      // Send email notification to admin
+    // send critical feedback alert to admin
+    if (isCritical) {
       try {
         await fetch(
           `${process.env.NEXT_PUBLIC_API_URL || process.env.BETTER_AUTH_URL || "http://localhost:3000"}/api/send-email`,

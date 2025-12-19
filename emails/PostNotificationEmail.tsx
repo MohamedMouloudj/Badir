@@ -3,7 +3,7 @@ import {
   Button,
   Container,
   Head,
-  Hr,
+  Heading,
   Html,
   Preview,
   Section,
@@ -26,23 +26,15 @@ export default function PostNotificationEmail({
   categoryName,
 }: PostNotificationEmailProps) {
   return (
-    <Html dir="rtl" lang="ar">
-      <Head>
-        <style>{`
-          * {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-          }
-        `}</style>
-      </Head>
+    <Html dir="rtl">
+      <Head />
       <Preview>منشور جديد: {postTitle}</Preview>
       <Body style={main}>
         <Container style={container}>
           {/* Header */}
           <Section style={header}>
-            <Text style={logo}>بادر</Text>
-            <Text style={headerSubtitle}>منشور جديد</Text>
+            <Heading style={heading}>منصة بادر</Heading>
+            <Text style={subtitle}>منشور جديد</Text>
           </Section>
 
           {/* Content */}
@@ -64,8 +56,6 @@ export default function PostNotificationEmail({
 
               {postExcerpt && <Text style={excerpt}>{postExcerpt}</Text>}
 
-              <Hr style={divider} />
-
               <Text style={authorInfo}>بواسطة: {authorName}</Text>
             </Section>
 
@@ -76,14 +66,23 @@ export default function PostNotificationEmail({
               </Button>
             </Section>
 
-            <Text style={footerNote}>
+            <Text style={notificationNote}>
               تلقيت هذه الرسالة لأنك مشترك في إشعارات منصة بادر.
             </Text>
           </Section>
 
           {/* Footer */}
           <Section style={footer}>
-            <Text style={footerText}>منصة بادر - معاً نصنع الفرق</Text>
+            <Text style={footerText}>
+              هذه رسالة آلية من منصة بادر. يرجى عدم الرد على هذا البريد
+              الإلكتروني.
+            </Text>
+            <Text style={footerText}>
+              للمساعدة، تواصل معنا على:{" "}
+              <a href="mailto:contact@updates.badir.space" style={link}>
+                contact@updates.badir.space
+              </a>
+            </Text>
           </Section>
         </Container>
       </Body>
@@ -93,69 +92,69 @@ export default function PostNotificationEmail({
 
 // Styles
 const main = {
-  backgroundColor: "#faf9f5",
+  backgroundColor: "#f6f9fc",
+  fontFamily: 'Arial, "Segoe UI", sans-serif',
   padding: "20px 0",
 };
 
 const container = {
-  backgroundColor: "#ffffff",
+  backgroundColor: "#F9F7F3",
   margin: "0 auto",
   padding: "0",
   maxWidth: "600px",
   borderRadius: "8px",
   overflow: "hidden",
-  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
 };
 
 const header = {
-  backgroundColor: "#064e43",
-  padding: "30px 20px",
+  backgroundColor: "#064E43",
+  padding: "32px 24px",
   textAlign: "center" as const,
 };
 
-const logo = {
+const heading = {
   color: "#ffffff",
-  fontSize: "32px",
+  fontSize: "28px",
   fontWeight: "bold",
+  margin: "0 0 8px 0",
+};
+
+const subtitle = {
+  color: "#E0F4F1",
+  fontSize: "16px",
   margin: "0",
 };
 
-const headerSubtitle = {
-  color: "#70b595",
-  fontSize: "16px",
-  fontWeight: "500",
-  marginTop: "8px",
-};
-
 const content = {
-  padding: "40px 30px",
+  padding: "32px 24px",
 };
 
 const greeting = {
-  fontSize: "20px",
+  fontSize: "18px",
   fontWeight: "600",
-  color: "#262520",
-  marginBottom: "16px",
+  color: "#1a1a1a",
+  margin: "0 0 16px 0",
 };
 
 const paragraph = {
   fontSize: "16px",
   lineHeight: "24px",
-  color: "#3e3d37",
-  marginBottom: "24px",
+  color: "#4a5568",
+  margin: "0 0 24px 0",
 };
 
 const postCard = {
-  backgroundColor: "#f1f0ea",
+  backgroundColor: "#f7fafc",
   borderRadius: "8px",
   padding: "24px",
   marginBottom: "24px",
-  border: "1px solid #c9c7bf",
+  border: "1px solid #e2e8f0",
 };
 
 const categoryBadge = {
   display: "inline-block",
-  backgroundColor: "#92bd4e",
+  backgroundColor: "#3D986E",
   color: "#ffffff",
   fontSize: "12px",
   fontWeight: "600",
@@ -165,64 +164,67 @@ const categoryBadge = {
 };
 
 const postTitle_style = {
-  fontSize: "22px",
+  fontSize: "20px",
   fontWeight: "700",
-  color: "#064e43",
-  marginBottom: "12px",
-  lineHeight: "1.3",
+  color: "#064E43",
+  margin: "0 0 12px 0",
+  lineHeight: "1.4",
 };
 
 const excerpt = {
   fontSize: "15px",
   lineHeight: "22px",
-  color: "#605f57",
-  marginTop: "12px",
-};
-
-const divider = {
-  border: "none",
-  borderTop: "1px solid #c9c7bf",
-  margin: "16px 0",
+  color: "#718096",
+  margin: "12px 0 16px 0",
 };
 
 const authorInfo = {
   fontSize: "14px",
-  color: "#605f57",
+  color: "#718096",
   fontWeight: "500",
+  margin: "0",
+  paddingTop: "12px",
+  borderTop: "1px solid #e2e8f0",
 };
 
 const buttonContainer = {
   textAlign: "center" as const,
-  margin: "30px 0",
+  margin: "32px 0",
 };
 
 const button = {
-  backgroundColor: "#064e43",
-  borderRadius: "8px",
+  backgroundColor: "#064E43",
+  borderRadius: "6px",
   color: "#ffffff",
   fontSize: "16px",
   fontWeight: "600",
   textDecoration: "none",
   textAlign: "center" as const,
   display: "inline-block",
-  padding: "14px 40px",
+  padding: "14px 32px",
 };
 
-const footerNote = {
+const notificationNote = {
   fontSize: "13px",
-  color: "#92918f",
+  color: "#718096",
   textAlign: "center" as const,
-  marginTop: "24px",
+  margin: "24px 0 0 0",
 };
 
 const footer = {
-  backgroundColor: "#f1f0ea",
-  padding: "24px 30px",
-  textAlign: "center" as const,
+  backgroundColor: "#f7fafc",
+  padding: "24px",
+  borderTop: "1px solid #e2e8f0",
 };
 
 const footerText = {
   fontSize: "14px",
-  color: "#605f57",
-  margin: "4px 0",
+  color: "#718096",
+  textAlign: "center" as const,
+  margin: "8px 0",
+};
+
+const link = {
+  color: "#064E43",
+  textDecoration: "underline",
 };

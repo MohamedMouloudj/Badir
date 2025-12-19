@@ -2,7 +2,7 @@ import {
   Body,
   Container,
   Head,
-  Hr,
+  Heading,
   Html,
   Preview,
   Section,
@@ -27,16 +27,8 @@ export default function ContactMessageEmail({
   timestamp,
 }: ContactMessageEmailProps) {
   return (
-    <Html dir="rtl" lang="ar">
-      <Head>
-        <style>{`
-          * {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-          }
-        `}</style>
-      </Head>
+    <Html dir="rtl">
+      <Head />
       <Preview>
         رسالة جديدة من {fullName} - {title}
       </Preview>
@@ -44,8 +36,8 @@ export default function ContactMessageEmail({
         <Container style={container}>
           {/* Header */}
           <Section style={header}>
-            <Text style={logo}>بادر</Text>
-            <Text style={headerSubtitle}>رسالة جديدة من نموذج التواصل</Text>
+            <Heading style={heading}>منصة بادر</Heading>
+            <Text style={subtitle}>رسالة جديدة من نموذج التواصل</Text>
           </Section>
 
           {/* Content */}
@@ -74,15 +66,11 @@ export default function ContactMessageEmail({
               </Text>
             </Section>
 
-            <Hr style={divider} />
-
             {/* Message Subject */}
             <Section style={subjectBox}>
               <Text style={sectionTitle}>عنوان الرسالة</Text>
               <Text style={subjectText}>{title}</Text>
             </Section>
-
-            <Hr style={divider} />
 
             {/* Message Content */}
             <Section style={messageBox}>
@@ -93,7 +81,7 @@ export default function ContactMessageEmail({
             {/* Action Note */}
             <Section style={actionBox}>
               <Text style={actionText}>
-                💡 للرد على هذه الرسالة، استخدم البريد الإلكتروني: {email}
+                <strong>للرد:</strong> استخدم البريد الإلكتروني {email}
               </Text>
             </Section>
           </Section>
@@ -101,9 +89,15 @@ export default function ContactMessageEmail({
           {/* Footer */}
           <Section style={footer}>
             <Text style={footerText}>
-              هذه رسالة تلقائية من نظام التواصل في منصة بادر
+              هذه رسالة آلية من نظام التواصل في منصة بادر. يرجى عدم الرد على هذا
+              البريد الإلكتروني.
             </Text>
-            <Text style={footerText}>لا ترد على هذا البريد الإلكتروني</Text>
+            <Text style={footerText}>
+              للمساعدة، تواصل معنا على:{" "}
+              <a href="mailto:contact@updates.badir.space" style={link}>
+                contact@updates.badir.space
+              </a>
+            </Text>
           </Section>
         </Container>
       </Body>
@@ -113,125 +107,128 @@ export default function ContactMessageEmail({
 
 // Styles
 const main = {
-  backgroundColor: "#faf9f5",
+  backgroundColor: "#f6f9fc",
+  fontFamily: 'Arial, "Segoe UI", sans-serif',
   padding: "20px 0",
 };
 
 const container = {
-  backgroundColor: "#ffffff",
+  backgroundColor: "#F9F7F3",
   margin: "0 auto",
   padding: "0",
   maxWidth: "650px",
   borderRadius: "8px",
   overflow: "hidden",
-  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
 };
 
 const header = {
-  backgroundColor: "#064e43",
-  padding: "30px 20px",
+  backgroundColor: "#064E43",
+  padding: "32px 24px",
   textAlign: "center" as const,
 };
 
-const logo = {
+const heading = {
   color: "#ffffff",
-  fontSize: "32px",
+  fontSize: "28px",
   fontWeight: "bold",
+  margin: "0 0 8px 0",
+};
+
+const subtitle = {
+  color: "#E0F4F1",
+  fontSize: "16px",
   margin: "0",
 };
 
-const headerSubtitle = {
-  color: "#70b595",
-  fontSize: "16px",
-  fontWeight: "500",
-  marginTop: "8px",
-};
-
 const content = {
-  padding: "30px",
+  padding: "32px 24px",
 };
 
 const infoBox = {
-  backgroundColor: "#f1f0ea",
+  backgroundColor: "#f7fafc",
   borderRadius: "8px",
   padding: "20px",
-  marginBottom: "20px",
-  borderRight: "4px solid #92bd4e",
+  marginBottom: "24px",
+  border: "1px solid #e2e8f0",
+  borderRight: "4px solid #3D986E",
 };
 
 const sectionTitle = {
   fontSize: "18px",
   fontWeight: "700",
-  color: "#064e43",
-  marginBottom: "16px",
+  color: "#064E43",
+  margin: "0 0 16px 0",
 };
 
 const infoRow = {
   fontSize: "15px",
   lineHeight: "24px",
-  color: "#3e3d37",
-  marginBottom: "10px",
+  color: "#4a5568",
+  margin: "0 0 10px 0",
 };
 
 const emailLink = {
-  color: "#064e43",
+  color: "#064E43",
   textDecoration: "underline",
 };
 
-const divider = {
-  border: "none",
-  borderTop: "2px solid #c9c7bf",
-  margin: "24px 0",
-};
-
 const subjectBox = {
-  marginBottom: "20px",
+  marginBottom: "24px",
 };
 
 const subjectText = {
   fontSize: "20px",
   fontWeight: "600",
-  color: "#262520",
+  color: "#1a1a1a",
   lineHeight: "1.4",
+  margin: "0",
 };
 
 const messageBox = {
-  backgroundColor: "#faf9f5",
+  backgroundColor: "#f7fafc",
   borderRadius: "8px",
   padding: "24px",
-  marginBottom: "20px",
-  border: "1px solid #c9c7bf",
+  marginBottom: "24px",
+  border: "1px solid #e2e8f0",
 };
 
 const messageText = {
   fontSize: "16px",
   lineHeight: "26px",
-  color: "#3e3d37",
+  color: "#4a5568",
   whiteSpace: "pre-wrap" as const,
+  margin: "0",
 };
 
 const actionBox = {
-  backgroundColor: "#e9f2db",
-  borderRadius: "8px",
+  backgroundColor: "#EDF2F7",
+  borderRadius: "6px",
   padding: "16px",
-  borderRight: "4px solid #92bd4e",
+  borderRight: "4px solid #3D986E",
 };
 
 const actionText = {
   fontSize: "14px",
   lineHeight: "20px",
-  color: "#445a22",
+  color: "#2D3748",
   margin: "0",
 };
 
 const footer = {
-  backgroundColor: "#f1f0ea",
-  padding: "24px 30px",
-  textAlign: "center" as const,
+  backgroundColor: "#f7fafc",
+  padding: "24px",
+  borderTop: "1px solid #e2e8f0",
 };
 
 const footerText = {
-  fontSize: "13px",
-  color: "#605f57",
-  margin: "4px 0",
+  fontSize: "14px",
+  color: "#718096",
+  textAlign: "center" as const,
+  margin: "8px 0",
+};
+
+const link = {
+  color: "#064E43",
+  textDecoration: "underline",
 };

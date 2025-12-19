@@ -4,13 +4,13 @@ import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import AppButton from "./AppButton";
 
-export default function BackButton() {
+export default function BackButton({ url }: { url?: string }) {
   const router = useRouter();
 
   return (
     <AppButton
       type="outline"
-      onClick={() => router.back()}
+      onClick={() => (url ? router.replace(url) : router.back())}
       icon={<ChevronLeft className="h-4 w-4" />}
       size="sm"
       border="default"

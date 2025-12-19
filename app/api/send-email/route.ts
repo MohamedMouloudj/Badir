@@ -1,32 +1,19 @@
 import { Resend } from "resend";
 import { NextRequest, NextResponse } from "next/server";
-import PasswordResetEmail from "@/emails/PasswordResetEmail";
 import PostNotificationEmail from "@/emails/PostNotificationEmail";
 import FeedbackReceivedEmail from "@/emails/FeedbackReceivedEmail";
 import ContactMessageEmail from "@/emails/ContactMessageEmail";
 import emailConfig from "@/lib/email";
+import { render } from "@react-email/components";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Email type definitions
-type EmailType =
-  | "password-reset"
-  | "post-notification"
-  | "feedback"
-  | "contact";
+// ? password-reset is excluded from here as it's handled directly in lib/auth.ts to wait for the background email to be sent before terminating the function
+type EmailType = "post-notification" | "feedback" | "contact";
 
 interface BaseEmailRequest {
   type: EmailType;
   to: string;
-}
-
-interface PasswordResetRequest extends BaseEmailRequest {
-  type: "password-reset";
-  data: {
-    resetLink: string;
-    userName?: string;
-    expiryMinutes?: number;
-  };
 }
 
 interface PostNotificationRequest extends BaseEmailRequest {
@@ -71,11 +58,7 @@ interface ContactRequest extends BaseEmailRequest {
   };
 }
 
-type EmailRequest =
-  | PasswordResetRequest
-  | PostNotificationRequest
-  | FeedbackRequest
-  | ContactRequest;
+type EmailRequest = PostNotificationRequest | FeedbackRequest | ContactRequest;
 
 export async function POST(request: NextRequest) {
   try {
@@ -99,38 +82,38 @@ export async function POST(request: NextRequest) {
     let emailResponse;
     const fromEmail = emailConfig.fromEmail;
 
+    const commonHeaders = {
+      "X-Entity-Ref-ID": `badir-${Date.now()}`,
+    };
+
     switch (body.type) {
-      case "password-reset": {
-        const { resetLink, userName, expiryMinutes } = body.data;
-
-        emailResponse = await resend.emails.send({
-          from: fromEmail,
-          to: body.to,
-          subject: "إعادة تعيين كلمة المرور - منصة بادر",
-          react: PasswordResetEmail({
-            resetLink,
-            userName,
-            expiryMinutes,
-          }),
-        });
-        break;
-      }
-
       case "post-notification": {
         const { postTitle, authorName, postExcerpt, postUrl, categoryName } =
           body.data;
 
-        emailResponse = await resend.emails.send({
-          from: fromEmail,
-          to: body.to,
-          subject: `منشور جديد: ${postTitle}`,
-          react: PostNotificationEmail({
+        const emailHtml = await render(
+          PostNotificationEmail({
             postTitle,
             authorName,
             postExcerpt,
             postUrl,
             categoryName,
           }),
+        );
+
+        emailResponse = await resend.emails.send({
+          from: `منصة بادر <${fromEmail}>`,
+          to: body.to,
+          subject: `منشور جديد: ${postTitle}`,
+          html: emailHtml,
+          headers: commonHeaders,
+          tags: [
+            { name: "category", value: "post-notification" },
+            {
+              name: "environment",
+              value: process.env.NODE_ENV || "development",
+            },
+          ],
         });
         break;
       }
@@ -138,24 +121,18 @@ export async function POST(request: NextRequest) {
       case "feedback": {
         const feedbackData = body.data;
 
-        // Determine if this is critical feedback
-        const isCritical =
-          feedbackData.easeOfUse === "سيء جداً" ||
-          feedbackData.informationClarity === "سيء جداً" ||
-          feedbackData.contentDiversity === "سيء جداً" ||
-          feedbackData.performanceSpeed === "سيء جداً" ||
-          feedbackData.generalSatisfaction === "سيء جداً" ||
-          (feedbackData.appRating && parseInt(feedbackData.appRating) <= 2);
-
-        const subject = isCritical
-          ? "⚠️ تقييم حرج للمنصة - يتطلب متابعة فورية"
-          : "تقييم جديد للمنصة - منصة بادر";
+        const emailHtml = await render(FeedbackReceivedEmail(feedbackData));
 
         emailResponse = await resend.emails.send({
-          from: fromEmail,
+          from: `منصة بادر <${fromEmail}>`,
           to: body.to,
-          subject,
-          react: FeedbackReceivedEmail(feedbackData),
+          subject: "تقييم حرج للمنصة - يتطلب متابعة فورية",
+          html: emailHtml,
+          headers: commonHeaders,
+          tags: [
+            { name: "category", value: "feedback" },
+            { name: "priority", value: "critical" },
+          ],
         });
         break;
       }
@@ -164,12 +141,8 @@ export async function POST(request: NextRequest) {
         const { fullName, email, inquiryType, title, message, timestamp } =
           body.data;
 
-        emailResponse = await resend.emails.send({
-          from: fromEmail,
-          to: body.to,
-          subject: `رسالة تواصل جديدة: ${title}`,
-          replyTo: email, // Allow admin to reply directly to the user
-          react: ContactMessageEmail({
+        const emailHtml = await render(
+          ContactMessageEmail({
             fullName,
             email,
             inquiryType,
@@ -177,6 +150,19 @@ export async function POST(request: NextRequest) {
             message,
             timestamp,
           }),
+        );
+
+        emailResponse = await resend.emails.send({
+          from: `منصة بادر <${fromEmail}>`,
+          to: body.to,
+          subject: `رسالة تواصل جديدة: ${title}`,
+          replyTo: email,
+          html: emailHtml,
+          headers: commonHeaders,
+          tags: [
+            { name: "category", value: "contact" },
+            { name: "inquiry-type", value: inquiryType },
+          ],
         });
         break;
       }
@@ -188,7 +174,6 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    // Check if email was sent successfully
     if (emailResponse.error) {
       console.error("Resend API error:", emailResponse.error);
       return NextResponse.json(

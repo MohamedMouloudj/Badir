@@ -3,6 +3,7 @@ import {
   Button,
   Container,
   Head,
+  Heading,
   Html,
   Preview,
   Section,
@@ -11,8 +12,8 @@ import {
 
 interface PasswordResetEmailProps {
   resetLink: string;
-  userName?: string;
-  expiryMinutes?: number;
+  userName: string;
+  expiryMinutes: number;
 }
 
 export default function PasswordResetEmail({
@@ -21,57 +22,59 @@ export default function PasswordResetEmail({
   expiryMinutes = 30,
 }: PasswordResetEmailProps) {
   return (
-    <Html dir="rtl" lang="ar">
-      <Head>
-        <style>{`
-          * {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-          }
-        `}</style>
-      </Head>
-      <Preview>طلب إعادة تعيين كلمة المرور - منصة بادر</Preview>
+    <Html dir="rtl">
+      <Head />
+      <Preview>طلب إعادة تعيين كلمة المرور لحسابك في منصة بادر</Preview>
       <Body style={main}>
         <Container style={container}>
           {/* Header */}
           <Section style={header}>
-            <Text style={logo}>بادر</Text>
+            <Heading style={heading}>منصة بادر</Heading>
+            <Text style={subtitle}>إعادة تعيين كلمة المرور</Text>
           </Section>
 
           {/* Content */}
           <Section style={content}>
-            <Text style={greeting}>مرحباً {userName ? userName : ""},</Text>
+            <Text style={greeting}>مرحباً {userName}،</Text>
 
             <Text style={paragraph}>
               تلقينا طلباً لإعادة تعيين كلمة المرور الخاصة بحسابك في منصة بادر.
             </Text>
 
             <Text style={paragraph}>
-              اضغط على الزر أدناه لإعادة تعيين كلمة المرور الخاصة بك:
+              انقر على الزر أدناه لإنشاء كلمة مرور جديدة:
             </Text>
 
-            {/* Reset Button */}
+            {/* CTA Button */}
             <Section style={buttonContainer}>
               <Button style={button} href={resetLink}>
                 إعادة تعيين كلمة المرور
               </Button>
             </Section>
 
-            <Text style={paragraph}>
+            <Text style={expiryText}>
               هذا الرابط صالح لمدة {expiryMinutes} دقيقة فقط.
             </Text>
 
-            <Text style={warningText}>
-              إذا لم تطلب إعادة تعيين كلمة المرور، يُرجى تجاهل هذه الرسالة.
-              حسابك آمن ولن يتم إجراء أي تغييرات.
+            <Text style={securityNote}>
+              <strong>ملاحظة أمنية:</strong> إذا لم تطلب إعادة تعيين كلمة
+              المرور، يمكنك تجاهل هذه الرسالة بأمان. لن يتم إجراء أي تغييرات على
+              حسابك.
             </Text>
           </Section>
 
           {/* Footer */}
           <Section style={footer}>
-            <Text style={footerText}>منصة بادر - معاً نصنع الفرق</Text>
-            <Text style={footerText}>لا تقم بمشاركة هذا الرابط مع أي شخص</Text>
+            <Text style={footerText}>
+              هذه رسالة آلية من منصة بادر. يرجى عدم الرد على هذا البريد
+              الإلكتروني.
+            </Text>
+            <Text style={footerText}>
+              للمساعدة، تواصل معنا على:{" "}
+              <a href="mailto:contact@updates.badir.space" style={link}>
+                contact@updates.badir.space
+              </a>
+            </Text>
           </Section>
         </Container>
       </Body>
@@ -81,87 +84,106 @@ export default function PasswordResetEmail({
 
 // Styles
 const main = {
-  backgroundColor: "#faf9f5",
+  backgroundColor: "#f6f9fc",
+  fontFamily: 'Arial, "Segoe UI", sans-serif',
   padding: "20px 0",
 };
 
 const container = {
-  backgroundColor: "#ffffff",
+  backgroundColor: "#F9F7F3",
   margin: "0 auto",
   padding: "0",
   maxWidth: "600px",
   borderRadius: "8px",
   overflow: "hidden",
-  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
 };
 
 const header = {
-  backgroundColor: "#064e43",
-  padding: "30px 20px",
+  backgroundColor: "#064E43",
+  padding: "32px 24px",
   textAlign: "center" as const,
 };
 
-const logo = {
+const heading = {
   color: "#ffffff",
-  fontSize: "32px",
+  fontSize: "28px",
   fontWeight: "bold",
+  margin: "0 0 8px 0",
+};
+
+const subtitle = {
+  color: "#E0F4F1",
+  fontSize: "16px",
   margin: "0",
 };
 
 const content = {
-  padding: "40px 30px",
+  padding: "32px 24px",
 };
 
 const greeting = {
-  fontSize: "24px",
+  fontSize: "18px",
   fontWeight: "600",
-  color: "#262520",
-  marginBottom: "20px",
+  color: "#1a1a1a",
+  margin: "0 0 16px 0",
 };
 
 const paragraph = {
   fontSize: "16px",
   lineHeight: "24px",
-  color: "#3e3d37",
-  marginBottom: "16px",
+  color: "#4a5568",
+  margin: "0 0 16px 0",
 };
 
 const buttonContainer = {
   textAlign: "center" as const,
-  margin: "30px 0",
+  margin: "32px 0",
 };
 
 const button = {
-  backgroundColor: "#064e43",
-  borderRadius: "8px",
+  backgroundColor: "#064E43",
+  borderRadius: "6px",
   color: "#ffffff",
   fontSize: "16px",
   fontWeight: "600",
   textDecoration: "none",
   textAlign: "center" as const,
   display: "inline-block",
-  padding: "14px 40px",
+  padding: "14px 32px",
 };
 
-const warningText = {
+const expiryText = {
   fontSize: "14px",
-  lineHeight: "20px",
-  color: "#605f57",
-  backgroundColor: "#f1f0ea",
-  padding: "16px",
+  color: "#718096",
+  textAlign: "center" as const,
+  margin: "16px 0 24px 0",
+};
+
+const securityNote = {
+  backgroundColor: "#FFF5F5",
+  border: "1px solid #FEB2B2",
   borderRadius: "6px",
-  marginTop: "24px",
-  borderRight: "4px solid #ebb632",
+  padding: "16px",
+  fontSize: "14px",
+  color: "#742A2A",
+  margin: "24px 0 0 0",
 };
 
 const footer = {
-  backgroundColor: "#f1f0ea",
-  padding: "24px 30px",
-  textAlign: "center" as const,
+  backgroundColor: "#f7fafc",
+  padding: "24px",
+  borderTop: "1px solid #e2e8f0",
 };
 
 const footerText = {
   fontSize: "14px",
-  color: "#605f57",
-  margin: "4px 0",
+  color: "#718096",
+  textAlign: "center" as const,
+  margin: "8px 0",
+};
+
+const link = {
+  color: "#064E43",
+  textDecoration: "underline",
 };

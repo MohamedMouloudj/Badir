@@ -2,7 +2,7 @@ import {
   Body,
   Container,
   Head,
-  Hr,
+  Heading,
   Html,
   Preview,
   Section,
@@ -50,54 +50,51 @@ export default function FeedbackReceivedEmail({
     (appRating && parseInt(appRating) <= 2);
 
   return (
-    <Html dir="rtl" lang="ar">
-      <Head>
-        <style>{`
-          * {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-          }
-        `}</style>
-      </Head>
+    <Html dir="rtl">
+      <Head />
       <Preview>
-        {isCritical ? "⚠️ تقييم حرج - " : ""}تقييم جديد للمنصة من {userName}
+        {isCritical ? "تقييم حرج - " : ""}تقييم جديد للمنصة من {userName}
       </Preview>
       <Body style={main}>
         <Container style={container}>
           {/* Header */}
-          <Section
-            style={{
-              ...header,
-              backgroundColor: isCritical ? "#c11d1d" : "#064e43",
-            }}
-          >
-            <Text style={logo}>بادر</Text>
-            <Text style={headerSubtitle}>
-              {isCritical ? "⚠️ تقييم حرج للمنصة" : "تقييم جديد للمنصة"}
+          <Section style={isCritical ? criticalHeader : header}>
+            <Heading style={heading}>منصة بادر</Heading>
+            <Text style={subtitle}>
+              {isCritical
+                ? "تقييم حرج للمنصة - يتطلب متابعة"
+                : "تقييم جديد للمنصة"}
             </Text>
           </Section>
 
           {/* Content */}
           <Section style={content}>
+            {/* Critical Alert */}
+            {isCritical && (
+              <Section style={criticalAlert}>
+                <Text style={criticalAlertText}>
+                  <strong>تنبيه:</strong> هذا التقييم يحتوي على ملاحظات حرجة
+                  تتطلب متابعة فورية
+                </Text>
+              </Section>
+            )}
+
             {/* User Info */}
             <Section style={infoBox}>
               <Text style={sectionTitle}>معلومات المستخدم</Text>
-              <Text style={infoText}>
+              <Text style={infoRow}>
                 <strong>الاسم:</strong> {userName}
               </Text>
-              <Text style={infoText}>
+              <Text style={infoRow}>
                 <strong>البريد الإلكتروني:</strong> {userEmail}
               </Text>
-              <Text style={infoText}>
+              <Text style={infoRow}>
                 <strong>التاريخ والوقت:</strong> {timestamp}
               </Text>
             </Section>
 
-            <Hr style={divider} />
-
             {/* Rating Scores */}
-            <Section style={scoresBox}>
+            <Section style={scoresSection}>
               <Text style={sectionTitle}>التقييمات</Text>
 
               {easeOfUse && (
@@ -159,44 +156,40 @@ export default function FeedbackReceivedEmail({
 
             {/* Difficulties */}
             {encounteredDifficulties && (
-              <>
-                <Hr style={divider} />
-                <Section style={feedbackBox}>
-                  <Text style={sectionTitle}>الصعوبات</Text>
+              <Section style={feedbackBox}>
+                <Text style={sectionTitle}>الصعوبات التي واجهها المستخدم</Text>
+                <Text style={feedbackText}>
+                  <strong>واجه صعوبات:</strong> {encounteredDifficulties}
+                </Text>
+                {difficultiesDetails && (
                   <Text style={feedbackText}>
-                    <strong>واجه صعوبات:</strong> {encounteredDifficulties}
+                    <strong>التفاصيل:</strong> {difficultiesDetails}
                   </Text>
-                  {difficultiesDetails && (
-                    <Text style={feedbackText}>
-                      <strong>التفاصيل:</strong> {difficultiesDetails}
-                    </Text>
-                  )}
-                </Section>
-              </>
+                )}
+              </Section>
             )}
 
             {/* Improvement Suggestions */}
             {improvementSuggestions && (
-              <>
-                <Hr style={divider} />
-                <Section style={feedbackBox}>
-                  <Text style={sectionTitle}>اقتراحات التطوير</Text>
-                  <Text style={feedbackText}>{improvementSuggestions}</Text>
-                </Section>
-              </>
+              <Section style={feedbackBox}>
+                <Text style={sectionTitle}>اقتراحات التطوير</Text>
+                <Text style={feedbackText}>{improvementSuggestions}</Text>
+              </Section>
             )}
           </Section>
 
           {/* Footer */}
           <Section style={footer}>
             <Text style={footerText}>
-              هذه رسالة تلقائية من نظام تقييم منصة بادر
+              هذه رسالة آلية من نظام تقييم منصة بادر. يرجى عدم الرد على هذا
+              البريد الإلكتروني.
             </Text>
-            {isCritical && (
-              <Text style={criticalFooter}>
-                ⚠️ يتطلب هذا التقييم متابعة فورية
-              </Text>
-            )}
+            <Text style={footerText}>
+              للمساعدة، تواصل معنا على:{" "}
+              <a href="mailto:contact@updates.badir.space" style={link}>
+                contact@updates.badir.space
+              </a>
+            </Text>
           </Section>
         </Container>
       </Body>
@@ -204,7 +197,6 @@ export default function FeedbackReceivedEmail({
   );
 }
 
-// Helper component for rating rows
 function RatingRow({
   label,
   value,
@@ -215,22 +207,16 @@ function RatingRow({
   isCritical: boolean;
 }) {
   return (
-    <Text
-      style={{
-        ...ratingRow,
-        backgroundColor: isCritical ? "#fef2f2" : "#faf9f5",
-        borderRight: isCritical ? "4px solid #c11d1d" : "4px solid #92bd4e",
-      }}
-    >
-      <strong>{label}:</strong>{" "}
-      <span style={{ color: isCritical ? "#c11d1d" : "#064e43" }}>{value}</span>
+    <Text style={isCritical ? criticalRatingRow : ratingRow}>
+      <strong>{label}:</strong> {value}
     </Text>
   );
 }
 
 // Styles
 const main = {
-  backgroundColor: "#faf9f5",
+  backgroundColor: "#f6f9fc",
+  fontFamily: 'Arial, "Segoe UI", sans-serif',
   padding: "20px 0",
 };
 
@@ -241,102 +227,130 @@ const container = {
   maxWidth: "650px",
   borderRadius: "8px",
   overflow: "hidden",
-  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
 };
 
 const header = {
-  padding: "30px 20px",
+  backgroundColor: "#064E43",
+  padding: "32px 24px",
   textAlign: "center" as const,
 };
 
-const logo = {
+const criticalHeader = {
+  backgroundColor: "#C53030",
+  padding: "32px 24px",
+  textAlign: "center" as const,
+};
+
+const heading = {
   color: "#ffffff",
-  fontSize: "32px",
+  fontSize: "28px",
   fontWeight: "bold",
+  margin: "0 0 8px 0",
+};
+
+const subtitle = {
+  color: "#E0F4F1",
+  fontSize: "16px",
   margin: "0",
 };
 
-const headerSubtitle = {
-  color: "#ffffff",
-  fontSize: "16px",
-  fontWeight: "500",
-  marginTop: "8px",
-  opacity: 0.9,
+const content = {
+  padding: "32px 24px",
 };
 
-const content = {
-  padding: "30px",
+const criticalAlert = {
+  backgroundColor: "#FFF5F5",
+  border: "2px solid #FC8181",
+  borderRadius: "6px",
+  padding: "16px",
+  marginBottom: "24px",
+};
+
+const criticalAlertText = {
+  fontSize: "14px",
+  color: "#742A2A",
+  margin: "0",
+  textAlign: "center" as const,
 };
 
 const infoBox = {
-  backgroundColor: "#f1f0ea",
+  backgroundColor: "#f7fafc",
   borderRadius: "8px",
   padding: "20px",
-  marginBottom: "20px",
+  marginBottom: "24px",
+  border: "1px solid #e2e8f0",
 };
 
 const sectionTitle = {
   fontSize: "18px",
   fontWeight: "700",
-  color: "#064e43",
-  marginBottom: "12px",
+  color: "#064E43",
+  margin: "0 0 16px 0",
 };
 
-const infoText = {
-  fontSize: "14px",
-  lineHeight: "22px",
-  color: "#3e3d37",
-  marginBottom: "8px",
+const infoRow = {
+  fontSize: "15px",
+  lineHeight: "24px",
+  color: "#4a5568",
+  margin: "0 0 8px 0",
 };
 
-const divider = {
-  border: "none",
-  borderTop: "2px solid #c9c7bf",
-  margin: "24px 0",
-};
-
-const scoresBox = {
-  marginBottom: "20px",
+const scoresSection = {
+  marginBottom: "24px",
 };
 
 const ratingRow = {
   fontSize: "15px",
   lineHeight: "22px",
-  color: "#3e3d37",
+  color: "#4a5568",
   padding: "12px 16px",
   marginBottom: "10px",
+  backgroundColor: "#f7fafc",
   borderRadius: "6px",
+  borderRight: "4px solid #3D986E",
+};
+
+const criticalRatingRow = {
+  fontSize: "15px",
+  lineHeight: "22px",
+  color: "#742A2A",
+  padding: "12px 16px",
+  marginBottom: "10px",
+  backgroundColor: "#FFF5F5",
+  borderRadius: "6px",
+  borderRight: "4px solid #C53030",
 };
 
 const feedbackBox = {
-  backgroundColor: "#f1f0ea",
+  backgroundColor: "#f7fafc",
   borderRadius: "8px",
   padding: "20px",
   marginBottom: "20px",
+  border: "1px solid #e2e8f0",
 };
 
 const feedbackText = {
   fontSize: "15px",
   lineHeight: "24px",
-  color: "#3e3d37",
-  marginBottom: "12px",
+  color: "#4a5568",
+  margin: "0 0 12px 0",
 };
 
 const footer = {
-  backgroundColor: "#f1f0ea",
-  padding: "24px 30px",
-  textAlign: "center" as const,
+  backgroundColor: "#f7fafc",
+  padding: "24px",
+  borderTop: "1px solid #e2e8f0",
 };
 
 const footerText = {
-  fontSize: "13px",
-  color: "#605f57",
-  margin: "4px 0",
+  fontSize: "14px",
+  color: "#718096",
+  textAlign: "center" as const,
+  margin: "8px 0",
 };
 
-const criticalFooter = {
-  fontSize: "14px",
-  color: "#c11d1d",
-  fontWeight: "600",
-  marginTop: "8px",
+const link = {
+  color: "#064E43",
+  textDecoration: "underline",
 };

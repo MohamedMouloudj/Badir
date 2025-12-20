@@ -6,7 +6,7 @@
   "crons": [
     {
       "path": "/api/cron/process-webhooks",
-      "schedule": "*/10 * * * *"
+      "schedule": "*/45 * * * *"
     }
   ]
 }

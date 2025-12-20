@@ -114,7 +114,6 @@ const educationCategory: InitiativeCategory = {
   nameEn: null,
   descriptionAr: null,
   descriptionEn: null,
-  icon: null,
   bgColor: null,
   textColor: null,
   createdAt: new Date(),
@@ -127,7 +126,6 @@ const healthCategory: InitiativeCategory = {
   nameEn: null,
   descriptionAr: null,
   descriptionEn: null,
-  icon: null,
   bgColor: null,
   textColor: null,
   createdAt: new Date(),
@@ -140,7 +138,6 @@ const mindCategory: InitiativeCategory = {
   nameEn: null,
   descriptionAr: null,
   descriptionEn: null,
-  icon: null,
   bgColor: null,
   textColor: null,
   createdAt: new Date(),
@@ -170,6 +167,9 @@ const sampleUsers: User[] = [
     latitude: null,
     longitude: null,
     profileCompleted: false,
+    newsletterSubscribed: false,
+    newsletterSubscribedAt: null,
+    mailerLiteId: null,
   },
   {
     id: "2",
@@ -193,6 +193,9 @@ const sampleUsers: User[] = [
     latitude: null,
     longitude: null,
     profileCompleted: false,
+    newsletterSubscribed: false,
+    newsletterSubscribedAt: null,
+    mailerLiteId: null,
   },
   {
     id: "3",
@@ -216,6 +219,9 @@ const sampleUsers: User[] = [
     latitude: null,
     longitude: null,
     profileCompleted: false,
+    newsletterSubscribed: false,
+    newsletterSubscribedAt: null,
+    mailerLiteId: null,
   },
 ];
 

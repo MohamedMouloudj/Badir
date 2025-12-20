@@ -10,6 +10,7 @@ import { PostType, PostStatus } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import { extractImageSrcsFromHtml } from "@/lib/utils";
 import { ALLOWED_INITIATIVE_IMAGES } from "@/types/Statics";
+import { PostEmailQueueService } from "@/services/post-email-queue";
 
 /**
  * Create a new post
@@ -66,6 +67,19 @@ export async function createPostAction(
     );
   }
 
+  // Enqueue emails if post is published
+  if (status === "published") {
+    try {
+      await PostEmailQueueService.enqueuePostEmails({
+        postId: post.id,
+        initiativeId,
+      });
+    } catch (error) {
+      console.error("Failed to enqueue post emails:", error);
+      // Don't fail the post creation if email queueing fails
+    }
+  }
+
   revalidatePath(`/initiatives/${initiativeId}`);
   revalidateTag(`initiative-${initiativeId}-posts`);
   return { success: true, message: "تم نشر المنشور" };
@@ -100,6 +114,10 @@ export async function updatePostAction(
 ) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) return { success: false, error: "يجب تسجيل الدخول" };
+
+  // Get current post status to check if we're transitioning to published
+  const existingPost = await InitiativePostsService.getById(postId);
+  const wasNotPublished = existingPost?.status !== "published";
 
   const updateData: any = {
     content,
@@ -176,6 +194,18 @@ export async function updatePostAction(
           err,
         );
       }
+    }
+  }
+
+  // Enqueue emails if post is being published for the first time
+  if (status === "published" && wasNotPublished) {
+    try {
+      await PostEmailQueueService.enqueuePostEmails({
+        postId,
+        initiativeId,
+      });
+    } catch (error) {
+      console.error("Failed to enqueue post emails:", error);
     }
   }
 
@@ -324,7 +354,7 @@ export async function listPostsAction(
     },
     [`initiative-${initiativeId}-posts`, onlyUserId || "all", status || "all"],
     {
-      revalidate: 30,
+      revalidate: 60,
       tags: [`initiative-${initiativeId}-posts`],
     },
   );

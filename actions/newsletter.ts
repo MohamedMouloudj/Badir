@@ -4,22 +4,14 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { MailerLiteService } from "@/services/mailerlite";
 import { prisma } from "@/lib/db";
-import { Ratelimit } from "@upstash/ratelimit";
-import { Redis } from "@upstash/redis";
 import { waitUntil } from "@vercel/functions";
+import { newsletterSubscriptionRateLimiter } from "@/lib/rate-limit";
 
 interface ActionResult {
   success: boolean;
   message?: string;
   error?: string;
 }
-
-const ratelimit = new Ratelimit({
-  redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(3, "1 m"),
-  analytics: true,
-  prefix: "newsletter",
-});
 
 export async function subscribeToNewsletter(): Promise<ActionResult> {
   try {
@@ -37,7 +29,7 @@ export async function subscribeToNewsletter(): Promise<ActionResult> {
     const userId = session.user.id;
 
     const { success: rateLimitSuccess, pending } =
-      await ratelimit.limit(userId);
+      await newsletterSubscriptionRateLimiter.limit(userId);
 
     if (waitUntil !== undefined) {
       // I added the condition to avoid error in dev
@@ -135,7 +127,7 @@ export async function unsubscribeFromNewsletter(): Promise<ActionResult> {
     const userId = session.user.id;
 
     const { success: rateLimitSuccess, pending } =
-      await ratelimit.limit(userId);
+      await newsletterSubscriptionRateLimiter.limit(userId);
 
     if (waitUntil !== undefined) {
       waitUntil(pending);

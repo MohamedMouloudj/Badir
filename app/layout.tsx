@@ -33,6 +33,10 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
+        url: "/favicon.ico",
+        sizes: "any",
+      },
+      {
         url: "/pwa/icons/manifest-icon-192.maskable.png",
         sizes: "192x192",
         type: "image/png",
@@ -94,6 +98,19 @@ export default async function RootLayout({
               warning: "bg-yellow-50 border-yellow-200 text-yellow-800",
               info: "bg-blue-50 border-blue-200 text-blue-800",
             },
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "بادر",
+              url: "https://badir.space",
+              logo: "https://badir.space/pwa/icons/icon-512.png",
+              description: "منصة تطوعية شبابية لتنظيم العمل التطوعي",
+            }),
           }}
         />
       </body>

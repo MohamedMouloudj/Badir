@@ -392,3 +392,15 @@ model WebhookEvent {
   @@index([provider, createdAt])
   @@map("webhook_events")
 }
+
+model PostEmailQueue {
+  id           String   @id @default(cuid())
+  userId       String   @map("user_id")
+  email        String   @db.VarChar(255)
+  initiativeId String   @map("initiative_id")
+  postId       String   @map("post_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@map("post_email_queue")
+}

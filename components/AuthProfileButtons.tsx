@@ -58,7 +58,7 @@ export function AuthProfileButtons({
     }
 
     setHasLoadedImage(true);
-  }, [session?.user?.id, hasLoadedImage]);
+  }, [session?.user.id, hasLoadedImage, fetchUserImage, fetchOrganizationLogo]);
 
   const handleProfileClick = () => {
     setIsPopoverOpen(false);
@@ -142,6 +142,20 @@ export function AuthProfileButtons({
                     <Star className="h-4 w-4" />
                     التقييم
                   </Link>
+                  <Link
+                    href="/profile#newsletter"
+                    className="text-neutrals-600 hover:bg-neutrals-200 flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors"
+                    onClick={handleProfileClick}
+                  >
+                    <Image
+                      src="/images/icons/messages.svg"
+                      alt="Newsletter Icon"
+                      width={16}
+                      height={16}
+                      className="text-neutrals-600 h-4 w-4"
+                    />
+                    النشرة البريدية
+                  </Link>
 
                   {/* Logout Button */}
                   <Logout
@@ -217,6 +231,20 @@ export function AuthProfileButtons({
                   >
                     <Star className="h-4 w-4" />
                     التقييم
+                  </Link>
+                  <Link
+                    href="/profile#newsletter"
+                    className="text-neutrals-600 hover:bg-neutrals-200 flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors"
+                    onClick={handleProfileClick}
+                  >
+                    <Image
+                      src="/images/icons/messages.svg"
+                      alt="Newsletter Icon"
+                      width={16}
+                      height={16}
+                      className="text-neutrals-600 h-4 w-4"
+                    />
+                    النشرة البريدية
                   </Link>
 
                   {/* Logout Button */}

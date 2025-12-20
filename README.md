@@ -423,6 +423,93 @@ actions
 
 ---
 
+## Email Systems
+
+Badir uses two separate email services, each optimized for its specific purpose:
+
+### Transactional Emails (Resend)
+
+**Purpose**: Time-sensitive, user-triggered emails requiring high deliverability
+
+**Use Cases**:
+
+- Password reset links
+- Contact form submissions
+- Feedback notifications
+- Account-related notifications
+
+**Configuration**:
+
+```bash
+RESEND_API_KEY=re_...
+RESEND_FROM_EMAIL=noreply@yourdomain.com
+CONTACT_EMAIL=contact@yourdomain.com
+```
+
+**Implementation**: Uses [Resend](https://resend.com) with `react-email` templates for type-safe, responsive emails.
+
+### Newsletter Emails (MailerLite)
+
+**Purpose**: Marketing, newsletters, and bulk communications
+
+**Use Cases**:
+
+- Newsletter subscriptions
+- Campaign delivery
+- Audience segmentation
+- Email analytics
+
+**Configuration**:
+
+```bash
+MAILERLITE_API_KEY=eyJ...
+MAILERLITE_WEBHOOK_SECRET=...
+```
+
+**Implementation**: Uses [MailerLite](https://mailerlite.com) API for subscription management with production-ready rate limiting via Upstash Redis.
+
+### Webhook Queue System
+
+To keep user newsletter status synchronized with MailerLite (unsubscribes, bounces, etc.), Badir implements a database-backed webhook queue:
+
+**Flow**:
+
+1. **Fast Webhook Endpoint** (`/api/webhooks/mailerlite`):
+   - Validates HMAC-SHA256 signature
+   - Enqueues events to `webhook_events` table
+   - Returns 200 OK in <3 seconds
+
+2. **Background Cron Worker** (`/api/cron/process-webhooks`):
+   - Runs every minute via Vercel Cron
+   - Processes 10 oldest events per batch
+   - Updates user newsletter status
+   - Deletes successfully processed events
+   - Failed events remain for automatic retry
+
+**Required Environment Variables**:
+
+```bash
+CRON_SECRET=...  # Generated via: openssl rand -base64 32
+UPSTASH_REDIS_REST_URL=https://...  # For rate limiting
+UPSTASH_REDIS_REST_TOKEN=...
+```
+
+**Deployment Notes**:
+
+- Run `npm run db:migrate` to create `webhook_events` table
+- Configure webhook in MailerLite dashboard after deployment
+- Vercel Cron activates automatically in production
+- See `WEBHOOK_QUEUE_QUICK_START.md` for complete setup guide
+
+**Why Two Services?**
+
+- **Compliance**: Transactional emails must not contain marketing content
+- **Deliverability**: Separate IP reputation prevents marketing campaigns from affecting critical notifications
+- **Cost**: MailerLite provides better economics for bulk newsletters
+- **Features**: MailerLite offers advanced analytics, A/B testing, and audience management
+
+---
+
 # License
 
 <a href="https://github.com/MohamedMouloudj/Badir">Badir</a>© 2025 by<a href="https://github.com/MohamedMouloudj/">Mohamed Mouloudj</a>and<a href="https://www.linkedin.com/company/bunian-%D8%A8%D9%86%D9%8A%D8%A7%D9%86/">Bunian</a>is licensed under<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</a></br><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">

@@ -5,7 +5,6 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import emailjs from "@emailjs/browser";
 import FormInput from "@/components/FormInput";
 import AppButton from "@/components/AppButton";
 import {
@@ -17,7 +16,6 @@ import {
 } from "@/schemas/platformRatingSchema";
 import { Card, CardContent } from "@/components/ui/card";
 import { submitRating } from "@/actions/submitRating";
-import emailConfig from "@/lib/email";
 
 export default function PlatformRatingForm() {
   const [isPending, startTransition] = useTransition();
@@ -47,15 +45,6 @@ export default function PlatformRatingForm() {
         if (result.message) {
           toast.success(result.message);
           reset();
-        }
-        if (result.criticalAlertSent) {
-          emailjs.init(emailConfig.publicKey);
-
-          emailjs.send(
-            emailConfig.serviceId,
-            emailConfig.templates.criticalRating,
-            result.criticalAlertSent,
-          );
         }
       } else {
         if (result.errors) {

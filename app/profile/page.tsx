@@ -1,6 +1,7 @@
 import ParticipationCard from "@/components/pages/ParticipationCard";
 import UserProfileForm from "@/components/pages/profile/UserProfile";
 import OrganizationProfileForm from "@/components/pages/profile/OrganizationProfile";
+import NewsletterSubscription from "@/components/pages/NewsletterSubscription";
 import getSessionWithCheckProfile from "@/hooks/getSessionWithCheckProfile";
 import { toPlainOrganization, toPlainUser } from "@/lib/utils";
 import { ParticipationService } from "@/services/participations";
@@ -65,6 +66,9 @@ export default async function Page() {
             dir="rtl"
           >
             <OrganizationProfileForm defaultValues={plainOrgData} />
+            <div className="mt-6">
+              <NewsletterSubscription />
+            </div>
             {orgInitiatives.length > 0 && (
               <div
                 className="container w-full px-4 pt-2 pb-6 md:px-6"
@@ -108,6 +112,9 @@ export default async function Page() {
             dir="rtl"
           >
             <UserProfileForm defaultValues={userProfileData} />
+            <div className="mt-6">
+              <NewsletterSubscription />
+            </div>
             {participations.length > 0 && (
               <div
                 className="container w-full px-4 pt-2 pb-6 md:px-6"

@@ -9,3 +9,5 @@ export * from "./contactSchema";
 export * from "./newInitiativeSchema";
 export * from "./joinInitiativeSchema";
 export * from "./categorySchema";
+export * from "./forgotPasswordSchema";
+export * from "./resetPasswordSchema";

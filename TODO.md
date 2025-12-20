@@ -61,10 +61,15 @@
 
 ### Email Service
 
-- [ ] Integrate Resend (or similar email service)
-- [ ] Replace all EmailJS usage with new service
-- [ ] Set up email templates
+- [x] Integrate Resend email service
+- [x] Replace all EmailJS usage with Resend
+- [x] Set up email templates (4 templates created)
 - [ ] Add email notification features (verification, updates, reminders)
+  - [x] Contact form notifications
+  - [x] Critical feedback alerts
+  - [ ] Email verification
+  - [x] Post update notifications
+  - [ ] Event reminders
 
 ### Multi-language Support
 

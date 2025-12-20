@@ -6,6 +6,14 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "40mb",
     },
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/webhooks/mailerlite",
+        destination: "/api/webhooks/mailerlite",
+      },
+    ];
+  },
   images: {
     // domains: ["*.supabase.co"],
     remotePatterns: [

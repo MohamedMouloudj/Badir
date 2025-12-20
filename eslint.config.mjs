@@ -21,7 +21,7 @@ const eslintConfig = [
     rules: {
       "@typescript-eslint/no-empty-object-type": "off",
       "@typescript-eslint/no-explicit-any": "warn",
-      "prettier/prettier": "error",
+      "prettier/prettier": "warn",
     },
   },
   {

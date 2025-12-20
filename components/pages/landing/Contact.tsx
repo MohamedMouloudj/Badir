@@ -1,4 +1,5 @@
 import AppButton from "@/components/AppButton";
+import { ArrowUpLeft } from "lucide-react";
 import React from "react";
 
 export default function Contact() {
@@ -6,9 +7,9 @@ export default function Contact() {
     <section dir="rtl" className="flex-center-column items-center">
       <h2 className="section-title">رأيـــك يهمــنا</h2>
       <p className="section-description text-center">
-        ضع هنا كل فكرة، تحسين ترجو أن يكون في هذه المنصة
+        نسعد بملاحظاتك واقتراحاتك لتحسين تجربتك على المنصة
       </p>
-      <div className="bg-neutrals-100 border-primary-400 flex items-center overflow-hidden rounded-full border-3">
+      {/* <div className="bg-neutrals-100 border-primary-400 flex items-center overflow-hidden rounded-full border-3">
         <input
           type="email"
           placeholder="فكرتك"
@@ -25,7 +26,16 @@ export default function Contact() {
             أرسلها
           </AppButton>
         </div>
-      </div>
+      </div> */}
+      <AppButton
+        type="primary"
+        border="rounded"
+        url="/contact"
+        className="h-8 px-3 whitespace-nowrap sm:h-10 sm:px-4"
+        icon={<ArrowUpLeft className="h-4 w-4 md:h-5 md:w-5" />}
+      >
+        تواصل معنا
+      </AppButton>
     </section>
   );
 }

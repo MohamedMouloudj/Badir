@@ -29,10 +29,10 @@ export default function ContactInfo() {
                 البريد الإلكتروني
               </h3>
               <a
-                href="mailto:contact@badir.space"
+                href={`mailto:${emailConfig.contactEmail}`}
                 className="text-primary-500 text-paragraph-md hover:text-primary-600 font-medium underline decoration-2 underline-offset-4 transition-colors"
               >
-                {emailConfig.adminEmail}
+                {emailConfig.contactEmail}
               </a>
               <p className="text-neutrals-500 text-paragraph-md mt-1">
                 راسلنا في أي وقت

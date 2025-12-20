@@ -5,11 +5,11 @@ import { NextRequest, NextResponse } from "next/server";
 /**
  * Webhook Event Processor (Cron Worker)
  *
- * Runs every minute via Vercel Cron.
+ * Runs daily at 8 AM via Vercel Cron (Hobby plan).
  * Processes queued webhook events from the database.
  *
  * Flow:
- * 1. Fetch oldest unprocessed events (batch of 20)
+ * 1. Fetch oldest unprocessed events (batch of 50)
  * 2. Process each event
  * 3. Delete event only after successful processing
  * 4. If processing fails, event remains for retry on next run
@@ -21,7 +21,7 @@ interface MailerLiteWebhookEvent {
   data: SubscriberPayload;
 }
 
-const BATCH_SIZE = 10;
+const BATCH_SIZE = 40;
 
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
@@ -206,7 +206,7 @@ async function handleUpdate(
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-// Since we are usign Hobby plan of Vercel, we have up to 10 seconds per execution. For that I reduced batch size to 10.
+// Since we are usign Hobby plan of Vercel, we have up to 10 seconds per execution. For that I reduced batch size to 40.
 // But still, on the table in https://vercel.com/docs/functions/configuring-functions/duration?framework=nextjs-app#duration-limits is says max is 60s for disabled Fluide compute.
-// I am keeping batch size to 10 for now to be safe.
+// I am keeping batch size to 40 for now to be safe.
 export const maxDuration = 60;

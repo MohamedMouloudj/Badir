@@ -75,6 +75,7 @@ export class MailerLiteService {
           name: firstName,
           last_name: lastName,
         },
+        groups: [process.env.MAILERLITE_SUBSCRIBERS_GROUP_ID || ""],
         status: "active",
       };
 

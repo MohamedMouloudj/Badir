@@ -1,4 +1,3 @@
-import { InitiativeCard } from "@/types/Initiatives";
 import {
   AboutInfo,
   CarouselImage,
@@ -7,11 +6,8 @@ import {
 } from "@/types/Statics";
 import {
   InitiativeCategory,
-  InitiativeStatus,
-  OrganizerType,
   ParticipantRole,
   Sex,
-  TargetAudience,
   User,
   UserType,
 } from "@prisma/client";
@@ -225,112 +221,27 @@ const sampleUsers: User[] = [
   },
 ];
 
-// Sample Initiatives
-const sampleInitiatives: InitiativeCard[] = [
-  {
-    id: "1",
-    titleAr: "برنامج محو الأمية للكبار",
-    titleEn: "Adult Literacy Program",
-    shortDescriptionAr: "تعليم القراءة والكتابة للكبار",
-    shortDescriptionEn: "Teaching reading and writing to adults",
-    coverImage: "/images/initiatives/literacy-program.jpg",
-    city: "الجزائر",
-    startDate: new Date("2024-03-01T09:00:00Z"),
-    endDate: new Date("2024-05-30T17:00:00Z"),
-    maxParticipants: 50,
-    currentParticipants: 25,
-    targetAudience: TargetAudience.both,
-    status: InitiativeStatus.published,
-    category: {
-      nameAr: "التعليم",
-      nameEn: "Education",
-      icon: "📚",
-      bgColor: "#E3F2FD",
-      textColor: "#1976D2",
-    },
-    organizer: {
-      type: OrganizerType.organization,
-      name: "الهلال الأحمر الجزائري",
-      image: "/images/organizations/red-crescent.png",
-    },
-    distance: 2.5,
-  },
-  {
-    id: "2",
-    titleAr: "حملة التبرع بالدم",
-    titleEn: "Blood Donation Campaign",
-    shortDescriptionAr: "تبرع بالدم وأنقذ حياة",
-    shortDescriptionEn: "Donate blood and save lives",
-    coverImage: "/images/initiatives/blood-donation.jpg",
-    city: "الجزائر",
-    startDate: new Date("2024-02-15T08:00:00Z"),
-    endDate: new Date("2024-02-15T16:00:00Z"),
-    maxParticipants: 100,
-    currentParticipants: 67,
-    targetAudience: TargetAudience.both,
-    status: InitiativeStatus.published,
-    category: {
-      nameAr: "الصحة",
-      nameEn: "Health",
-      icon: "🏥",
-      bgColor: "#F3E5F5",
-      textColor: "#7B1FA2",
-    },
-    organizer: {
-      type: OrganizerType.user,
-      name: "أحمد حسن",
-    },
-    distance: 5.2,
-  },
-  {
-    id: "3",
-    titleAr: "ورشة الكتابة الإبداعية للشباب",
-    titleEn: "Creative Writing Workshop for Youth",
-    shortDescriptionAr: "تعلم الكتابة الإبداعية",
-    shortDescriptionEn: "Learn creative writing",
-    coverImage: "/images/initiatives/creative-writing.jpg",
-    city: "وهران",
-    startDate: new Date("2024-03-10T14:00:00Z"),
-    endDate: new Date("2024-03-12T17:00:00Z"),
-    maxParticipants: 30,
-    currentParticipants: 18,
-    targetAudience: TargetAudience.both,
-    status: InitiativeStatus.published,
-    category: {
-      nameAr: "الفكر",
-      nameEn: "Mind",
-      icon: "🧠",
-      bgColor: "#E8F5E8",
-      textColor: "#388E3C",
-    },
-    organizer: {
-      type: OrganizerType.user,
-      name: "فاطمة بن علي",
-      image: "/images/users/fatima-profile.jpg",
-    },
-    distance: 1.8,
-  },
-];
-
 // Sample Ratings
 const sampleRatings: TestimonialOpinion[] = [
   {
     id: 1,
     userName: "أحمد",
-    userJob: "مطور ويب",
-    comment: "مبادرة رائعة! تنظيم ممتاز وأثر إيجابي كبير على المجتمع",
+    initiative: "مخيم أبجديات البيانات",
+    comment:
+      "شكرا لكم  اذا كانت هناك مخيمات قادمة في تحليل البيانات كون مناصب العمل حسب بحثي الى حد ما قليلة و تتطلب خبرة مسبقة أن يكون هناك لقاء مع شخص لديه خبرة فريلانس في هذا المجال و كيف نحصل على عملاء من داخل و خارج الجزائر",
   },
   {
     id: 2,
-    userName: "فاطمة",
-    userJob: "مصممة جرافيك",
-    comment: "مبادرة رائعة! تنظيم ممتاز وأثر إيجابي كبير على المجتمع",
+    userName: "بوكوش عبد الحكيم",
+    initiative: "مبادرة فالتمسوا علما",
+    comment: `كانت أفضل دورة شاملة ومرافقة للطالب، غنية بكل ما يهم الطالب في دراسته ومليئة بالأفكار وغيرها من الإضافات، وكانت مبادرة في القمة سباقة للخير وكسب الحسنات ودعوات الخير لا المال. فلكم ألف تحية مني ودعوة خير من القلب إليكم فجزاكم الله عني وعنّا كل خير، وسدد خطاكم وأعانكم الله في خيركم دمتم ذخرا للأمة.`,
   },
   {
     id: 3,
-    userName: "علي",
-    userJob: "طبيب",
-    comment: "مبادرة رائعة! تنظيم ممتاز وأثر إيجابي كبير على المجتمع",
+    userName: "مالاك",
+    initiative: "مبادرة أينع",
+    comment: `ابنتي سعيدة جدا بالمشاركة في مبادرة أينع وتنتظر اللقاء التفاعلي بشوق.
+الأطفال المشاركين في اللقاء ما شاء الله فصاحة وعلم وقرآن وأدب يعطينا أملا في الجيل القادم.`,
   },
 ];
 
@@ -373,7 +284,6 @@ export {
   mindCategory,
   sampleUsers,
   sampleRatings,
-  sampleInitiatives,
   partners,
   aboutInfo,
   targetAudienceOptions,

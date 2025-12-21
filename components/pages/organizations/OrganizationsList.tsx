@@ -70,11 +70,17 @@ export default function OrganizationsList({
             )}
           </div>
         </div>
-        <div className="mx-auto mb-8 grid max-w-full grid-cols-1 gap-6 sm:max-w-3/4 md:grid-cols-2">
-          {organizations.data.map((org) => (
-            <OrganizationCard key={org.id} org={org} />
-          ))}
-        </div>
+        {organizations.data.length === 0 && !loading ? (
+          <div className="text-neutrals-500 mt-16 text-center">
+            لا توجد منظمات مطابقة لبحثك.
+          </div>
+        ) : (
+          <div className="mx-auto mb-8 grid max-w-full grid-cols-1 gap-6 sm:max-w-3/4 md:grid-cols-2">
+            {organizations.data.map((org) => (
+              <OrganizationCard key={org.id} org={org} />
+            ))}
+          </div>
+        )}
         {organizations.pagination.totalPages > 1 && (
           <PaginationControls
             currentPage={organizations.pagination.page}

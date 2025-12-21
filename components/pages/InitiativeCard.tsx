@@ -67,7 +67,7 @@ export default function InitiativeCard({
           </TooltipProvider>
         )}
         {/* Header with badges */}
-        <div className="mt-2 flex items-start justify-between sm:mt-1">
+        <div className="mt-2 flex flex-wrap items-start justify-between max-sm:gap-2 sm:mt-1">
           <CategoryBadge
             nameAr={category.nameAr}
             bgColor={category.bgColor ?? "transparent"}

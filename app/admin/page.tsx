@@ -6,10 +6,7 @@ import AdminDashboard from "@/components/pages/admin/Dashboard";
 export default async function AdminPage() {
   const session = await getSessionWithCheckProfile();
 
-  // TODO: Change admin permission check logic
-  const isAdmin = session?.user?.email === process.env.ADMIN_EMAIL;
-
-  if (!isAdmin) {
+  if (session?.user?.role !== "ADMIN") {
     redirect("/");
   }
 

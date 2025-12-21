@@ -15,7 +15,7 @@ Closes #\<!-- issue number -->
 ## Checklist
 
 - [ ] Code follows **Badir** conventions (folder, naming, formatting)
-- [ ] I ran `npm run lint` and fixed all warnings
+- [ ] I ran `npm run lint`, `npm run prettier` (if needed) and fixed all warnings
 - [ ] I tested the change locally (`npm run dev`)
 - [ ] I updated documentation or translations if needed
 - [ ] I added proper validation, error handling, and comments where useful

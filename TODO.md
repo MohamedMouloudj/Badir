@@ -40,11 +40,11 @@
 
 ### Admin System
 
-- [ ] Update Admin DB table to include two types: Admin, Supervisor
-- [ ] Remove email-based admin check from environment variables
-- [ ] Add admin authentication and authorization
-- [ ] Create route to add/manage initiative categories
-- [ ] Build category management interface
+- [x] Update Admin DB table to include Admin role
+- [x] Remove email-based admin check from environment variables
+- [x] Add admin authentication and authorization
+- [x] Create route to add/manage initiative categories
+- [x] Build category management interface
 
 ### Organization Management
 

@@ -27,6 +27,11 @@ export const auth = betterAuth({
         required: true,
         defaultValue: "participant",
       },
+      role: {
+        type: "string",
+        required: true,
+        defaultValue: "USER",
+      },
       profileCompleted: {
         type: "boolean",
         required: false,

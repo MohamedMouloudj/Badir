@@ -4,13 +4,7 @@ import {
   Partner,
   TestimonialOpinion,
 } from "@/types/Statics";
-import {
-  InitiativeCategory,
-  ParticipantRole,
-  Sex,
-  User,
-  UserType,
-} from "@prisma/client";
+import { ParticipantRole } from "@prisma/client";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import arLocale from "i18n-iso-countries/langs/ar.json";
@@ -103,124 +97,6 @@ const aboutInfo: AboutInfo[] = [
   },
 ];
 
-const educationCategory: InitiativeCategory = {
-  id: "1",
-  nameAr: "التعليم",
-  isActive: true,
-  nameEn: null,
-  descriptionAr: null,
-  descriptionEn: null,
-  bgColor: null,
-  textColor: null,
-  createdAt: new Date(),
-};
-
-const healthCategory: InitiativeCategory = {
-  id: "2",
-  nameAr: "الصحة",
-  isActive: true,
-  nameEn: null,
-  descriptionAr: null,
-  descriptionEn: null,
-  bgColor: null,
-  textColor: null,
-  createdAt: new Date(),
-};
-
-const mindCategory: InitiativeCategory = {
-  id: "3",
-  nameAr: "الفكر",
-  isActive: true,
-  nameEn: null,
-  descriptionAr: null,
-  descriptionEn: null,
-  bgColor: null,
-  textColor: null,
-  createdAt: new Date(),
-};
-
-// Sample Users
-const sampleUsers: User[] = [
-  {
-    id: "1",
-    email: "ahmed.hassan@email.com",
-    firstName: "أحمد",
-    lastName: "حسن",
-    phone: "+213555123456",
-    dateOfBirth: new Date("1995-03-15"),
-    userType: UserType.helper,
-    city: "الجزائر",
-    state: "الجزائر",
-    country: "Algeria",
-    isActive: true,
-    createdAt: new Date("2024-01-15T10:00:00Z"),
-    updatedAt: new Date("2024-01-15T10:00:00Z"),
-    name: "",
-    image: null,
-    emailVerified: false,
-    sex: Sex.male,
-    bio: null,
-    latitude: null,
-    longitude: null,
-    profileCompleted: false,
-    newsletterSubscribed: false,
-    newsletterSubscribedAt: null,
-    mailerLiteId: null,
-  },
-  {
-    id: "2",
-    email: "fatima.benali@email.com",
-    firstName: "فاطمة",
-    lastName: "بن علي",
-    phone: "+213555987654",
-    dateOfBirth: new Date("1992-07-22"),
-    userType: UserType.helper,
-    city: "وهران",
-    state: "وهران",
-    country: "Algeria",
-    isActive: true,
-    createdAt: new Date("2024-01-20T14:30:00Z"),
-    updatedAt: new Date("2024-01-20T14:30:00Z"),
-    name: "",
-    image: null,
-    emailVerified: false,
-    sex: Sex.female,
-    bio: null,
-    latitude: null,
-    longitude: null,
-    profileCompleted: false,
-    newsletterSubscribed: false,
-    newsletterSubscribedAt: null,
-    mailerLiteId: null,
-  },
-  {
-    id: "3",
-    email: "admin@redcrescent.dz",
-    firstName: "محمد",
-    lastName: "الأمين",
-    phone: "+213555456789",
-    dateOfBirth: new Date("1988-11-10"),
-    userType: UserType.helper,
-    city: "قسنطينة",
-    state: "قسنطينة",
-    country: "Algeria",
-    isActive: true,
-    createdAt: new Date("2024-01-10T09:00:00Z"),
-    updatedAt: new Date("2024-01-10T09:00:00Z"),
-    name: "",
-    image: null,
-    emailVerified: false,
-    sex: Sex.male,
-    bio: null,
-    latitude: null,
-    longitude: null,
-    profileCompleted: false,
-    newsletterSubscribed: false,
-    newsletterSubscribedAt: null,
-    mailerLiteId: null,
-  },
-];
-
 // Sample Ratings
 const sampleRatings: TestimonialOpinion[] = [
   {
@@ -279,10 +155,6 @@ const organizerTypeOptions = [
 
 export {
   heroCarouselItems,
-  educationCategory,
-  healthCategory,
-  mindCategory,
-  sampleUsers,
   sampleRatings,
   partners,
   aboutInfo,

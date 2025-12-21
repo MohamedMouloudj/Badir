@@ -52,12 +52,7 @@ export async function checkAdminPermission() {
     throw new Error("يجب تسجيل الدخول");
   }
 
-  // TODO: Implement your admin permission check
-  // This could be based on user role, specific admin table, or environment variable
-  // For now, assuming you have an isAdmin field or similar
-  // Replace this with your actual admin check logic
-  const isAdmin = session.user.email === process.env.ADMIN_EMAIL;
-  if (!isAdmin) {
+  if (session.user.role !== "ADMIN") {
     throw new Error("غير مصرح لك بالوصول لهذه الصفحة");
   }
 

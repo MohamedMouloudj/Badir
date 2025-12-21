@@ -13,7 +13,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 /**
  * Post Email Queue Processor (Cron Worker)
  *
- * Runs every 10 minutes via Vercel Cron.
+ * Runs daily via Vercel Cron to process queued post email notifications.
  * Processes queued post email notifications with rate limiting.
  *
  * Flow:

@@ -66,7 +66,7 @@ export default function HeroCarousel() {
         ))}
 
         {/* Static Dark Gradient Overlay - Stays in place over all images */}
-        <div className="pointer-events-none absolute inset-0 z-30 bg-gradient-to-br from-black/40 via-black/20 to-black/60" />
+        <div className="pointer-events-none absolute inset-0 z-30 bg-linear-to-br from-black/40 via-black/20 to-black/60" />
       </div>
     </div>
   );

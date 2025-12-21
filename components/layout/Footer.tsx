@@ -164,7 +164,7 @@ export default function Footer() {
               type="primary"
               border="rounded"
               size="md"
-              className="w-full"
+              className="w-full overflow-hidden px-0.5 text-ellipsis whitespace-nowrap"
               url="/profile"
             >
               اشترك في النشرة البريدية

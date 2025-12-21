@@ -15,10 +15,7 @@ export default async function AdminLayout({
 }) {
   const session = await getSessionWithCheckProfile();
 
-  // Check if user has admin permissions
-  const isAdmin = session?.user?.email === process.env.ADMIN_EMAIL;
-
-  if (!isAdmin) {
+  if (session?.user?.role !== "ADMIN") {
     redirect("/");
   }
 

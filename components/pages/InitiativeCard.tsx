@@ -18,9 +18,11 @@ import { formatDate } from "@/lib/utils";
 export default function InitiativeCard({
   initiative,
   userId,
+  className,
 }: {
   initiative: InitiativeCardType;
   userId?: string;
+  className?: string;
 }) {
   const {
     id,
@@ -44,7 +46,7 @@ export default function InitiativeCard({
 
   return (
     <Card
-      className="bg-neutrals-100 border-secondary-700 relative mx-auto h-full w-full max-w-2xl rounded-xl border-2 p-4 shadow-md md:p-6"
+      className={`bg-neutrals-100 border-secondary-700 relative mx-auto h-full w-full max-w-2xl rounded-xl border-2 p-4 shadow-md md:p-6 ${className}`}
       dir="rtl"
     >
       <CardContent className="flex-center-column h-full justify-between gap-2 p-0.5">

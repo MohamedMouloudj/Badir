@@ -21,6 +21,7 @@ model User {
   sex                    Sex                     @default(male)
   bio                    String?
   userType               UserType                @map("user_type")
+  role                   UserRole                @default(USER)
   latitude               Decimal?                @db.Decimal(10, 8)
   longitude              Decimal?                @db.Decimal(11, 8)
   city                   String?                 @db.VarChar(100)
@@ -301,6 +302,11 @@ enum UserType {
   participant
   both
   organization
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }
 
 enum Sex {

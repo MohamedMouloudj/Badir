@@ -9,7 +9,7 @@ export type CarouselImage = {
 export type TestimonialOpinion = {
   id: number;
   userName: string;
-  userJob: string;
+  initiative: string;
   comment: string;
 };
 export type Partner = {

@@ -74,10 +74,10 @@ export default function InitiativeHeader({
               priority
               sizes="(max-width: 768px) 640px, 1200px"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/20" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-black/20" />
           </div>
         ) : (
-          <div className="from-primary-800 to-primary-600 h-[200px] w-full bg-gradient-to-br md:h-[240px]" />
+          <div className="from-primary-800 to-primary-600 h-[200px] w-full bg-linear-to-br md:h-60" />
         )}
 
         {/* Overlay content with smooth fade animation */}
@@ -131,13 +131,13 @@ export default function InitiativeHeader({
       <div
         className={`border-neutrals-200 w-full transform border-b bg-white transition-all duration-300 ease-in-out ${
           compact
-            ? "fixed top-[var(--navbar-height)] z-10 translate-y-0 opacity-100 shadow-sm"
+            ? "fixed top-(--navbar-height) z-10 translate-y-0 opacity-100 shadow-sm"
             : "pointer-events-none -translate-y-full opacity-0"
         }`}
       >
         <div className="mx-auto flex max-w-5xl items-center gap-4 px-4 py-3">
           {image ? (
-            <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-md">
+            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md">
               <Image
                 src={image || ""}
                 alt={title}
@@ -147,7 +147,7 @@ export default function InitiativeHeader({
               />
             </div>
           ) : (
-            <div className="from-primary-500 to-primary-700 h-12 w-12 flex-shrink-0 rounded-md bg-gradient-to-br" />
+            <div className="from-primary-500 to-primary-700 h-12 w-12 shrink-0 rounded-md bg-linear-to-br" />
           )}
           <div className="overflow-hidden text-right">
             <div className="text-neutrals-900 truncate font-semibold">

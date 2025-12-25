@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 import { extractImageSrcsFromHtml } from "@/lib/utils";
 import { ALLOWED_INITIATIVE_IMAGES } from "@/types/Statics";
 import { PostEmailQueueService } from "@/services/post-email-queue";
+import { postCreationRateLimiter } from "@/lib/rate-limit";
 
 /**
  * Create a new post
@@ -30,6 +31,19 @@ export async function createPostAction(
 ) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) return { success: false, error: "يجب تسجيل الدخول" };
+
+  // Rate limit post creation (only if publishing)
+  if (status === "published") {
+    const { success: rateLimitSuccess } = await postCreationRateLimiter.limit(
+      session.user.id,
+    );
+    if (!rateLimitSuccess) {
+      return {
+        success: false,
+        error: "تجاوزت الحد المسموح من المنشورات. حاول مرة أخرى لاحقاً",
+      };
+    }
+  }
 
   const imageSrcs = extractImageSrcsFromHtml(content)
     .map((s) => s.trim())

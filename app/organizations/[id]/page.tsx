@@ -14,6 +14,7 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import OrgInitiative from "@/components/pages/OrgInitiative";
 import { workAreaOptions } from "@/types/Profile";
+import { getTranslatedCountryName } from "@/lib/utils";
 
 export async function generateMetadata({
   params,
@@ -84,7 +85,7 @@ export default async function OrganizationProfilePage({
             )}
             <span className="text-caption text-neutrals-500">
               <MapPin className="mx-1 mb-0.5 inline size-5" />
-              {orgData.country} - {orgData.state}
+              {getTranslatedCountryName(orgData.country)} - {orgData.state}
               {orgData.city ? ` - ${orgData.city}` : ""}
             </span>
             <span className="text-caption text-neutrals-500">
@@ -167,7 +168,7 @@ export default async function OrganizationProfilePage({
                   <p className="text-neutrals-700 font-medium">
                     {orgData.headquarters}
                   </p>
-                  <p className="text-neutrals-700 font-medium break-words">
+                  <p className="text-neutrals-700 font-medium wrap-break-word">
                     {[
                       orgData.country && `${orgData.country}`,
                       orgData.state && `${orgData.state}`,

@@ -9,6 +9,7 @@ import {
   CountryCallingCode,
 } from "libphonenumber-js";
 import * as cheerio from "cheerio";
+import { countryList } from "@/data/statics";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -106,6 +107,15 @@ export function getCountryFromCallingCode(
   return undefined;
 }
 
+export function getTranslatedCountryName(
+  countryName: string,
+  toLocale: string = "ar",
+): string {
+  const country = countryList.find((c) => c.labelEn === countryName);
+  if (!country) return countryName;
+  return toLocale === "ar" ? country.label : country.labelEn;
+}
+
 /**
  * Handle file upload, convert to base64 and validate size.
  * @param file - The file to upload.
@@ -158,7 +168,7 @@ export function extractImageSrcsFromHtml(html: string): string[] {
 }
 
 /**
- * Extract all image src attributes from HTML (server-safe, uses cheerio).
+ * Extract all image src attributes from HTML.
  * Browser version (use in client components).
  * Returns only non-empty src strings.
  */

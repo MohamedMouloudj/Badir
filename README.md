@@ -49,6 +49,9 @@
 - **Zod** - Schema validation
 - **TipTap Editor** - Rich text editing
 - **DOMPurify** - HTML sanitization
+- **sanitize-html** - Content sanitization (both client-side and server-side)
+- **html-react-parser** - Safe HTML rendering in React (both client-side and server-side)
+- **cheerio** - Server-side HTML parsing and manipulation
 
 ## Architecture Overview
 
@@ -329,7 +332,7 @@ Client Request → Server Function / Next.js API Route → Service Layer → Pri
 1. **Clone the repository**
 
 ```bash
-   git clone https://github.com/MohamedMouloudj/Badir.git
+   git clone https://github.com/algerian-tech-makers/Badir
    cd Badir
 ```
 
@@ -512,4 +515,4 @@ UPSTASH_REDIS_REST_TOKEN=...
 
 # License
 
-<a href="https://github.com/MohamedMouloudj/Badir">Badir</a>© 2025 by<a href="https://github.com/MohamedMouloudj/">Mohamed Mouloudj</a>and<a href="https://www.linkedin.com/company/bunian-%D8%A8%D9%86%D9%8A%D8%A7%D9%86/">Bunian</a>is licensed under<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</a></br><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+`<a href="https://github.com/algerian-tech-makers/Badir">` Badir `</a>`© 2025 is licensed under `<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">`Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International `</a></br>``<img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">``<img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">`

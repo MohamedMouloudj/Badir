@@ -125,7 +125,7 @@ npm run lint --fix
 If you find a security issue (e.g. auth bypass, data exposure):
 
 - **Do not open a public issue**
-- Email: badircontact@gmail.com (replace with your actual email)
+- Email: atm.website.test@gmail.com
 - Provide steps to reproduce + environment info
 
 We’ll acknowledge within 48 hours and coordinate a fix.

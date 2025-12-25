@@ -2,11 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { render } from "@react-email/components";
 import { prisma } from "@/lib/db";
-import { postEmailRateLimiter } from "@/lib/rate-limit";
 import { PostEmailQueueService } from "@/services/post-email-queue";
 import InitiativePostNotificationEmail from "@/emails/InitiativePostNotificationEmail";
 import emailConfig from "@/lib/email";
-import { waitUntil } from "@vercel/functions";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -53,7 +51,7 @@ export async function GET(request: NextRequest) {
   const startTime = Date.now();
   let processed = 0;
   let failed = 0;
-  let rateLimited = 0;
+  const rateLimited = 0;
 
   try {
     // Fetch batch of queued emails
@@ -116,20 +114,6 @@ export async function GET(request: NextRequest) {
     const failedQueueIds: string[] = [];
 
     for (const queueEntry of queuedEmails) {
-      const { success, pending } = await postEmailRateLimiter.limit(
-        queueEntry.email,
-      );
-
-      if (waitUntil !== undefined) {
-        waitUntil(pending);
-      }
-
-      if (!success) {
-        rateLimited++;
-        console.log(`Rate limited: ${queueEntry.email}`);
-        continue; // Leave in queue for next run
-      }
-
       const postDetails = postDetailsMap.get(queueEntry.postId);
 
       if (!postDetails) {
@@ -230,4 +214,3 @@ export async function GET(request: NextRequest) {
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 60;

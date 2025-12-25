@@ -4,13 +4,13 @@ import { Redis } from "@upstash/redis";
 /**
  * Rate limiter for post email notifications
  *
- * Limit: 50 emails per minute
+ * Limit: 10 emails per hour
  * Prevents overwhelming Resend API and ensures controlled delivery
  */
-export const postEmailRateLimiter = new Ratelimit({
+export const postCreationRateLimiter = new Ratelimit({
   redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(50, "1 m"),
-  prefix: "post-emails",
+  limiter: Ratelimit.slidingWindow(10, "1 h"),
+  prefix: "post-creation",
   analytics: true,
 });
 
